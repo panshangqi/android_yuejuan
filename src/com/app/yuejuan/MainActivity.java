@@ -60,40 +60,90 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-  
+    //登陆
+	public void toLoginClick(){
+		EditText usernameET =(EditText)findViewById(R.id.login_username);
+        String username = usernameET.getText().toString();
+        EditText passwordET =(EditText)findViewById(R.id.login_password);
+        String password = passwordET.getText().toString();
+       
+        HashMap<String, String> properties = new HashMap<String, String>();
+        properties.put("arg0", username);
+        properties.put("arg1", password);
+        Public pub = (Public)this.getApplication();
+        pub.setUserID(username);
+        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "UserLogin", properties, new WebServiceUtil.WebServiceCallBack() {
+            @Override
+            public void callBack(String result) {
+                if (result != null) {
+                    Log.v("YJ",result);
+                    
+                    UserLoginResponse reponse = new UserLoginResponse(result);
+                    if("0001".equals(reponse.getCodeID())){
+                    	//AppCookies.setToken(reponse.getAuthtoken());
+                        Public pub = (Public)MainActivity.this.getApplication();
+                        pub.setToken(reponse.getAuthtoken());
+                        MainActivity.this.getUserInfo();
+                       
+                    }else if("0002".equals(reponse.getCodeID())){
+                    	Toast.makeText(MainActivity.this, "用户名或密码不能为空", Toast.LENGTH_SHORT).show();
+                    }else if("0003".equals(reponse.getCodeID())){
+                    	Toast.makeText(MainActivity.this, "本系统暂不支持管理员登录", Toast.LENGTH_SHORT).show();
+                    }else if("0004".equals(reponse.getCodeID())){
+                    	Toast.makeText(MainActivity.this, "服务器数据异常", Toast.LENGTH_SHORT).show();
+                    }else if("0005".equals(reponse.getCodeID())){
+                    	Toast.makeText(MainActivity.this, "数据异常验证失败", Toast.LENGTH_SHORT).show();
+                    }else if("0006".equals(reponse.getCodeID())){
+                    	Toast.makeText(MainActivity.this, "数据异常登录失败", Toast.LENGTH_SHORT).show();
+                    }
+                    
+                }
+            }
+        });
+	}
+    public void getUserInfo(){
+ 
+    	Public pub = (Public)this.getApplication();
+    	String userid = pub.getUserID();
+    	String token = pub.getToken();
+       
+        HashMap<String, String> properties = new HashMap<String, String>();
+        properties.put("arg0", userid);
+        properties.put("arg1", token);
+        
+        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetUserinfo", properties, new WebServiceUtil.WebServiceCallBack() {
+            @Override
+            public void callBack(String result) {
+                if (result != null) {
+                    Log.v("YJ",result);
+                    
+                    GetUserInfoResponse reponse = new GetUserInfoResponse(result);
+                    if("0001".equals(reponse.getCodeID())){
+                    	Public pub = (Public)MainActivity.this.getApplication();
+                       
+                    	pub.userid = reponse.userid;
+                    	pub.username = reponse.username;
+                    	pub.usernowproject = reponse.usernowproject;
+                    	pub.usersubjectid = reponse.usersubjectid;
+                    	pub.usersubject = reponse.usersubject;
+                    	pub.userpower = reponse.userpower;
+                        
+                        Intent intent =new Intent(MainActivity.this, MyActivity.class);
+                    	startActivity(intent);
+                    }else if("0002".equals(reponse.getCodeID())){
+                    	Toast.makeText(MainActivity.this, "用户信息验证失败", Toast.LENGTH_SHORT).show();
+                    }else if("0003".equals(reponse.getCodeID())){
+                    	Toast.makeText(MainActivity.this, "服务器数据异常", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+    }
     public void onClick(View v) {
         switch (v.getId()) {
         case R.id.login_button:
         	
-            EditText usernameET =(EditText)findViewById(R.id.login_username);
-            String username = usernameET.getText().toString();
-            EditText passwordET =(EditText)findViewById(R.id.login_password);
-            String password = passwordET.getText().toString();
-            
-            Toast.makeText(MainActivity.this, "btn1:"+username+password, Toast.LENGTH_SHORT).show();
-            
-            HashMap<String, String> properties = new HashMap<String, String>();
-            properties.put("arg0", username);
-            properties.put("arg1", password);
-            
-            WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "UserLogin", properties, new WebServiceUtil.WebServiceCallBack() {
-                @Override
-                public void callBack(String result) {
-                    if (result != null) {
-                        Log.v("YJ",result);
-//                        Gson gs = new Gson();  
-//                        List<UserLoginResponse> jsonListObject = gs.fromJson(result, new TypeToken<List<UserLoginResponse>>(){}.getType());//鎶奐SON鏍煎紡鐨勫瓧绗︿覆杞负List  
-//                        System.out.println("response json: "+jsonListObject.get(0).toString());
-//                        
-                        UserLoginResponse reponse = new UserLoginResponse(result);
-                        AppCookies.setToken(reponse.getAuthtoken());
-                        
-                        Log.v("YJ",AppCookies.getToken());
-                    }
-                }
-            });
-
-            
+            this.toLoginClick();
             break;
         case R.id.loginforget:
         	

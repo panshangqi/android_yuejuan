@@ -8,6 +8,9 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,7 +24,7 @@ public class WebServiceUtil {
     private static final ExecutorService executorService = Executors.newFixedThreadPool(8);//限制线程池大小为8的线程池
     // 命名空间
     private static final String NAMESPACE = "http://webservice.app.com/";//"http://121.18.49.118:88/";
-
+    
     public static void callWebService(String url, final String methodName, HashMap<String,String> properties, final WebServiceCallBack webServiceCallBack){
         //创建HttpTransportSE对象，传递WebService服务器地址
         final HttpTransportSE httpTransportSE = new HttpTransportSE(url);
@@ -53,7 +56,17 @@ public class WebServiceUtil {
                 	webServiceCallBack.callBack(null);
                 else{
                 	String resStr = result.getProperty(0).toString();
-                    webServiceCallBack.callBack(resStr);
+                	int _len = resStr.length() - 1;
+                	if(_len>1){
+                		
+                		if(resStr.charAt(0)=='[' && resStr.charAt(_len) == ']'){
+                			resStr = resStr.substring(1, _len);
+                			webServiceCallBack.callBack(resStr);
+                			return;
+                    	}
+                	}
+                	webServiceCallBack.callBack(resStr);
+                    
                 }
             }
         };
@@ -83,4 +96,5 @@ public class WebServiceUtil {
     public interface WebServiceCallBack{
         public void callBack(String result);
     }
+    
 }
