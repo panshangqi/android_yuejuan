@@ -251,5 +251,5 @@
 	    
 	</LinearLayout>
 
-    <include layout="@layout/buttom_nav_layout" />
+    <include layout="@layout/buttom_nav_menu_layout" />
 </LinearLayout>

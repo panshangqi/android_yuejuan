@@ -8,16 +8,18 @@ import com.app.webservice.UserLoginResponse;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.Menu;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.view.View;
 import android.widget.Toast;
 import android.util.Log;
 
 
-public class PersonalActivity extends Activity {
+public class PersonalActivity extends MainBaseActivity {
 
 	public TextView usernameView;
 	public TextView useridView;
@@ -26,8 +28,14 @@ public class PersonalActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
     	Log.d("YJ", "onCreate func");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_personal);
-        usernameView = (TextView)findViewById(R.id.my_username);
+    }
+    @Override
+    protected int getLayoutId(){
+    	return R.layout.activity_personal;
+    }
+    @Override
+	protected void initView(){
+    	usernameView = (TextView)findViewById(R.id.my_username);
         useridView = (TextView)findViewById(R.id.my_user_id);
         userpowerView = (TextView)findViewById(R.id.my_authority);
         Public pub = (Public)PersonalActivity.this.getApplication();
@@ -35,8 +43,10 @@ public class PersonalActivity extends Activity {
     	usernameView.setText(pub.username);
     	useridView.setText("账号：" + pub.userid);
     	userpowerView.setText("权限：" + pub.userpower);
-    }
-
+    	
+    	RadioButton radioBtn = getButtonById(3);
+    	radioBtn.setSelected(true);
+	}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -45,8 +55,10 @@ public class PersonalActivity extends Activity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-  //方法：控件View的点击事件
-    public void onClick(View v) {
+
+//  //方法：控件View的点击事件
+    @Override
+	public void widgetClick(View v){
         switch (v.getId()) {
         case R.id.logout_button:
         	Public pub = (Public)this.getApplication();

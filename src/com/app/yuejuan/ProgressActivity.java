@@ -54,10 +54,9 @@ import com.app.modules.BackMarkItemInfo;
 import com.app.modules.BackMarkItemListAdapter;
 import com.app.webservice.*;
 
-public class MarkingActivity extends MainBaseActivity {
+public class ProgressActivity extends MainBaseActivity {
 
-	public TextView markFaceBtn;
-	public TextView markBackBtn;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	Log.d("YJ", "onCreate func");
@@ -66,41 +65,38 @@ public class MarkingActivity extends MainBaseActivity {
     }
     @Override
     protected int getLayoutId(){
-    	return R.layout.activity_marking;
+    	return R.layout.activity_progress;
     }
     @Override
 	protected void initView(){
 
-        markFaceBtn = (TextView)findViewById(R.id.radio_mark_button);  
-        markBackBtn = (TextView)findViewById(R.id.radio_mark_back_button);
+
         
-        this.getBackMarkList();
-        
-        RadioButton radioBtn = getButtonById(1);
+        RadioButton radioBtn = getButtonById(2);
     	radioBtn.setSelected(true);
     	
 	}
 
     public void getBackMarkList(){
-    	BackMarkItemInfo item = new BackMarkItemInfo();
-    	item.que_num = 1;
-    	item.que_score = 50;
-    	item.que_time = "xx: 00: 00";
-    	
-    	List<BackMarkItemInfo> listInfo = new ArrayList(1);
-    	
-    	listInfo.add(item);
-    	listInfo.add(item);
-    	listInfo.add(item);
-    	listInfo.add(item);
-    	listInfo.add(item);
-    	Log.v("YJ","getBackMarkList()");
-    	Toast.makeText(MarkingActivity.this, "onCreate", Toast.LENGTH_SHORT).show();
-    	BackMarkItemListAdapter bmilAdapter = new BackMarkItemListAdapter(Public.context, listInfo);
-
-    	ListView AlreadyMackListView = (ListView)findViewById(R.id.already_mark_list_view);
-    	
-    	AlreadyMackListView.setAdapter(bmilAdapter);
+//    	BackMarkItemInfo item = new BackMarkItemInfo();
+//    	item.que_num = 1;
+//    	item.que_score = 50;
+//    	item.que_time = "xx: 00: 00";
+//    	
+//    	List<BackMarkItemInfo> listInfo = new ArrayList(1);
+//    	
+//    	listInfo.add(item);
+//    	listInfo.add(item);
+//    	listInfo.add(item);
+//    	listInfo.add(item);
+//    	listInfo.add(item);
+//    	Log.v("YJ","getBackMarkList()");
+//    	Toast.makeText(ProgressActivity.this, "onCreate", Toast.LENGTH_SHORT).show();
+//    	BackMarkItemListAdapter bmilAdapter = new BackMarkItemListAdapter(Public.context, listInfo);
+//
+//    	ListView AlreadyMackListView = (ListView)findViewById(R.id.already_mark_list_view);
+//    	
+//    	AlreadyMackListView.setAdapter(bmilAdapter);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -113,25 +109,7 @@ public class MarkingActivity extends MainBaseActivity {
     @Override
 	public void widgetClick(View v){
         switch (v.getId()) {
-        case R.id.radio_mark_button:
-        	
-        	markFaceBtn.setTextColor(Color.parseColor("#FFFFFF"));
-        	markFaceBtn.setBackgroundColor(Color.parseColor("#ff9647"));
-        	markBackBtn.setTextColor(Color.parseColor("#333333"));
-        	markBackBtn.setBackgroundColor(Color.parseColor("#ffffff"));
-        	
-        	Toast.makeText(MarkingActivity.this, "btn1:", Toast.LENGTH_SHORT).show();
-
-            break;
-        case R.id.radio_mark_back_button:
-        	
-        	markFaceBtn.setTextColor(Color.parseColor("#333333"));
-        	markFaceBtn.setBackgroundColor(Color.parseColor("#ffffff"));
-        	markBackBtn.setTextColor(Color.parseColor("#ffffff"));
-        	markBackBtn.setBackgroundColor(Color.parseColor("#ff9647"));
-        	Toast.makeText(MarkingActivity.this, "btn1:", Toast.LENGTH_SHORT).show();
-        	
-            
+        
         default:
             break;
         }

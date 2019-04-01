@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <!--中间为一条分割线-->
+    <View
+        android:background="#888"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <!--最下边为RadioGroup-->
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:orientation="horizontal"
+        android:padding="10dp"
+    	android:background="#fff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+ 		
+        <!--第一个RadioButton-->
+        <RadioButton
+            android:id="@+id/button_1"
+            android:text="阅卷"
+            android:button="@null"
+            android:textColor="@drawable/radio_button_color_selector"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:drawablePadding="3dp"
+            android:onClick="onClick"
+            android:drawableTop="@drawable/radio_button_icon_selector_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <!--第二个RadioButton-->
+        <RadioButton
+            android:id="@+id/button_2"
+            android:text="进度查询"
+            android:button="@null"
+            android:textColor="@drawable/radio_button_color_selector"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:drawablePadding="3dp"
+            android:onClick="onClick"
+            android:drawableTop="@drawable/radio_button_icon_selector_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <!--第三个RadioButton-->
+        <RadioButton
+            android:id="@+id/button_3"
+            android:text="我的"
+            android:button="@null"
+            android:textColor="@drawable/radio_button_color_selector"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:drawablePadding="3dp"
+            android:onClick="onClick"
+            android:drawableTop="@drawable/radio_button_icon_selector_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        
+    </RadioGroup>
+</merge>
