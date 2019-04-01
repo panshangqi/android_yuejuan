@@ -462,36 +462,43 @@ public final class R {
     
          */
         public static final int activity_horizontal_margin=0x7f050000;
+        public static final int activity_margin_16=0x7f050005;
+        public static final int activity_margin_40=0x7f050002;
+        public static final int activity_margin_60=0x7f050003;
+        public static final int activity_margin_80=0x7f050004;
         public static final int activity_vertical_margin=0x7f050001;
     }
     public static final class drawable {
-        public static final int buttonsharp=0x7f020000;
-        public static final int editsharp=0x7f020001;
-        public static final int ic_launcher=0x7f020002;
-        public static final int line_bottom_sharp=0x7f020003;
-        public static final int line_left_sharp=0x7f020004;
-        public static final int login_logo=0x7f020005;
-        public static final int menu_button_corner=0x7f020006;
-        public static final int menu_change_password=0x7f020007;
-        public static final int menu_kefu_phone=0x7f020008;
+        public static final int bottom_nav_mine_avtive=0x7f020000;
+        public static final int buttonsharp=0x7f020001;
+        public static final int editsharp=0x7f020002;
+        public static final int ic_launcher=0x7f020003;
+        public static final int inputsharp=0x7f020004;
+        public static final int line_bottom_sharp=0x7f020005;
+        public static final int line_left_sharp=0x7f020006;
+        public static final int login_bg=0x7f020007;
+        public static final int login_logo=0x7f020008;
         public static final int menu_my=0x7f020009;
         public static final int menu_my_active=0x7f02000a;
-        public static final int menu_problem=0x7f02000b;
-        public static final int menu_progress=0x7f02000c;
-        public static final int menu_progress_80=0x7f02000d;
-        public static final int menu_progress_active=0x7f02000e;
-        public static final int menu_progress_active_80=0x7f02000f;
-        public static final int menu_regiter_parent=0x7f020010;
-        public static final int menu_request=0x7f020011;
-        public static final int menu_yuejuan=0x7f020012;
-        public static final int menu_yuejuan_active=0x7f020013;
-        public static final int my_user_bg=0x7f020014;
-        public static final int view_rect_border=0x7f020015;
+        public static final int menu_progress=0x7f02000b;
+        public static final int menu_progress_80=0x7f02000c;
+        public static final int menu_progress_active=0x7f02000d;
+        public static final int menu_progress_active_80=0x7f02000e;
+        public static final int menu_yuejuan=0x7f02000f;
+        public static final int menu_yuejuan_active=0x7f020010;
+        public static final int my_change_password=0x7f020011;
+        public static final int my_custom_service_phone=0x7f020012;
+        public static final int my_fre_question=0x7f020013;
+        public static final int my_householder_invite=0x7f020014;
+        public static final int my_register_householder=0x7f020015;
+        public static final int my_user_bg=0x7f020016;
+        public static final int personal_head_bg=0x7f020017;
+        public static final int view_rect_border=0x7f020018;
     }
     public static final class id {
-        public static final int Button=0x7f090012;
+        public static final int Button=0x7f090011;
         public static final int action_settings=0x7f090022;
-        public static final int already_mark_list_view=0x7f090011;
+        public static final int already_mark_list_view=0x7f090010;
         public static final int forget_certain_password=0x7f090006;
         public static final int forget_code=0x7f090003;
         public static final int forget_code_box=0x7f090002;
@@ -499,14 +506,14 @@ public final class R {
         public static final int forget_phone=0x7f090001;
         public static final int forgettitle=0x7f090000;
         public static final int get_code_button=0x7f090004;
-        public static final int login_button=0x7f09000c;
-        public static final int login_password=0x7f09000b;
-        public static final int login_username=0x7f09000a;
-        public static final int loginforget=0x7f09000d;
-        public static final int loginlogo=0x7f090009;
+        public static final int login_button=0x7f09000b;
+        public static final int login_password=0x7f09000a;
+        public static final int login_username=0x7f090009;
+        public static final int loginforget=0x7f09000c;
         public static final int logintitle=0x7f090008;
         public static final int logout_button=0x7f09001b;
         public static final int my_authority=0x7f090015;
+        public static final int my_bg=0x7f090012;
         public static final int my_change_password_button=0x7f090016;
         public static final int my_change_password_icon=0x7f090017;
         public static final int my_my_icon=0x7f090021;
@@ -520,18 +527,18 @@ public final class R {
         public static final int que_num=0x7f09001c;
         public static final int que_score=0x7f09001d;
         public static final int que_time=0x7f09001e;
-        public static final int radio_mark_back_button=0x7f090010;
-        public static final int radio_mark_box=0x7f09000e;
-        public static final int radio_mark_button=0x7f09000f;
+        public static final int radio_mark_back_button=0x7f09000f;
+        public static final int radio_mark_box=0x7f09000d;
+        public static final int radio_mark_button=0x7f09000e;
         public static final int submit_button=0x7f090007;
     }
     public static final class layout {
         public static final int activity_forget=0x7f030000;
-        public static final int activity_main=0x7f030001;
+        public static final int activity_login=0x7f030001;
         public static final int activity_marking=0x7f030002;
-        public static final int activity_my=0x7f030003;
+        public static final int activity_personal=0x7f030003;
         public static final int already_mark_list_item=0x7f030004;
-        public static final int button_layout=0x7f030005;
+        public static final int buttom_nav_layout=0x7f030005;
     }
     public static final class menu {
         public static final int main=0x7f080000;
