@@ -44,7 +44,7 @@ public final class R {
         /** 暗红色 
          */
         public static final int blueviolet=0x7f04005f;
-        /** 暗灰色 
+        /** 暗灰色2 
          */
         public static final int brown=0x7f040054;
         /** 亮青色 
@@ -86,12 +86,12 @@ public final class R {
         /** 亮蓝色 
          */
         public static final int darkgray=0x7f040052;
+        /** 暗灰色 
+         */
+        public static final int darkgray_2=0x7f040053;
         /** 绿色 
          */
         public static final int darkgreen=0x7f040090;
-        /** 暗灰色 
-         */
-        public static final int darkgrey=0x7f040053;
         /** 银色 
          */
         public static final int darkkhaki=0x7f040048;
@@ -224,15 +224,15 @@ public final class R {
         /** 老花色 
          */
         public static final int lightgoldenrodyellow=0x7f040024;
+        /** 亮灰色 
+         */
+        public static final int lightgray=0x7f040041;
         /** 蓟色 
          */
         public static final int lightgray2=0x7f040040;
         /** 中紫色 
          */
         public static final int lightgreen=0x7f04005a;
-        /** 亮灰色 
-         */
-        public static final int lightgrey=0x7f040041;
         /** 粉红色 
          */
         public static final int lightpink=0x7f040017;
@@ -475,100 +475,114 @@ public final class R {
         public static final int activity_vertical_margin=0x7f050001;
     }
     public static final class drawable {
-        public static final int bottom_nav_mark=0x7f020000;
-        public static final int bottom_nav_mark_active=0x7f020001;
-        public static final int bottom_nav_mine=0x7f020002;
-        public static final int bottom_nav_mine_active=0x7f020003;
-        public static final int bottom_nav_progress=0x7f020004;
-        public static final int bottom_nav_progress_active=0x7f020005;
-        public static final int buttonsharp=0x7f020006;
-        public static final int editsharp=0x7f020007;
-        public static final int ic_launcher=0x7f020008;
-        public static final int inputsharp=0x7f020009;
-        public static final int line_bottom_sharp=0x7f02000a;
-        public static final int line_left_sharp=0x7f02000b;
-        public static final int login_bg=0x7f02000c;
-        public static final int login_logo=0x7f02000d;
-        public static final int menu_my=0x7f02000e;
-        public static final int menu_my_active=0x7f02000f;
-        public static final int menu_progress=0x7f020010;
-        public static final int menu_progress_80=0x7f020011;
-        public static final int menu_progress_active=0x7f020012;
-        public static final int menu_progress_active_80=0x7f020013;
-        public static final int menu_yuejuan=0x7f020014;
-        public static final int menu_yuejuan_active=0x7f020015;
-        public static final int my_change_password=0x7f020016;
-        public static final int my_custom_service_phone=0x7f020017;
-        public static final int my_fre_question=0x7f020018;
-        public static final int my_householder_invite=0x7f020019;
-        public static final int my_register_householder=0x7f02001a;
-        public static final int my_user_bg=0x7f02001b;
-        public static final int personal_head_bg=0x7f02001c;
-        public static final int progress_task_item_style=0x7f02001d;
-        public static final int progressbar_bg=0x7f02001e;
-        public static final int progressbar_bg_block=0x7f02001f;
-        public static final int radio_button_color_selector=0x7f020020;
-        public static final int radio_button_icon_selector_1=0x7f020021;
-        public static final int radio_button_icon_selector_2=0x7f020022;
-        public static final int radio_button_icon_selector_3=0x7f020023;
-        public static final int subject_name_style_1=0x7f020024;
-        public static final int view_rect_border=0x7f020025;
+        public static final int bottom_bar=0x7f020000;
+        public static final int bottom_bar_white=0x7f020001;
+        public static final int bottom_nav_mark=0x7f020002;
+        public static final int bottom_nav_mark_active=0x7f020003;
+        public static final int bottom_nav_mine=0x7f020004;
+        public static final int bottom_nav_mine_active=0x7f020005;
+        public static final int bottom_nav_progress=0x7f020006;
+        public static final int bottom_nav_progress_active=0x7f020007;
+        public static final int buttonsharp=0x7f020008;
+        public static final int editsharp=0x7f020009;
+        public static final int ic_launcher=0x7f02000a;
+        public static final int inputsharp=0x7f02000b;
+        public static final int line_bottom_sharp=0x7f02000c;
+        public static final int line_left_sharp=0x7f02000d;
+        public static final int login_bg=0x7f02000e;
+        public static final int login_logo=0x7f02000f;
+        public static final int menu_my=0x7f020010;
+        public static final int menu_my_active=0x7f020011;
+        public static final int menu_progress=0x7f020012;
+        public static final int menu_progress_80=0x7f020013;
+        public static final int menu_progress_active=0x7f020014;
+        public static final int menu_progress_active_80=0x7f020015;
+        public static final int menu_yuejuan=0x7f020016;
+        public static final int menu_yuejuan_active=0x7f020017;
+        public static final int my_change_password=0x7f020018;
+        public static final int my_custom_service_phone=0x7f020019;
+        public static final int my_fre_question=0x7f02001a;
+        public static final int my_householder_invite=0x7f02001b;
+        public static final int my_register_householder=0x7f02001c;
+        public static final int my_user_bg=0x7f02001d;
+        public static final int personal_head_bg=0x7f02001e;
+        public static final int progress_task_item_style=0x7f02001f;
+        public static final int progressbar_bg=0x7f020020;
+        public static final int progressbar_bg_block=0x7f020021;
+        public static final int radio_button_bg_selector_1=0x7f020022;
+        public static final int radio_button_color_selector=0x7f020023;
+        public static final int radio_button_color_selector_1=0x7f020024;
+        public static final int radio_button_color_selector_2=0x7f020025;
+        public static final int radio_button_icon_selector_1=0x7f020026;
+        public static final int radio_button_icon_selector_2=0x7f020027;
+        public static final int radio_button_icon_selector_3=0x7f020028;
+        public static final int radio_button_icon_selector_4=0x7f020029;
+        public static final int radio_button_icon_selector_5=0x7f02002a;
+        public static final int radio_group_sharp=0x7f02002b;
+        public static final int subject_name_style_1=0x7f02002c;
+        public static final int view_rect_border=0x7f02002d;
     }
     public static final class id {
-        public static final int Button=0x7f090011;
-        public static final int action_settings=0x7f09002b;
-        public static final int already_mark_list_view=0x7f090010;
+        public static final int Button=0x7f090001;
+        public static final int action_settings=0x7f09002e;
+        public static final int already_mark_list_view=0x7f090000;
         public static final int button_1=0x7f09001e;
         public static final int button_2=0x7f09001f;
         public static final int button_3=0x7f090020;
-        public static final int forget_certain_password=0x7f090006;
-        public static final int forget_code=0x7f090003;
-        public static final int forget_code_box=0x7f090002;
-        public static final int forget_password=0x7f090005;
-        public static final int forget_phone=0x7f090001;
-        public static final int forgettitle=0x7f090000;
-        public static final int get_code_button=0x7f090004;
-        public static final int login_button=0x7f09000b;
-        public static final int login_password=0x7f09000a;
-        public static final int login_username=0x7f090009;
-        public static final int loginforget=0x7f09000c;
-        public static final int logintitle=0x7f090008;
-        public static final int logout_button=0x7f09001b;
-        public static final int my_authority=0x7f090015;
-        public static final int my_bg=0x7f090012;
-        public static final int my_change_password_button=0x7f090016;
-        public static final int my_change_password_icon=0x7f090017;
-        public static final int my_phone_icon=0x7f09001a;
-        public static final int my_problem_icon=0x7f090019;
-        public static final int my_request_icon=0x7f090018;
-        public static final int my_user_id=0x7f090014;
-        public static final int my_username=0x7f090013;
-        public static final int progress_bar_h=0x7f090029;
-        public static final int progress_block_h=0x7f09002a;
-        public static final int progress_mark_list_view=0x7f09001c;
-        public static final int que_num=0x7f090021;
-        public static final int que_score=0x7f090022;
-        public static final int que_time=0x7f090023;
-        public static final int radioGroup=0x7f09001d;
-        public static final int radio_mark_back_button=0x7f09000f;
-        public static final int radio_mark_box=0x7f09000d;
-        public static final int radio_mark_button=0x7f09000e;
-        public static final int submit_button=0x7f090007;
-        public static final int tp_deal_with_count=0x7f090027;
-        public static final int tp_deal_with_percent=0x7f090028;
-        public static final int tp_question_name=0x7f090025;
-        public static final int tp_subject_name=0x7f090024;
-        public static final int tp_task_total_count=0x7f090026;
+        public static final int button_hd_1=0x7f090021;
+        public static final int button_hd_2=0x7f090022;
+        public static final int forget_certain_password=0x7f090008;
+        public static final int forget_code=0x7f090005;
+        public static final int forget_code_box=0x7f090004;
+        public static final int forget_password=0x7f090007;
+        public static final int forget_phone=0x7f090003;
+        public static final int forgettitle=0x7f090002;
+        public static final int get_code_button=0x7f090006;
+        public static final int login_button=0x7f09000d;
+        public static final int login_password=0x7f09000c;
+        public static final int login_username=0x7f09000b;
+        public static final int loginforget=0x7f09000e;
+        public static final int logintitle=0x7f09000a;
+        public static final int logout_button=0x7f09001c;
+        public static final int marking_list_view=0x7f090012;
+        public static final int mk_all_button=0x7f090010;
+        public static final int mk_part_button=0x7f090011;
+        public static final int my_authority=0x7f090016;
+        public static final int my_bg=0x7f090013;
+        public static final int my_change_password_button=0x7f090017;
+        public static final int my_change_password_icon=0x7f090018;
+        public static final int my_phone_icon=0x7f09001b;
+        public static final int my_problem_icon=0x7f09001a;
+        public static final int my_request_icon=0x7f090019;
+        public static final int my_user_id=0x7f090015;
+        public static final int my_username=0x7f090014;
+        public static final int progress_bar_h=0x7f09002c;
+        public static final int progress_block_h=0x7f09002d;
+        public static final int progress_mark_list_view=0x7f09001d;
+        public static final int que_num=0x7f090023;
+        public static final int que_score=0x7f090024;
+        public static final int que_time=0x7f090025;
+        public static final int radioGroup=0x7f09000f;
+        public static final int submit_button=0x7f090009;
+        public static final int tp_deal_with_count=0x7f090029;
+        public static final int tp_deal_with_percent=0x7f09002b;
+        public static final int tp_question_name=0x7f090027;
+        public static final int tp_subject_name=0x7f090026;
+        public static final int tp_task_total_count=0x7f090028;
+        public static final int tp_without_count=0x7f09002a;
     }
     public static final class layout {
-        public static final int activity_forget=0x7f030000;
-        public static final int activity_login=0x7f030001;
-        public static final int activity_marking=0x7f030002;
-        public static final int activity_personal=0x7f030003;
-        public static final int activity_progress=0x7f030004;
-        public static final int buttom_nav_menu_layout=0x7f030005;
-        public static final int list_item_already_mark=0x7f030006;
-        public static final int list_item_task_progress=0x7f030007;
+        public static final int activity_already_mark=0x7f030000;
+        public static final int activity_forget=0x7f030001;
+        public static final int activity_login=0x7f030002;
+        public static final int activity_marking=0x7f030003;
+        public static final int activity_personal=0x7f030004;
+        public static final int activity_progress=0x7f030005;
+        public static final int buttom_nav_menu_layout=0x7f030006;
+        public static final int header_mark_nav_menu_layout=0x7f030007;
+        public static final int list_item_already_mark=0x7f030008;
+        public static final int list_item_marking=0x7f030009;
+        public static final int list_item_task_progress=0x7f03000a;
     }
     public static final class menu {
         public static final int main=0x7f080000;
@@ -606,5 +620,7 @@ public final class R {
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f070001;
+        public static final int Theme_notAnimation=0x7f070002;
+        public static final int notAnimation=0x7f070003;
     }
 }

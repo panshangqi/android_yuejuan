@@ -20,11 +20,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class BackMarkItemListAdapter extends BaseAdapter{
+public class AlreadyMarkItemListAdapter extends BaseAdapter{
 	LayoutInflater inflater = null;
-    List<BackMarkItemInfo> listInfo;
+    List<AlreadyMarkItemInfo> listInfo;
     
-    public BackMarkItemListAdapter(Context context,List<BackMarkItemInfo> listInfo){
+    public AlreadyMarkItemListAdapter(Context context,List<AlreadyMarkItemInfo> listInfo){
     	
         inflater = LayoutInflater.from(context);
         this.listInfo = listInfo;
@@ -48,7 +48,7 @@ public class BackMarkItemListAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
         ViewHolder holder;
-        final BackMarkItemInfo itemInfo = listInfo.get(position);
+        final AlreadyMarkItemInfo itemInfo = listInfo.get(position);
         if(convertView == null || convertView.getTag() == null){
             convertView = inflater.inflate(R.layout.list_item_already_mark,null);
             holder = new ViewHolder();

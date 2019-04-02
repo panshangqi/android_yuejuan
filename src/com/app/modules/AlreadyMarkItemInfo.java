@@ -1,7 +1,7 @@
 package com.app.modules;
 import java.io.Serializable;
 
-public class BackMarkItemInfo implements Serializable{
+public class AlreadyMarkItemInfo implements Serializable{
 
 	public int que_num;
 	public int que_score;

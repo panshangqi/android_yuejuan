@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <LinearLayout 
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:background="#fff"
+    	android:gravity="center"
+    	android:padding="12dp"
+        >
+        <RadioGroup
+        android:layout_width="200dp"
+    	android:layout_height="wrap_content"
+	    android:background="@drawable/radio_group_sharp"
+    	android:orientation="horizontal" 
+    	android:gravity="center"
+    	>
+ 		
+        <!--第一个RadioButton-->
+        <RadioButton
+            android:id="@+id/button_hd_1"
+            android:text="正评列表"
+            android:button="@null"
+            android:textColor="@drawable/radio_button_color_selector_1"
+            android:background="@drawable/radio_button_bg_selector_1"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:textSize="12dp"
+            android:layout_width="100dp"
+            android:layout_height="28dp" />
+        <!--第二个RadioButton-->
+        <RadioButton
+            android:id="@+id/button_hd_2"
+            android:text="回评列表"
+            android:textSize="12dp"
+            android:button="@null"
+            android:textColor="@drawable/radio_button_color_selector_1"
+            android:background="@drawable/radio_button_bg_selector_1"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:layout_width="100dp"
+            android:layout_height="28dp" />
+        
+        
+    </RadioGroup>
+        
+        
+    </LinearLayout>
+</merge>

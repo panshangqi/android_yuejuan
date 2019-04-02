@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 
 //import java.util.Date;
 //import java.text.DateFormat;
@@ -50,14 +51,16 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import com.app.modules.BackMarkItemInfo;
-import com.app.modules.BackMarkItemListAdapter;
+import com.app.modules.AlreadyMarkItemInfo;
+import com.app.modules.AlreadyMarkItemListAdapter;
+import com.app.modules.MarkingItemInfo;
+import com.app.modules.MarkingItemListAdapter;
+import com.app.modules.ProgressItemInfo;
 import com.app.webservice.*;
 
 public class MarkingActivity extends MainBaseActivity {
-
-	public TextView markFaceBtn;
-	public TextView markBackBtn;
+	RadioButton button_all;
+	RadioButton button_part;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	Log.d("YJ", "onCreate func");
@@ -71,36 +74,79 @@ public class MarkingActivity extends MainBaseActivity {
     @Override
 	protected void initView(){
 
-        markFaceBtn = (TextView)findViewById(R.id.radio_mark_button);  
-        markBackBtn = (TextView)findViewById(R.id.radio_mark_back_button);
-        
-        this.getBackMarkList();
+    	button_all = (RadioButton) findViewById(R.id.mk_all_button);
+    	button_part = (RadioButton) findViewById(R.id.mk_part_button);
+    	int icon_size = 110;
+    	Drawable drawable4=getResources().getDrawable(R.drawable.radio_button_icon_selector_4);
+    	drawable4.setBounds(0,0,icon_size,4);
+    	Drawable drawable5=getResources().getDrawable(R.drawable.radio_button_icon_selector_5);
+    	drawable5.setBounds(0,0,icon_size,4);
+    	button_all.setCompoundDrawables(null,null,null,drawable4);
+    	button_part.setCompoundDrawables(null,null,null,drawable5);
+    	button_all.setSelected(true);
         
         RadioButton radioBtn = getButtonById(1);
     	radioBtn.setSelected(true);
+    	RadioButton radioHdBtn = getButtonHdById(1);
+    	radioHdBtn.setSelected(true);
     	
+    	this.getMarkTaskFromService();
 	}
 
-    public void getBackMarkList(){
-    	BackMarkItemInfo item = new BackMarkItemInfo();
-    	item.que_num = 1;
-    	item.que_score = 50;
-    	item.que_time = "xx: 00: 00";
+    public void getMarkTaskList(List<MarkingListResponse.Datas> itemsList){
     	
-    	List<BackMarkItemInfo> listInfo = new ArrayList(1);
+    	List<MarkingItemInfo> listInfo = new ArrayList(1);
     	
-    	listInfo.add(item);
-    	listInfo.add(item);
-    	listInfo.add(item);
-    	listInfo.add(item);
-    	listInfo.add(item);
-    	Log.v("YJ","getBackMarkList()");
-    	Toast.makeText(MarkingActivity.this, "onCreate", Toast.LENGTH_SHORT).show();
-    	BackMarkItemListAdapter bmilAdapter = new BackMarkItemListAdapter(Public.context, listInfo);
+    	Public pub = (Public)this.getApplication();
+        
+    	
+    	for(int i=0;i<itemsList.size();i++){
+    		MarkingListResponse.Datas data = itemsList.get(i);
+    		MarkingItemInfo item = new MarkingItemInfo();
 
-    	ListView AlreadyMackListView = (ListView)findViewById(R.id.already_mark_list_view);
+        	item.taskTotalCount = data.grouptaskcount == 0 ? data.taskcount : data.grouptaskcount;
+        	item.dealWithCount = data.teacount;
+        	item.subjectName = pub.usersubject;
+        	item.questionName = data.quename;
+        	item.withoutCount = item.taskTotalCount - data.teacount;
+    		listInfo.add(item);	
+    	}
     	
-    	AlreadyMackListView.setAdapter(bmilAdapter);
+    	MarkingItemListAdapter bmilAdapter = new MarkingItemListAdapter(Public.context, listInfo);
+
+    	ListView markTaskListView = (ListView)findViewById(R.id.marking_list_view);
+    	
+    	markTaskListView.setAdapter(bmilAdapter);
+    }
+    public void getMarkTaskFromService(){
+    	Public pub = (Public)this.getApplication();
+       
+        HashMap<String, String> properties = new HashMap<String, String>();
+        properties.put("arg0", pub.userid);
+        properties.put("arg1", pub.token);
+        properties.put("arg2", pub.usersubjectid);
+        
+        Log.v("YJ", pub.token); //
+        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetWorkprogress", properties, new WebServiceUtil.WebServiceCallBack() {
+            @Override
+            public void callBack(String result) {
+                if (result != null) {
+                    Log.v("YJ",result);
+                    
+                    MarkingListResponse reponse = new MarkingListResponse(result);
+                    if("0001".equals(reponse.getCodeID())){
+                    	List<MarkingListResponse.Datas> itemsList = reponse.dataList;
+                    	//TODO
+                    	MarkingActivity.this.getMarkTaskList(itemsList);
+                       
+                    }else if("0002".equals(reponse.getCodeID())){
+                    	Toast.makeText(MarkingActivity.this, "用户名信息验证失败", Toast.LENGTH_SHORT).show();
+                    }else if("0003".equals(reponse.getCodeID())){
+                    	Toast.makeText(MarkingActivity.this, "服务器数据异常", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -113,25 +159,14 @@ public class MarkingActivity extends MainBaseActivity {
     @Override
 	public void widgetClick(View v){
         switch (v.getId()) {
-        case R.id.radio_mark_button:
+        case R.id.mk_all_button:
         	
-        	markFaceBtn.setTextColor(Color.parseColor("#FFFFFF"));
-        	markFaceBtn.setBackgroundColor(Color.parseColor("#ff9647"));
-        	markBackBtn.setTextColor(Color.parseColor("#333333"));
-        	markBackBtn.setBackgroundColor(Color.parseColor("#ffffff"));
-        	
-        	Toast.makeText(MarkingActivity.this, "btn1:", Toast.LENGTH_SHORT).show();
-
+        	button_all.setSelected(true);
+        	button_part.setSelected(false);
             break;
-        case R.id.radio_mark_back_button:
-        	
-        	markFaceBtn.setTextColor(Color.parseColor("#333333"));
-        	markFaceBtn.setBackgroundColor(Color.parseColor("#ffffff"));
-        	markBackBtn.setTextColor(Color.parseColor("#ffffff"));
-        	markBackBtn.setBackgroundColor(Color.parseColor("#ff9647"));
-        	Toast.makeText(MarkingActivity.this, "btn1:", Toast.LENGTH_SHORT).show();
-        	
-            
+        case R.id.mk_part_button:
+        	button_all.setSelected(false);
+        	button_part.setSelected(true);
         default:
             break;
         }

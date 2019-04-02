@@ -11,12 +11,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public abstract class MainBaseActivity extends Activity implements View.OnClickListener{
 	private RadioButton button_1;
     private RadioButton button_2;
     private RadioButton button_3;
+    private RadioButton button_hd_1;
+    private RadioButton button_hd_2;
     private List<RadioButton>radioList;
+    private List<RadioButton>radioHDList;
     public Intent intent;
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +29,7 @@ public abstract class MainBaseActivity extends Activity implements View.OnClickL
         this.requestWindowFeature(getWindow().FEATURE_NO_TITLE);
         setContentView(this.getLayoutId());
         radioList = new ArrayList();
+        radioHDList = new ArrayList(); //正评列表 回评列表
         //找到四个按钮
         button_1 = (RadioButton) findViewById(R.id.button_1);
         button_2 = (RadioButton) findViewById(R.id.button_2);
@@ -34,6 +39,15 @@ public abstract class MainBaseActivity extends Activity implements View.OnClickL
         radioList.add(button_2);
         radioList.add(button_3);
         
+        button_hd_1 = (RadioButton) findViewById(R.id.button_hd_1);
+        button_hd_2 = (RadioButton) findViewById(R.id.button_hd_2);
+        if(button_hd_1 != null){
+        	radioHDList.add(button_hd_1);
+        }
+        if(button_hd_2 != null){
+        	radioHDList.add(button_hd_2);
+        }
+ 
         //设置icon大小
         int icon_size = 45;
         Drawable drawable1=getResources().getDrawable(R.drawable.radio_button_icon_selector_1);
@@ -63,15 +77,28 @@ public abstract class MainBaseActivity extends Activity implements View.OnClickL
 		}
 		return null;
 	}
+	public RadioButton getButtonHdById(int id){
+		//id  1,2,3,4
+		if(id >0 && id <= radioHDList.size()){
+			int _id = id - 1;
+			return radioHDList.get(_id);
+		}
+		return null;
+	}
 	@Override
     public void onClick(View v) {
 		
 		switch (v.getId()) {
 		
 	        case R.id.button_1:
+	        	if(Public.isMarkingActivity == 1){
+	        		intent =new Intent(MainBaseActivity.this, MarkingActivity.class);
+	            	startActivity(intent);
+	        	}else{
+	        		intent =new Intent(MainBaseActivity.this, AlreadyMarkActivity.class);
+					startActivity(intent);
+	        	}
 	        	
-	        	intent =new Intent(MainBaseActivity.this, MarkingActivity.class);
-            	startActivity(intent);
 	            break;
 	        case R.id.button_2:
 	        	intent =new Intent(MainBaseActivity.this, ProgressActivity.class);
@@ -82,7 +109,16 @@ public abstract class MainBaseActivity extends Activity implements View.OnClickL
 	        	intent =new Intent(MainBaseActivity.this, PersonalActivity.class);
             	startActivity(intent);
 	            break;
-	
+        	case R.id.button_hd_1:
+        		Public.isMarkingActivity = 1;
+	        	intent =new Intent(MainBaseActivity.this, MarkingActivity.class);
+            	startActivity(intent);
+	            break;
+			case R.id.button_hd_2:
+				Public.isMarkingActivity = 0;
+				intent =new Intent(MainBaseActivity.this, AlreadyMarkActivity.class);
+				startActivity(intent);
+			    break;
 	        default:
 	            break;
 	    }
