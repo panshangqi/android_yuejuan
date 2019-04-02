@@ -52,6 +52,8 @@ import java.util.List;
 
 import com.app.modules.BackMarkItemInfo;
 import com.app.modules.BackMarkItemListAdapter;
+import com.app.modules.ProgressItemInfo;
+import com.app.modules.ProgressItemListAdapter;
 import com.app.webservice.*;
 
 public class ProgressActivity extends MainBaseActivity {
@@ -75,28 +77,65 @@ public class ProgressActivity extends MainBaseActivity {
         RadioButton radioBtn = getButtonById(2);
     	radioBtn.setSelected(true);
     	
+    	
+    	this.getTaskProgressFromService();
+    	
 	}
 
-    public void getBackMarkList(){
-//    	BackMarkItemInfo item = new BackMarkItemInfo();
-//    	item.que_num = 1;
-//    	item.que_score = 50;
-//    	item.que_time = "xx: 00: 00";
-//    	
-//    	List<BackMarkItemInfo> listInfo = new ArrayList(1);
-//    	
-//    	listInfo.add(item);
-//    	listInfo.add(item);
-//    	listInfo.add(item);
-//    	listInfo.add(item);
-//    	listInfo.add(item);
-//    	Log.v("YJ","getBackMarkList()");
-//    	Toast.makeText(ProgressActivity.this, "onCreate", Toast.LENGTH_SHORT).show();
-//    	BackMarkItemListAdapter bmilAdapter = new BackMarkItemListAdapter(Public.context, listInfo);
-//
-//    	ListView AlreadyMackListView = (ListView)findViewById(R.id.already_mark_list_view);
-//    	
-//    	AlreadyMackListView.setAdapter(bmilAdapter);
+    public void getTaskProgressList(List<TaskProgressListResponse.Datas> itemsList){
+    	
+
+    	List<ProgressItemInfo> listInfo = new ArrayList();
+    	Public pub = (Public)this.getApplication();
+        
+    	
+    	for(int i=0;i<itemsList.size();i++){
+    		TaskProgressListResponse.Datas data = itemsList.get(i);
+    		ProgressItemInfo item = new ProgressItemInfo();
+        	item.taskTotalCount = data.grouptaskcount == 0 ? data.taskcount : data.grouptaskcount;
+        	item.dealWithCount = data.teacount;
+        	item.subjectName = pub.usersubject;
+        	item.questionName = data.quename;
+        	item.reat = data.reat;
+    		listInfo.add(item);	
+    	}
+
+    	Log.v("YJ","getBackMarkList()");
+    	
+    	ProgressItemListAdapter bmilAdapter = new ProgressItemListAdapter(Public.context, listInfo);
+
+    	ListView AlreadyMackListView = (ListView)findViewById(R.id.progress_mark_list_view);
+    	
+    	AlreadyMackListView.setAdapter(bmilAdapter);
+    }
+    public void getTaskProgressFromService(){
+    	Public pub = (Public)this.getApplication();
+       
+        HashMap<String, String> properties = new HashMap<String, String>();
+        properties.put("arg0", pub.userid);
+        properties.put("arg1", pub.token);
+        properties.put("arg2", pub.usersubjectid);
+        
+
+        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetWorkprogress", properties, new WebServiceUtil.WebServiceCallBack() {
+            @Override
+            public void callBack(String result) {
+                if (result != null) {
+                    Log.v("YJ",result);
+                    
+                    TaskProgressListResponse reponse = new TaskProgressListResponse(result);
+                    if("0001".equals(reponse.getCodeID())){
+                    	List<TaskProgressListResponse.Datas> itemsList = reponse.dataList;
+                    	ProgressActivity.this.getTaskProgressList(itemsList);
+                       
+                    }else if("0002".equals(reponse.getCodeID())){
+                    	Toast.makeText(ProgressActivity.this, "用户名信息验证失败", Toast.LENGTH_SHORT).show();
+                    }else if("0003".equals(reponse.getCodeID())){
+                    	Toast.makeText(ProgressActivity.this, "服务器数据异常", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

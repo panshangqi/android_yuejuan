@@ -50,7 +50,7 @@ public class BackMarkItemListAdapter extends BaseAdapter{
         ViewHolder holder;
         final BackMarkItemInfo itemInfo = listInfo.get(position);
         if(convertView == null || convertView.getTag() == null){
-            convertView = inflater.inflate(R.layout.already_mark_list_item,null);
+            convertView = inflater.inflate(R.layout.list_item_already_mark,null);
             holder = new ViewHolder();
             holder.numView = (TextView)convertView.findViewById(R.id.que_num);
             holder.scoreView = (TextView)convertView.findViewById(R.id.que_score);

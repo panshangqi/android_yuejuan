@@ -10,13 +10,14 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 public class Public extends Application {
-	public String userid;
-	public String token;
+	public String userid = "d001";
+	public String token = "aJ7HAIWLh2qg7ut7f25DOQ==";
 	public String username;
 	public String usernowproject;
-	public String usersubjectid;
+	public String usersubjectid = "100001";
 	public String usersubject;
 	public String userpower;
+	public static String responseID = "0001";
 	
 	public static Context context = null;
 	public static LayoutInflater inflater = null;

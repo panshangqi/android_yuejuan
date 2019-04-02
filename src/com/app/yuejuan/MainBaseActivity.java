@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public abstract class MainBaseActivity extends Activity implements View.OnClickListener{
 	private RadioButton button_1;
@@ -36,13 +35,11 @@ public abstract class MainBaseActivity extends Activity implements View.OnClickL
         radioList.add(button_3);
         
         //…Ë÷√icon¥Û–°
-        int icon_size = 60;
+        int icon_size = 45;
         Drawable drawable1=getResources().getDrawable(R.drawable.radio_button_icon_selector_1);
         drawable1.setBounds(0,0,icon_size,icon_size);
         button_1.setCompoundDrawables(null,drawable1,null,null);
-        if(drawable1 != null){
-        	Toast.makeText(MainBaseActivity.this, "1", Toast.LENGTH_SHORT).show();
-        }
+        
         Drawable drawable2=getResources().getDrawable(R.drawable.radio_button_icon_selector_2);
         drawable2.setBounds(0,0,icon_size,icon_size);
         button_2.setCompoundDrawables(null,drawable2,null,null);
