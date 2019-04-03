@@ -73,68 +73,81 @@ public class AlreadyMarkActivity extends MainBaseActivity {
     	radioBtn.setSelected(true);
     	RadioButton radioHdBtn = getButtonHdById(2);
     	radioHdBtn.setSelected(true);
-        
-        this.getBackMarkList();
-        
+        this.checkMarkIsStart();
 	}
+    public void checkMarkIsStart(){
+    	Public pub = (Public)this.getApplication();
+        
+        HashMap<String, String> properties = new HashMap<String, String>();
+        properties.put("arg0", pub.usersubjectid);
 
-    public void getBackMarkList(){
-    	AlreadyMarkItemInfo item = new AlreadyMarkItemInfo();
-    	item.que_num = 1;
-    	item.que_score = 50;
-    	item.que_time = "xx: 00: 00";
-    	
+        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetSubjectstatus", properties, new WebServiceUtil.WebServiceCallBack() {
+            @Override
+            public void callBack(String result) {
+                if (result != null) {
+                    Log.v("YJ",result);
+                    GetSubjectStatusResponse reponse = new GetSubjectStatusResponse(result);
+                    if("0001".equals(reponse.getCodeID())){
+                    	//Toast.makeText(MarkingActivity.this, "本科目阅卷进程已启动", Toast.LENGTH_SHORT).show();
+                    	AlreadyMarkActivity.this.getAlreadyMarkList();
+                    }else if("0002".equals(reponse.getCodeID())){
+                    	Toast.makeText(AlreadyMarkActivity.this, "本科目阅卷进程未启动", Toast.LENGTH_SHORT).show();
+                    }else if("0003".equals(reponse.getCodeID())){
+                    	Toast.makeText(AlreadyMarkActivity.this, "服务器数据异常", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+    }
+    public void renderItemList(List<AlreadyMarkListResponse.Datas> itemList){
+
     	List<AlreadyMarkItemInfo> listInfo = new ArrayList(1);
     	
-    	listInfo.add(item);
-    	listInfo.add(item);
-    	listInfo.add(item);
-    	listInfo.add(item);
-    	listInfo.add(item);
-    	Log.v("YJ","getBackMarkList()");
+    	for(int i=0;i<itemList.size();i++){
+    		AlreadyMarkListResponse.Datas data = itemList.get(i);
+    		AlreadyMarkItemInfo item = new AlreadyMarkItemInfo();
+    		item.que_num = data.quename;
+        	item.que_score = data.firstmark;
+        	item.que_time = data.submittime;
+        	listInfo.add(item);
+    	}
+    	Log.v("YJ","renderItemList()");
     	
     	AlreadyMarkItemListAdapter bmilAdapter = new AlreadyMarkItemListAdapter(Public.context, listInfo);
-
     	ListView AlreadyMackListView = (ListView)findViewById(R.id.already_mark_list_view);
-    	
     	AlreadyMackListView.setAdapter(bmilAdapter);
     }
     public void getAlreadyMarkList(){
-//    	Public pub = (Public)this.getApplication();
-//    	String userid = pub.getUserID();
-//    	String token = pub.getToken();
-//       
-//        HashMap<String, String> properties = new HashMap<String, String>();
-//        properties.put("arg0", userid);
-//        properties.put("arg1", token);
-//        
-//        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetAlreadymarklist", properties, new WebServiceUtil.WebServiceCallBack() {
-//            @Override
-//            public void callBack(String result) {
-//                if (result != null) {
-//                    Log.v("YJ",result);
-//                    
-//                    GetUserInfoResponse reponse = new GetUserInfoResponse(result);
-//                    if("0001".equals(reponse.getCodeID())){
-//                    	Public pub = (Public)LoginActivity.this.getApplication();
-//                       
-//                    	pub.userid = reponse.userid;
-//                    	pub.username = reponse.username;
-//                    	pub.usernowproject = reponse.usernowproject;
-//                    	pub.usersubjectid = reponse.usersubjectid;
-//                    	pub.usersubject = reponse.usersubject;
-//                    	pub.userpower = reponse.userpower;
-//                        
-//                        Intent intent =new Intent(LoginActivity.this, PersonalActivity.class);
-//                    	startActivity(intent);
-//                    }else if("0002".equals(reponse.getCodeID())){
-//                    	Toast.makeText(LoginActivity.this, "用户信息验证失败", Toast.LENGTH_SHORT).show();
-//                    }else if("0003".equals(reponse.getCodeID())){
-//                    	Toast.makeText(LoginActivity.this, "服务器数据异常", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            }
-//        });
+    	Public pub = (Public)this.getApplication();
+    	String userid = pub.getUserID();
+    	String token = pub.getToken();
+    	String subjectid = pub.usersubjectid;
+       
+        HashMap<String, String> properties = new HashMap<String, String>();
+        properties.put("arg0", userid);
+        properties.put("arg1", token);
+        properties.put("arg2", subjectid);
+        //properties.put("arg3", "0");
+        //properties.put("arg4", "");
+        
+        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetAlreadymarklist", properties, new WebServiceUtil.WebServiceCallBack() {
+            @Override
+            public void callBack(String result) {
+                if (result != null) {
+                    Log.v("YJX",result);
+                    AlreadyMarkListResponse reponse = new AlreadyMarkListResponse(result);
+                    if("0001".equals(reponse.getCodeID())){
+                    	AlreadyMarkActivity.this.renderItemList(reponse.dataList);
+                    }else if("0002".equals(reponse.getCodeID())){
+                    	//Toast.makeText(AlreadyMarkActivity.this, reponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    	Intent intent =new Intent(AlreadyMarkActivity.this, LoginActivity.class);
+                    	startActivity(intent);
+                    }else if("0002".equals(reponse.getCodeID())){
+                    	Toast.makeText(AlreadyMarkActivity.this, reponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

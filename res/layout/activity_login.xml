@@ -28,7 +28,7 @@
  		android:background="@drawable/editsharp"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="250dp"
         android:hint="输入手机号"
         android:text="d001"
         android:paddingLeft="20dp"

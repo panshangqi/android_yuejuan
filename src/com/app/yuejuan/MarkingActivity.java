@@ -6,6 +6,7 @@ import android.os.Message;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.view.Menu;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.view.View;
 import android.widget.Toast;
@@ -32,6 +34,9 @@ import android.graphics.drawable.Drawable;
 //import javax.xml.namespace.QName;
 //import java.lang.Integer;
 //import javax.xml.rpc.ParameterMode;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -61,6 +66,10 @@ import com.app.webservice.*;
 public class MarkingActivity extends MainBaseActivity {
 	RadioButton button_all;
 	RadioButton button_part;
+	List<View> viewPagerList;
+	RadioGroup radioTabGroup;
+	int page_index = 0;
+	ViewPager viewPager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	Log.d("YJ", "onCreate func");
@@ -73,7 +82,7 @@ public class MarkingActivity extends MainBaseActivity {
     }
     @Override
 	protected void initView(){
-
+    	radioTabGroup = (RadioGroup)findViewById(R.id.radioTabGroup);
     	button_all = (RadioButton) findViewById(R.id.mk_all_button);
     	button_part = (RadioButton) findViewById(R.id.mk_part_button);
     	int icon_size = 110;
@@ -83,16 +92,123 @@ public class MarkingActivity extends MainBaseActivity {
     	drawable5.setBounds(0,0,icon_size,4);
     	button_all.setCompoundDrawables(null,null,null,drawable4);
     	button_part.setCompoundDrawables(null,null,null,drawable5);
-    	button_all.setSelected(true);
+    	setTabRadioButtonSelected(0);
         
         RadioButton radioBtn = getButtonById(1);
     	radioBtn.setSelected(true);
     	RadioButton radioHdBtn = getButtonHdById(1);
     	radioHdBtn.setSelected(true);
     	
-    	this.getMarkTaskFromService();
-	}
+    	viewPager = (ViewPager)findViewById(R.id.viewpager);
+    	viewPagerList = new ArrayList();
+    	
+    	View view1 = Public.inflater.inflate(R.layout.layout_mark_all, null);
+    	View view2 = Public.inflater.inflate(R.layout.layout_mark_part, null);
+    	viewPagerList.add(view1);
+    	viewPagerList.add(view2);
+    	PagerAdapter pagerAdapter = new PagerAdapter() {  
+    		  
+            @Override  
+            public boolean isViewFromObject(View arg0, Object arg1) {  
+  
+                return arg0 == arg1;  
+            }  
+  
+            @Override  
+            public int getCount() {  
+  
+                return viewPagerList.size();  
+            }  
+  
+            @Override  
+            public void destroyItem(ViewGroup container, int position, Object object) {  
+                container.removeView(viewPagerList.get(position));  
+            }  
+  
+            @Override  
+            public int getItemPosition(Object object) {  
+  
+                return super.getItemPosition(object);  
+            }  
+  
+            @Override  
+            public CharSequence getPageTitle(int position) {  
+  
+                return "";//titleList.get(position);  
+            }  
+  
+            @Override  
+            public Object instantiateItem(ViewGroup container, int position) {  
+                container.addView(viewPagerList.get(position));
+                
+                return viewPagerList.get(position);  
+            }  
 
+
+        };  
+        viewPager.setAdapter(pagerAdapter); 
+ 
+        viewPager.setOnPageChangeListener(new OnPageChangeListener() {
+            //此方法是在状态改变的时候调用，其中arg0这个参数有三种状态（0，1，2）。
+            //arg0 ==1的时辰默示正在滑动，arg0==2的时辰默示滑动完毕了，arg0==0的时辰默示什么都没做。
+            //当页面开始滑动的时候，三种状态的变化顺序为（1，2，0）
+            public void onPageScrollStateChanged(int arg0) {
+            
+            }
+            //此方法里有3个参数</span></span>
+            //当你滑动时一直调用这个方法直到停止滑到
+            //arg0：表示现在的页面； arg1：表示当前页面偏移百分比； arg2：表示当前页面偏移的像素；
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            
+            }
+            //此方法里的 arg0 是表示显示的第几页，当滑到第N页，就会调用此方法，arg0=N；
+            public void onPageSelected(int arg0) {
+	       		switch (arg0) {
+	       		case 0:
+	       			MarkingActivity.this.page_index = 0;
+	       			MarkingActivity.this.setTabRadioButtonSelected(0);
+	       		    break;
+	       		case 1:
+	       			MarkingActivity.this.page_index = 1;
+	       			MarkingActivity.this.setTabRadioButtonSelected(1);
+	       			break;
+	       		
+	       		default:
+	       			break;
+	       		}
+	       		MarkingActivity.this.checkMarkIsStart();
+	       	}
+       });
+       //init
+        viewPager.setCurrentItem(0);
+    	this.checkMarkIsStart();
+	}
+    public void checkMarkIsStart(){
+    	Public pub = (Public)this.getApplication();
+        
+        HashMap<String, String> properties = new HashMap<String, String>();
+        properties.put("arg0", pub.usersubjectid);
+
+        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetSubjectstatus", properties, new WebServiceUtil.WebServiceCallBack() {
+            @Override
+            public void callBack(String result) {
+                if (result != null) {
+                    Log.v("YJ",result);
+                    
+                    GetSubjectStatusResponse reponse = new GetSubjectStatusResponse(result);
+                    if("0001".equals(reponse.getCodeID())){
+                    	//Toast.makeText(MarkingActivity.this, "本科目阅卷进程已启动", Toast.LENGTH_SHORT).show();
+                    	MarkingActivity.this.getMarkTaskFromService();
+                    	
+                    }else if("0002".equals(reponse.getCodeID())){
+                    	Toast.makeText(MarkingActivity.this, "本科目阅卷进程未启动", Toast.LENGTH_SHORT).show();
+                    }else if("0003".equals(reponse.getCodeID())){
+                    	Toast.makeText(MarkingActivity.this, "服务器数据异常", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+    }
     public void getMarkTaskList(List<MarkingListResponse.Datas> itemsList){
     	
     	List<MarkingItemInfo> listInfo = new ArrayList(1);
@@ -114,7 +230,7 @@ public class MarkingActivity extends MainBaseActivity {
     	
     	MarkingItemListAdapter bmilAdapter = new MarkingItemListAdapter(Public.context, listInfo);
 
-    	ListView markTaskListView = (ListView)findViewById(R.id.marking_list_view);
+    	ListView markTaskListView = (ListView)viewPagerList.get(MarkingActivity.this.page_index).findViewById(R.id.marking_list_view);
     	
     	markTaskListView.setAdapter(bmilAdapter);
     }
@@ -161,14 +277,31 @@ public class MarkingActivity extends MainBaseActivity {
         switch (v.getId()) {
         case R.id.mk_all_button:
         	
-        	button_all.setSelected(true);
-        	button_part.setSelected(false);
+        	setTabRadioButtonSelected(0);
+        	page_index = 0;
+        	viewPager.setCurrentItem(page_index);
+        	this.checkMarkIsStart();
             break;
         case R.id.mk_part_button:
-        	button_all.setSelected(false);
-        	button_part.setSelected(true);
+        	setTabRadioButtonSelected(1);
+        	page_index = 1;
+        	viewPager.setCurrentItem(page_index);
+        	this.checkMarkIsStart();
         default:
             break;
         }
+    }
+    public void setTabRadioButtonSelected(int _id){
+    	int count = radioTabGroup.getChildCount();
+    	for(int i=0;i<count;i++){
+    		RadioButton rb = (RadioButton)radioTabGroup.getChildAt(i);
+    		if(i == _id){
+    			
+        		rb.setSelected(true);
+    		}else{
+    			rb.setSelected(false);
+    		}
+    	}
+
     }
 }

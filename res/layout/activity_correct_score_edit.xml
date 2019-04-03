@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:background="@color/theme_color"
+	    android:padding="12dp"
+	    >
+	    <ImageButton 
+	        android:layout_width="10dp"
+	    	android:layout_height="20dp"
+	    	android:layout_marginLeft="10dp"
+	    	android:background="@drawable/arrow_left"
+	        />
+	    <TextView 
+	        android:layout_width="0dp"
+	    	android:layout_height="wrap_content"
+	    	android:layout_weight="1"
+	    	android:layout_marginLeft="10dp"
+	    	android:text="第12-16题"
+	    	android:textColor="#fff"
+	    	android:textSize="16dp"
+	        />
+	    <TextView 
+	        android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:text="阅卷记录"
+	    	android:layout_gravity="right"
+	    	android:textColor="#fff"
+	    	android:textSize="16dp"
+	    	android:layout_marginLeft="20dp"
+	        />
+	    <TextView 
+	        android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:text="打分板"
+	    	android:layout_gravity="right"
+	    	android:textColor="#fff"
+	    	android:textSize="16dp"
+	    	android:layout_marginLeft="20dp"
+	        />
+	    <TextView 
+	        android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:text="选题"
+	    	android:layout_gravity="right"
+	    	android:gravity="right"
+	    	android:textColor="#fff"
+	    	android:textSize="16dp"
+	    	android:layout_marginLeft="20dp"
+	    	android:layout_marginRight="10dp"
+	        />
+	</LinearLayout>
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="0dp"
+	    android:layout_weight="1"
+	    android:orientation="horizontal"
+	    
+	    >
+	    <LinearLayout 
+		    android:layout_width="110dp"
+		    android:layout_height="match_parent"
+		    android:orientation="vertical"
+		    
+		    android:padding="12dp"
+		    >
+	    </LinearLayout>
+	    <LinearLayout 
+		    android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:layout_weight="1"
+		    android:orientation="vertical"
+		    android:background="@color/silver"
+		    android:padding="12dp"
+		    >
+	    </LinearLayout>
+	    <LinearLayout 
+		    android:layout_width="110dp"
+		    android:layout_height="match_parent"
+		    android:orientation="vertical"
+		    
+		    android:padding="12dp"
+		    >
+	    
+    	</LinearLayout>
+    </LinearLayout>
+</LinearLayout>

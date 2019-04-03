@@ -94,30 +94,36 @@ public abstract class MainBaseActivity extends Activity implements View.OnClickL
 	        	if(Public.isMarkingActivity == 1){
 	        		intent =new Intent(MainBaseActivity.this, MarkingActivity.class);
 	            	startActivity(intent);
+	            	//overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
 	        	}else{
 	        		intent =new Intent(MainBaseActivity.this, AlreadyMarkActivity.class);
 					startActivity(intent);
+					//overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
 	        	}
 	        	
 	            break;
 	        case R.id.button_2:
 	        	intent =new Intent(MainBaseActivity.this, ProgressActivity.class);
             	startActivity(intent);
+            	//overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
 	            break;
 	        case R.id.button_3:
 	        	
 	        	intent =new Intent(MainBaseActivity.this, PersonalActivity.class);
             	startActivity(intent);
+            	//overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
 	            break;
         	case R.id.button_hd_1:
         		Public.isMarkingActivity = 1;
 	        	intent =new Intent(MainBaseActivity.this, MarkingActivity.class);
             	startActivity(intent);
+            	//overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
 	            break;
 			case R.id.button_hd_2:
 				Public.isMarkingActivity = 0;
 				intent =new Intent(MainBaseActivity.this, AlreadyMarkActivity.class);
 				startActivity(intent);
+				//overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
 			    break;
 	        default:
 	            break;

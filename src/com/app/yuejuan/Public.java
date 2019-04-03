@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ public class Public extends Application {
 	public String userpower;
 	
 	public static String responseID = "0001";
+	public static String responseIDOK = "0001";
 	public static int isMarkingActivity = 1; //默认显示正评列表
 	public static Context context = null;
 	public static LayoutInflater inflater = null;
@@ -28,7 +30,7 @@ public class Public extends Application {
 		super.onCreate();
 		if(isDebug == true){
 			userid = "d001";
-			token = "mObAPFOnsFnGKuud747m4w==";
+			token = "SswBHcPQ4HKeRUSfJIrHUw==";
 			username = "d001";
 			usernowproject = "实验";
 			usersubjectid = "100001";

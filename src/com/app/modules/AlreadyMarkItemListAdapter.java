@@ -63,8 +63,8 @@ public class AlreadyMarkItemListAdapter extends BaseAdapter{
         }
         
         
-        holder.numView.setText(String.valueOf(itemInfo.que_num));
-        holder.scoreView.setText(String.valueOf(itemInfo.que_score));
+        holder.numView.setText(itemInfo.que_num);
+        holder.scoreView.setText(itemInfo.que_score);
         holder.timeView.setText(itemInfo.que_time);
 
         holder.numView.setOnTouchListener(new OnTouchListener(){

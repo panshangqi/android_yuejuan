@@ -128,8 +128,11 @@ public class LoginActivity extends Activity {
                     	pub.usersubject = reponse.usersubject;
                     	pub.userpower = reponse.userpower;
                         
-                        Intent intent =new Intent(LoginActivity.this, PersonalActivity.class);
+                        Intent intent =new Intent(LoginActivity.this, MarkingActivity.class);
                     	startActivity(intent);
+                    	//设置切换动画，从右边进入，左边退出
+        				overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+        				
                     }else if("0002".equals(reponse.getCodeID())){
                     	Toast.makeText(LoginActivity.this, "用户信息验证失败", Toast.LENGTH_SHORT).show();
                     }else if("0003".equals(reponse.getCodeID())){
