@@ -22,9 +22,9 @@ import android.widget.TextView;
 
 public class QuestionTaskItemListAdapter extends BaseAdapter{
 	LayoutInflater inflater = null;
-    List<AlreadyMarkItemInfo> listInfo;
+    List<QuestionTaskItemInfo> listInfo;
     
-    public QuestionTaskItemListAdapter(Context context,List<AlreadyMarkItemInfo> listInfo){
+    public QuestionTaskItemListAdapter(Context context,List<QuestionTaskItemInfo> listInfo){
     	
         inflater = LayoutInflater.from(context);
         this.listInfo = listInfo;
@@ -48,7 +48,7 @@ public class QuestionTaskItemListAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
         ViewHolder holder;
-        final AlreadyMarkItemInfo itemInfo = listInfo.get(position);
+        final QuestionTaskItemInfo itemInfo = listInfo.get(position);
         if(convertView == null || convertView.getTag() == null){
             convertView = inflater.inflate(R.layout.list_item_already_mark,null);
             holder = new ViewHolder();
