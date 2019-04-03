@@ -71,6 +71,7 @@ public class PersonalActivity extends MainBaseActivity {
             properties.put("arg1", token);
             Intent intent =new Intent(PersonalActivity.this, LoginActivity.class);
         	startActivity(intent);
+        	overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
         	Log.v("YJ","Login out");
             WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "UserLogout", properties, new WebServiceUtil.WebServiceCallBack() {
                 @Override
@@ -93,6 +94,7 @@ public class PersonalActivity extends MainBaseActivity {
         case R.id.my_change_password_button:
         	Intent intent1 =new Intent(PersonalActivity.this, ForgetPasswordActivity.class);
         	startActivity(intent1);
+        	overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
         	break;
         default:
             break;

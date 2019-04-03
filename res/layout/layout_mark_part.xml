@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    
+	<ListView
+	        android:id="@+id/marking_list_view"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/Button"
+	        android:padding="6dp"
+	        android:divider="@android:color/transparent"
+        	android:dividerHeight="6dp"
+   	/>
+
+</LinearLayout>

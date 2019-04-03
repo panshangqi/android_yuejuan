@@ -20,11 +20,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class AlreadyMarkItemListAdapter extends BaseAdapter{
+public class QuestionTaskItemListAdapter extends BaseAdapter{
 	LayoutInflater inflater = null;
-    List<AlreadyMarkItemInfo> listInfo;
+    List<QuestionTaskItemInfo> listInfo;
     
-    public AlreadyMarkItemListAdapter(Context context,List<AlreadyMarkItemInfo> listInfo){
+    public QuestionTaskItemListAdapter(Context context,List<QuestionTaskItemInfo> listInfo){
     	
         inflater = LayoutInflater.from(context);
         this.listInfo = listInfo;
@@ -48,7 +48,7 @@ public class AlreadyMarkItemListAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
         ViewHolder holder;
-        final AlreadyMarkItemInfo itemInfo = listInfo.get(position);
+        final QuestionTaskItemInfo itemInfo = listInfo.get(position);
         if(convertView == null || convertView.getTag() == null){
             convertView = inflater.inflate(R.layout.list_item_already_mark,null);
             holder = new ViewHolder();
@@ -63,9 +63,9 @@ public class AlreadyMarkItemListAdapter extends BaseAdapter{
         }
         
         
-        holder.numView.setText(itemInfo.que_num);
-        holder.scoreView.setText(itemInfo.que_score);
-        holder.timeView.setText(itemInfo.que_time);
+//        holder.numView.setText(itemInfo.que_num);
+//        holder.scoreView.setText(itemInfo.que_score);
+//        holder.timeView.setText(itemInfo.que_time);
 
         holder.numView.setOnTouchListener(new OnTouchListener(){
 

@@ -39,8 +39,6 @@ public class GetUserInfoResponse {
      */
 	
 	public GetUserInfoResponse(String result){
-		Gson gs = new Gson();  
-		Log.v("YJ", result);
 		
 		try {
 			JsonParser parser=new JsonParser();  //´´½¨JSON½âÎöÆ÷
