@@ -30,7 +30,7 @@ public class Public extends Application {
 		super.onCreate();
 		if(isDebug == true){
 			userid = "d001";
-			token = "SswBHcPQ4HKeRUSfJIrHUw==";
+			token = "Hz4ybVyXi2aBJIUrQjLnrg==";
 			username = "d001";
 			usernowproject = "สตั้";
 			usersubjectid = "100001";

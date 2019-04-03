@@ -50,22 +50,17 @@ public class QuestionTaskItemListAdapter extends BaseAdapter{
         ViewHolder holder;
         final QuestionTaskItemInfo itemInfo = listInfo.get(position);
         if(convertView == null || convertView.getTag() == null){
-            convertView = inflater.inflate(R.layout.list_item_already_mark,null);
+            convertView = inflater.inflate(R.layout.list_item_question_task,null);
             holder = new ViewHolder();
-            holder.numView = (TextView)convertView.findViewById(R.id.que_num);
-            holder.scoreView = (TextView)convertView.findViewById(R.id.que_score);
-            holder.timeView = (TextView)convertView.findViewById(R.id.que_time);
+            holder.numView = (TextView)convertView.findViewById(R.id.qt_question_num);
             
             convertView.setTag(holder);
         }else{
              
             holder = (ViewHolder)convertView.getTag();
         }
-        
-        
-//        holder.numView.setText(itemInfo.que_num);
-//        holder.scoreView.setText(itemInfo.que_score);
-//        holder.timeView.setText(itemInfo.que_time);
+
+        holder.numView.setText(itemInfo.queid);
 
         holder.numView.setOnTouchListener(new OnTouchListener(){
 
@@ -77,24 +72,11 @@ public class QuestionTaskItemListAdapter extends BaseAdapter{
 			}
         	
         });
-        holder.scoreView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//wifiListener.Callback(itemInfo);
-			}
-		});
-        holder.timeView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//wifiListener.CallbackInfo(itemInfo);
-			}
-		});
+
         return convertView;
     }
     public class ViewHolder{
     	
         public TextView numView;
-        public TextView scoreView;
-        public TextView timeView;
     }
 }

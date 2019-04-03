@@ -3,7 +3,11 @@
 <resources>
 
 <color name="theme_color">#ff9647</color><!--主题橘黄色色 -->
+<color name="theme_color_light">#ccff9647</color><!--主题橘黄色色 -->
+<color name="theme_color_deep">#f98228</color><!--主题橘黄色色 -->
+
 <color name="theme_gray_color">#444444</color><!--主题文字灰 -->    
+<color name="theme_bg_gray_color">#f0f0f0</color><!--主题背景灰 -->    
     
 <color name="transparent">#00ffffff</color><!--透明 -->
 <color name="ttvblue">#50008080</color><!--蓝色 -->

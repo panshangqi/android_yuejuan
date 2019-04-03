@@ -8,6 +8,7 @@
     
     <!-- 下面两个是用来给  activity_main.xml里的ListView赋值,-->
     <LinearLayout 
+        android:id="@+id/tp_list_item_marking_box"
         android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal"

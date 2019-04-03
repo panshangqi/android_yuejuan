@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    
+    <item android:state_selected="true">
+        <shape>
+            <padding android:left="3dp" android:top="3dp" android:bottom="3dp" android:right="3dp" />
+			<solid android:color="@color/theme_color" />
+        </shape>
+    </item>
+    <item android:state_pressed="true">
+        <shape>
+            <padding android:left="3dp" android:top="3dp" android:bottom="3dp" android:right="3dp" />
+			<solid android:color="@color/theme_color" />
+        </shape>
+    </item>
+    <item android:state_checked="true">
+        <shape>
+            <padding android:left="3dp" android:top="3dp" android:bottom="3dp" android:right="3dp" />
+			<solid android:color="@color/theme_color" />
+        </shape>
+    </item>
+    <!--没被选中时的颜色-->
+    <item>
+        <shape>
+            <padding android:left="3dp" android:top="3dp" android:bottom="3dp" android:right="3dp" />
+            <solid android:color="@color/theme_color_light" />
+        </shape>
+    </item>
+  
+</selector>

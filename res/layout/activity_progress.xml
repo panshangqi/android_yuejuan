@@ -10,6 +10,7 @@
         android:gravity="center"
         android:padding="14dp"
         android:background="#fff"
+        android:textSize="16dp"
 	    />
     <ListView
         android:id="@+id/progress_mark_list_view"

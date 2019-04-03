@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    
+    <!-- 下面两个是用来给  activity_main.xml里的ListView赋值,-->
+    
+	<TextView
+	  android:id="@+id/qt_question_num"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:text="--/--"
+	  android:textColor="#fff"
+	  android:background="@drawable/button_bg_selector"
+	  android:textSize="14dp"
+	  android:gravity="center"
+	  android:padding="6dp"
+	  android:layout_gravity="center"
+	/>
+		 
+    
+	
+</LinearLayout>

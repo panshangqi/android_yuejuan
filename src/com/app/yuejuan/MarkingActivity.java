@@ -47,7 +47,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.io.IOException;
@@ -68,6 +67,7 @@ public class MarkingActivity extends MainBaseActivity {
 	RadioButton button_part;
 	List<View> viewPagerList;
 	RadioGroup radioTabGroup;
+	MarkingItemListAdapter.ItemClickInterfaceListener itemClickListener;
 	int page_index = 0;
 	ViewPager viewPager;
     @Override
@@ -107,7 +107,7 @@ public class MarkingActivity extends MainBaseActivity {
     	viewPagerList.add(view1);
     	viewPagerList.add(view2);
     	PagerAdapter pagerAdapter = new PagerAdapter() {  
-    		  
+
             @Override  
             public boolean isViewFromObject(View arg0, Object arg1) {  
   
@@ -163,7 +163,9 @@ public class MarkingActivity extends MainBaseActivity {
             }
             //此方法里的 arg0 是表示显示的第几页，当滑到第N页，就会调用此方法，arg0=N；
             public void onPageSelected(int arg0) {
+            	Log.v("YJ","-------------"+arg0);
 	       		switch (arg0) {
+	       		
 	       		case 0:
 	       			MarkingActivity.this.page_index = 0;
 	       			MarkingActivity.this.setTabRadioButtonSelected(0);
@@ -227,11 +229,21 @@ public class MarkingActivity extends MainBaseActivity {
         	item.withoutCount = item.taskTotalCount - data.teacount;
     		listInfo.add(item);	
     	}
-    	
-    	MarkingItemListAdapter bmilAdapter = new MarkingItemListAdapter(Public.context, listInfo);
 
-    	ListView markTaskListView = (ListView)viewPagerList.get(MarkingActivity.this.page_index).findViewById(R.id.marking_list_view);
+    	itemClickListener = new MarkingItemListAdapter.ItemClickInterfaceListener(){
+    		
+			@Override
+			public void Callback(final MarkingItemInfo itemInfo) {
+				// TODO Auto-generated method stub
+				Log.v("YJ","Click");
+				Intent intent =new Intent(MarkingActivity.this, CorrectScoreEditActivity.class);
+            	startActivity(intent);
+			}
+		};
+		
     	
+    	MarkingItemListAdapter bmilAdapter = new MarkingItemListAdapter(Public.context, listInfo, itemClickListener);
+    	ListView markTaskListView = (ListView)viewPagerList.get(MarkingActivity.this.page_index).findViewById(R.id.marking_list_view);
     	markTaskListView.setAdapter(bmilAdapter);
     }
     public void getMarkTaskFromService(){
@@ -277,13 +289,13 @@ public class MarkingActivity extends MainBaseActivity {
         switch (v.getId()) {
         case R.id.mk_all_button:
         	
-        	setTabRadioButtonSelected(0);
+        	//setTabRadioButtonSelected(0);
         	page_index = 0;
         	viewPager.setCurrentItem(page_index);
         	this.checkMarkIsStart();
             break;
         case R.id.mk_part_button:
-        	setTabRadioButtonSelected(1);
+        	//setTabRadioButtonSelected(1);
         	page_index = 1;
         	viewPager.setCurrentItem(page_index);
         	this.checkMarkIsStart();
@@ -293,10 +305,11 @@ public class MarkingActivity extends MainBaseActivity {
     }
     public void setTabRadioButtonSelected(int _id){
     	int count = radioTabGroup.getChildCount();
+   
     	for(int i=0;i<count;i++){
     		RadioButton rb = (RadioButton)radioTabGroup.getChildAt(i);
+    
     		if(i == _id){
-    			
         		rb.setSelected(true);
     		}else{
     			rb.setSelected(false);

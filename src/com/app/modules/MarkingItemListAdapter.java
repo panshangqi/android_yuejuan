@@ -2,6 +2,7 @@ package com.app.modules;
 
 import java.util.List;
 
+//import com.app.yuejuan.MarkingItemClickInterfaceListener;
 import com.app.yuejuan.R;
 import com.app.yuejuan.R.drawable;
 import com.app.yuejuan.R.id;
@@ -24,10 +25,12 @@ public class MarkingItemListAdapter extends BaseAdapter{
 	LayoutInflater inflater = null;
     List<MarkingItemInfo> listInfo;
     
-    public MarkingItemListAdapter(Context context,List<MarkingItemInfo> listInfo){
+    ItemClickInterfaceListener itemClickListener;
+    public MarkingItemListAdapter(Context context,List<MarkingItemInfo> listInfo, ItemClickInterfaceListener itemClickListener){
     	
         inflater = LayoutInflater.from(context);
         this.listInfo = listInfo;
+        this.itemClickListener = itemClickListener;
     }
     @Override
     public int getCount() {
@@ -52,6 +55,7 @@ public class MarkingItemListAdapter extends BaseAdapter{
         if(convertView == null || convertView.getTag() == null){
             convertView = inflater.inflate(R.layout.list_item_marking,null);
             holder = new ViewHolder();
+            holder.itemBox = convertView;
             holder.subjectNameView = (TextView)convertView.findViewById(R.id.tp_subject_name);
             holder.questionNameView = (TextView)convertView.findViewById(R.id.tp_question_name);
             holder.taskTotalView = (TextView)convertView.findViewById(R.id.tp_task_total_count);
@@ -69,7 +73,14 @@ public class MarkingItemListAdapter extends BaseAdapter{
         holder.taskTotalView.setText(String.valueOf(itemInfo.taskTotalCount));
         holder.dealWithView.setText(String.valueOf(itemInfo.dealWithCount));
         holder.withoutView.setText(String.valueOf(itemInfo.withoutCount));
-
+        
+        holder.itemBox.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+				itemClickListener.Callback(itemInfo);
+			}
+		});
 //        holder.numView.setOnTouchListener(new OnTouchListener(){
 //
 //			@Override
@@ -95,11 +106,15 @@ public class MarkingItemListAdapter extends BaseAdapter{
         return convertView;
     }
     public class ViewHolder{
+    	public View itemBox;
     	public TextView subjectNameView;
     	public TextView questionNameView;
         public TextView taskTotalView;
         public TextView dealWithView;
         public TextView dealPercentView;
         public TextView withoutView;
+    }
+    public static interface ItemClickInterfaceListener{
+    	public void Callback(MarkingItemInfo itemInfo);
     }
 }
