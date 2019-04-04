@@ -13,40 +13,25 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 /*
- * int secretid            密号
-String firstmark        初评分数
-String secondmark       复评分数
-String flagmode         试卷类型
-String signname         试卷标记
-String submittime       提交时间
-String quename          题目名称
+secretid        密号
+examid          考号
+flag_send       当前批阅模式
+imgurl          图片路径（考虑图片路径中会有中文出现，现imgurl进行了加密数据变换）
  */
 public class GetExamTaskInfoResponse {
 
   
 	protected String codeid;
 	protected String message;
-	public static class Datas{
-		public String firstmark;
-		public String secondmark;
-		public String flagmode;
-		public String signname;
-		public String submittime;
-		public String quename;
-		public int secretid;
+	public class Datas{
+		public String secretid;
+		public String examid;
+		public String flag_send;
+		public String imgurl;
 	}
 	public List<Datas> dataList;
 	
-    
 
-    /**
-     * Gets the value of the return property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
 	public GetExamTaskInfoResponse(String result){
 		dataList = new ArrayList();
 		try {
@@ -58,13 +43,10 @@ public class GetExamTaskInfoResponse {
 				for(int i=0;i<jsonArr.size();i++){
 					Datas data = new Datas();
 	                JsonObject subObject=jsonArr.get(i).getAsJsonObject();
-	                data.quename = subObject.get("quename").getAsString();
-	                data.firstmark = subObject.get("firstmark").getAsString();
-	                data.secondmark = subObject.get("secondmark").getAsString();
-	                data.flagmode = subObject.get("flagmode").getAsString();
-	                data.signname = subObject.get("signname").getAsString();
-	                data.submittime = subObject.get("submittime").getAsString();
-	                data.secretid = subObject.get("secretid").getAsInt();
+	                data.secretid = subObject.get("secretid").getAsString();
+	                data.examid = subObject.get("examid").getAsString();
+	                data.flag_send = subObject.get("flag_send").getAsString();
+	                data.imgurl = subObject.get("imgurl").getAsString();
 	                dataList.add(data);
 	            }
 				this.message = "";

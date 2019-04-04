@@ -47,6 +47,7 @@ import com.app.modules.ProgressItemInfo;
 import com.app.modules.ProgressItemListAdapter;
 import com.app.modules.QuestionTaskItemInfo;
 import com.app.modules.QuestionTaskItemListAdapter;
+import com.app.utils.WebServiceUtil;
 import com.app.webservice.*;
 
 public class CorrectScoreEditActivity extends Activity {

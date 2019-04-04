@@ -62,6 +62,8 @@ import com.app.modules.AlreadyMarkItemListAdapter;
 import com.app.modules.MarkingItemInfo;
 import com.app.modules.MarkingItemListAdapter;
 import com.app.modules.ProgressItemInfo;
+import com.app.utils.ViewTranslateAnimate;
+import com.app.utils.WebServiceUtil;
 import com.app.webservice.*;
 
 public class MarkingActivity extends MainBaseActivity {
@@ -73,8 +75,9 @@ public class MarkingActivity extends MainBaseActivity {
 	int page_index = 0;
 	ViewPager viewPager;
 	LinearLayout viewPagerBox;
-	Animation animationL2R;
-	Animation animationR2L;
+	Animation animationInLeft;
+	Animation animationOutRight;
+	ViewTranslateAnimate animateUtil;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	Log.d("YJ", "onCreate func");
@@ -107,93 +110,14 @@ public class MarkingActivity extends MainBaseActivity {
     	//viewPager = (ViewPager)findViewById(R.id.viewpager);
     	viewPagerBox = (LinearLayout)findViewById(R.id.viewpager);
     	viewPagerList = new ArrayList();
-    	
     	View view1 = Public.inflater.inflate(R.layout.layout_mark_all, null);
     	View view2 = Public.inflater.inflate(R.layout.layout_mark_part, null);
     	viewPagerList.add(view1);
     	viewPagerList.add(view2);
-    	animationL2R = AnimationUtils.loadAnimation(Public.context, R.anim.view_translate_left_to_right);
-    	animationR2L = AnimationUtils.loadAnimation(Public.context, R.anim.view_translate_right_to_left);
-    	animationL2R.setDuration(500);
-    	animationR2L.setDuration(500);
-//    	PagerAdapter pagerAdapter = new PagerAdapter() {  
-//
-//            @Override  
-//            public boolean isViewFromObject(View arg0, Object arg1) {  
-//  
-//                return arg0 == arg1;  
-//            }  
-//  
-//            @Override  
-//            public int getCount() {  
-//  
-//                return viewPagerList.size();  
-//            }  
-//  
-//            @Override  
-//            public void destroyItem(ViewGroup container, int position, Object object) {  
-//                container.removeView(viewPagerList.get(position));  
-//            }  
-//  
-//            @Override  
-//            public int getItemPosition(Object object) {  
-//  
-//                return super.getItemPosition(object);  
-//            }  
-//  
-//            @Override  
-//            public CharSequence getPageTitle(int position) {  
-//  
-//                return "";//titleList.get(position);  
-//            }  
-//  
-//            @Override  
-//            public Object instantiateItem(ViewGroup container, int position) {  
-//                container.addView(viewPagerList.get(position));
-//                
-//                return viewPagerList.get(position);  
-//            }  
-//
-//
-//        };  
-//        viewPager.setAdapter(pagerAdapter); 
-// 
-//        viewPager.setOnPageChangeListener(new OnPageChangeListener() {
-//            //此方法是在状态改变的时候调用，其中arg0这个参数有三种状态（0，1，2）。
-//            //arg0 ==1的时辰默示正在滑动，arg0==2的时辰默示滑动完毕了，arg0==0的时辰默示什么都没做。
-//            //当页面开始滑动的时候，三种状态的变化顺序为（1，2，0）
-//            public void onPageScrollStateChanged(int arg0) {
-//            
-//            }
-//            //此方法里有3个参数</span></span>
-//            //当你滑动时一直调用这个方法直到停止滑到
-//            //arg0：表示现在的页面； arg1：表示当前页面偏移百分比； arg2：表示当前页面偏移的像素；
-//            public void onPageScrolled(int arg0, float arg1, int arg2) {
-//            
-//            }
-//            //此方法里的 arg0 是表示显示的第几页，当滑到第N页，就会调用此方法，arg0=N；
-//            public void onPageSelected(int arg0) {
-//            	Log.v("YJ","-------------"+arg0);
-//	       		switch (arg0) {
-//	       		
-//	       		case 0:
-//	       			MarkingActivity.this.page_index = 0;
-//	       			MarkingActivity.this.setTabRadioButtonSelected(0);
-//	       		    break;
-//	       		case 1:
-//	       			MarkingActivity.this.page_index = 1;
-//	       			MarkingActivity.this.setTabRadioButtonSelected(1);
-//	       			break;
-//	       		
-//	       		default:
-//	       			break;
-//	       		}
-//	       		MarkingActivity.this.checkMarkIsStart();
-//	       	}
-//       });
-       //init
-        //viewPager.setCurrentItem(0);
-    	//this.checkMarkIsStart();
+    	animateUtil = new ViewTranslateAnimate(viewPagerBox, viewPagerList, 0);
+    	animateUtil.setDruation(300);
+
+    	this.checkMarkIsStart();
 	}
     public void checkMarkIsStart(){
     	Public pub = (Public)this.getApplication();
@@ -253,7 +177,7 @@ public class MarkingActivity extends MainBaseActivity {
 		
     	
     	MarkingItemListAdapter bmilAdapter = new MarkingItemListAdapter(Public.context, listInfo, itemClickListener);
-    	ListView markTaskListView = (ListView)viewPagerList.get(MarkingActivity.this.page_index).findViewById(R.id.marking_list_view);
+    	ListView markTaskListView = (ListView)animateUtil.getViewByID(R.id.marking_list_view);
     	markTaskListView.setAdapter(bmilAdapter);
     }
     public void getMarkTaskFromService(){
@@ -299,28 +223,13 @@ public class MarkingActivity extends MainBaseActivity {
         switch (v.getId()) {
         case R.id.mk_all_button:
         	
-        	//setTabRadioButtonSelected(0);
-        	page_index = 0;
-        	//viewPager.setCurrentItem(page_index);
-        	
-        	viewPagerList.get(0).startAnimation(animationR2L);
-        	if(viewPagerBox!=null){
-        		viewPagerBox.removeView(viewPagerList.get(1));
-        		viewPagerBox.addView(viewPagerList.get(0));
-        	}
-        	
+    		setTabRadioButtonSelected(0);
+        	animateUtil.setCurrentItem(0);
         	this.checkMarkIsStart();
             break;
         case R.id.mk_part_button:
-        	//setTabRadioButtonSelected(1);
-        	page_index = 1;
-        	//viewPager.setCurrentItem(page_index);
-        	viewPagerList.get(1).startAnimation(animationL2R);
-        	if(viewPagerBox!=null){
-        		viewPagerBox.removeView(viewPagerList.get(0));
-        		viewPagerBox.addView(viewPagerList.get(1));
-        	}
-        	
+        	setTabRadioButtonSelected(1);
+        	animateUtil.setCurrentItem(1);
         	this.checkMarkIsStart();
         default:
             break;
