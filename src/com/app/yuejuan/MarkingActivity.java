@@ -161,6 +161,7 @@ public class MarkingActivity extends MainBaseActivity {
         	item.subjectName = pub.usersubject;
         	item.questionName = data.quename;
         	item.withoutCount = item.taskTotalCount - data.teacount;
+        	item.queid = data.queid;
     		listInfo.add(item);	
     	}
 
@@ -171,6 +172,8 @@ public class MarkingActivity extends MainBaseActivity {
 				// TODO Auto-generated method stub
 				Log.v("YJ","Click");
 				Intent intent =new Intent(MarkingActivity.this, CorrectScoreEditActivity.class);
+				intent.putExtra("queid", itemInfo.queid);
+				intent.putExtra("quename", itemInfo.questionName);
             	startActivity(intent);
 			}
 		};

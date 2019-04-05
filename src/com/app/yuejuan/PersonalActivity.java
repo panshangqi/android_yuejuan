@@ -115,6 +115,7 @@ public class PersonalActivity extends MainBaseActivity {
         	overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
         	break;
         case R.id.my_service_phone_button:
+        	//Toast.makeText(PersonalActivity.this, "my_service_phone_button", Toast.LENGTH_SHORT).show();
         	intent =new Intent(PersonalActivity.this, ServicePhoneActivity.class);
         	startActivity(intent);
         	overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);

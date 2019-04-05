@@ -178,19 +178,21 @@
 	    	</LinearLayout>
 		    
 		    <LinearLayout
-		        android:id="@+id/my_help_center_button"
+		        
 		        android:layout_width="match_parent"
 			    android:layout_height="120dp"
 			    android:gravity="center"
-			    android:onClick="onClick"
+			    
 			    android:background="@drawable/line_bottom_sharp"
 			    android:orientation="horizontal">
 		        >
 		        <LinearLayout
+		            android:id="@+id/my_help_center_button"
 			        android:layout_width="0dp"
 			        android:layout_weight="1"
 			        android:gravity="center"
 			        android:orientation="vertical"
+			        android:onClick="onClick"
 			        android:background="@drawable/line_left_sharp"
 			        android:layout_height="120dp">
 			        <ImageView 
@@ -220,6 +222,7 @@
 			        android:layout_weight="1"
 			        android:gravity="center"
 			        android:orientation="vertical"
+			        android:onClick="onClick"
 			        android:background="@drawable/line_left_sharp"
 			        android:layout_height="120dp">
 	

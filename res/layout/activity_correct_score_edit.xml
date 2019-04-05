@@ -27,11 +27,12 @@
 		    	android:background="@drawable/arrow_left"
 		    />
 		    <TextView 
+		        android:id="@+id/hd_que_name"
 		        android:layout_width="wrap_content"
 		    	android:layout_height="wrap_content"
-		    	android:layout_marginLeft="10dp"
+		    	android:layout_marginLeft="16dp"
 		    	android:layout_marginRight="10dp"
-		    	android:text="第12-16题"
+		    	android:text="--/--"
 		    	android:textColor="#fff"
 		    	android:textSize="16dp"
 		    />
@@ -44,6 +45,7 @@
 	    	android:textColor="#fff"
 	    />
 	    <TextView 
+	        android:id="@+id/ct_record_button"
 	        android:layout_width="wrap_content"
 	    	android:layout_height="wrap_content"
 	    	android:text="阅卷记录"
@@ -54,6 +56,7 @@
 	    	android:layout_marginLeft="20dp"
 	        />
 	    <TextView 
+	        android:id="@+id/ct_score_button"
 	        android:layout_width="wrap_content"
 	    	android:layout_height="wrap_content"
 	    	android:text="打分板"
@@ -64,6 +67,7 @@
 	    	android:layout_marginLeft="20dp"
 	        />
 	    <TextView 
+	        android:id="@+id/ct_select_button"
 	        android:layout_width="wrap_content"
 	    	android:layout_height="wrap_content"
 	    	android:text="选题"
@@ -102,6 +106,7 @@
 		    android:padding="1dp"
 	    >
 		    <ScrollView
+		        android:id="@+id/canvas_scroll_bar"
 			    android:layout_width="match_parent"
 			    android:layout_height="match_parent"
 			    >
@@ -122,21 +127,312 @@
 	    </LinearLayout>
 	    
 	    <LinearLayout 
-		    android:layout_width="130dp"
+		    android:layout_width="115dp"
 		    android:layout_height="match_parent"
 		    android:orientation="vertical"
-		    android:padding="2dp"
 		    >
-	    	<ListView
-		        android:id="@+id/question_task_list_view"
+		    <AbsoluteLayout 
 		        android:layout_width="match_parent"
-		        android:layout_height="0dp"
-		    	android:layout_weight="1"
-		        android:background="@color/lightgray2"
-		        android:padding="6dp"
-		        android:divider="@android:color/transparent"
-		        android:dividerHeight="6dp"
-	/>
+			    android:layout_height="match_parent"
+			    android:orientation="vertical"
+			    android:layout_marginTop="5dp"
+			    android:layout_marginLeft="5dp"
+		        >
+		        <ListView
+			        android:id="@+id/score_points_list_view"
+			        android:layout_width="match_parent"
+			        android:layout_height="match_parent"
+			    	android:layout_marginTop="5dp"
+			        android:background="@color/lightgray2"
+			        android:paddingLeft="5dp"
+			        android:paddingRight="0dp"
+			        android:divider="@android:color/transparent"
+			        android:dividerHeight="6dp"
+				/>
+		        <!-- 打分板 -->
+		    	<LinearLayout
+		    	    android:id="@+id/ct_score_panel"
+		    	    android:layout_width="match_parent"
+			        android:layout_height="match_parent"
+			        android:background="@color/theme_color_1"
+			        android:padding="6dp"
+			        android:columnWidth="48dp"
+			        android:orientation="vertical"
+	    	    >
+				    <!-- 分数显示 -->
+				    <LinearLayout
+			    	    android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:columnWidth="48dp"
+				        android:orientation="horizontal"
+				        android:layout_marginTop="0dp"
+				        android:gravity="center_horizontal"
+		    	    >
+		    	    	<TextView 
+		    	    	    android:id="@+id/score_show_box"
+		    	    	    android:layout_width="wrap_content"
+		    	    	    android:layout_height="wrap_content"
+		    	    	    android:text="2.5"
+		    	    	    android:textSize="29dp"
+		    	    	    android:textColor="#fff"
+		    	    	    android:layout_alignParentBottom="true"
+	    	    	    />
+		    	    	<TextView 
+		    	    	    android:layout_width="wrap_content"
+		    	    	    android:layout_height="wrap_content"
+		    	    	    android:text="分"
+		    	    	    android:layout_marginLeft="6dp"
+		    	    	    android:textColor="#fff"
+		    	    	    android:textSize="16dp"
+		    	    	    android:layout_alignParentBottom="true"
+	    	    	    />
+	    	    	</LinearLayout>
+				    <!-- 0 1 -->
+				    <LinearLayout
+			    	    android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:columnWidth="48dp"
+				        android:orientation="horizontal"
+				        android:layout_marginTop="10dp"
+		    	    >
+		    	    	<TextView 
+		    	    	    android:layout_width="45dp"
+		    	    	    android:layout_height="28dp"
+		    	    	    android:text="0"
+		    	    	    android:gravity="center"
+		    	    	    android:textColor="#222"
+		    	    	    android:background="@drawable/buttonsharp_2"
+	    	    	    />
+		    	    	<TextView 
+		    	    	    android:layout_width="45dp"
+		    	    	    android:layout_height="28dp"
+		    	    	    android:text="1"
+		    	    	    android:gravity="center"
+		    	    	    android:textColor="#222"
+		    	    	    android:layout_marginLeft="6dp"
+		    	    	    android:background="@drawable/buttonsharp_2"
+	    	    	    />
+	    	    	</LinearLayout>
+	    	    	<!-- 2 3 -->
+	    	    	<LinearLayout
+			    	    android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:columnWidth="48dp"
+				        android:orientation="horizontal"
+				        android:layout_marginTop="10dp"
+		    	    >
+		    	    	<TextView 
+		    	    	    android:layout_width="45dp"
+		    	    	    android:layout_height="28dp"
+		    	    	    android:text="2"
+		    	    	    android:gravity="center"
+		    	    	    android:textColor="#222"
+		    	    	    android:background="@drawable/buttonsharp_2"
+	    	    	    />
+		    	    	<TextView 
+		    	    	    android:layout_width="45dp"
+		    	    	    android:layout_height="28dp"
+		    	    	    android:text="3"
+		    	    	    android:gravity="center"
+		    	    	    android:textColor="#222"
+		    	    	    android:layout_marginLeft="6dp"
+		    	    	    android:background="@drawable/buttonsharp_2"
+	    	    	    />
+	    	    	</LinearLayout>
+	    	    	<!-- 4 5 -->
+	    	    	<LinearLayout
+			    	    android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:columnWidth="48dp"
+				        android:orientation="horizontal"
+				        android:layout_marginTop="10dp"
+		    	    >
+		    	    	<TextView 
+		    	    	    android:layout_width="45dp"
+		    	    	    android:layout_height="28dp"
+		    	    	    android:text="4"
+		    	    	    android:gravity="center"
+		    	    	    android:textColor="#222"
+		    	    	    android:background="@drawable/buttonsharp_2"
+	    	    	    />
+		    	    	<TextView 
+		    	    	    android:layout_width="45dp"
+		    	    	    android:layout_height="28dp"
+		    	    	    android:text="5"
+		    	    	    android:gravity="center"
+		    	    	    android:textColor="#222"
+		    	    	    android:layout_marginLeft="6dp"
+		    	    	    android:background="@drawable/buttonsharp_2"
+	    	    	    />
+	    	    	</LinearLayout>
+	    	    	<!-- 6 7 -->
+	    	    	<LinearLayout
+			    	    android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:columnWidth="48dp"
+				        android:textColor="#222"
+				        android:orientation="horizontal"
+				        android:layout_marginTop="10dp"
+		    	    >
+		    	    	<TextView 
+		    	    	    android:layout_width="45dp"
+		    	    	    android:layout_height="28dp"
+		    	    	    android:text="6"
+		    	    	    android:gravity="center"
+		    	    	    android:textColor="#222"
+		    	    	    android:background="@drawable/buttonsharp_2"
+	    	    	    />
+		    	    	<TextView 
+		    	    	    android:layout_width="45dp"
+		    	    	    android:layout_height="28dp"
+		    	    	    android:text="7"
+		    	    	    android:gravity="center"
+		    	    	    android:textColor="#222"
+		    	    	    android:layout_marginLeft="6dp"
+		    	    	    android:background="@drawable/buttonsharp_2"
+	    	    	    />
+	    	    	</LinearLayout>
+	    	    	<!-- 8 9 -->
+	    	    	<LinearLayout
+			    	    android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:columnWidth="48dp"
+				        android:orientation="horizontal"
+				        android:layout_marginTop="10dp"
+		    	    >
+		    	    	<TextView 
+		    	    	    android:layout_width="45dp"
+		    	    	    android:layout_height="28dp"
+		    	    	    android:text="8"
+		    	    	    android:gravity="center"
+		    	    	    android:textColor="#222"
+		    	    	    android:background="@drawable/buttonsharp_2"
+	    	    	    />
+		    	    	<TextView 
+		    	    	    android:layout_width="45dp"
+		    	    	    android:layout_height="28dp"
+		    	    	    android:text="9"
+		    	    	    android:gravity="center"
+		    	    	    android:textColor="#222"
+		    	    	    android:layout_marginLeft="6dp"
+		    	    	    android:background="@drawable/buttonsharp_2"
+	    	    	    />
+	    	    	</LinearLayout>
+	    	    	<!-- . <delete> -->
+	    	    	<LinearLayout
+			    	    android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:columnWidth="48dp"
+				        android:orientation="horizontal"
+				        android:layout_marginTop="10dp"
+		    	    >
+		    	    	<TextView 
+		    	    	    android:layout_width="45dp"
+		    	    	    android:layout_height="28dp"
+		    	    	    android:text="."
+		    	    	    android:textColor="#222"
+		    	    	    android:gravity="center"
+		    	    	    android:background="@drawable/buttonsharp_2"
+	    	    	    />
+		    	    	<ImageView 
+		    	    	    android:layout_width="45dp"
+		    	    	    android:layout_height="28dp"
+		    	    	    
+		    	    	    android:gravity="center"
+		    	    	    android:layout_marginLeft="6dp"
+		    	    	    android:background="@drawable/score_delete"
+	    	    	    />
+	    	    	</LinearLayout>
+	    	    	<!-- 满分 错误 -->
+	    	    	<LinearLayout
+			    	    android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:columnWidth="48dp"
+				        android:orientation="horizontal"
+				        android:layout_marginTop="10dp"
+		    	    >
+		    	    	<TextView 
+		    	    	    android:layout_width="45dp"
+		    	    	    android:layout_height="45dp"
+		    	    	    android:text="满分"
+		    	    	    android:gravity="center"
+		    	    	    android:textColor="#fff"
+		    	    	    android:background="@drawable/buttonsharp_3"
+	    	    	    />
+		    	    	<TextView 
+		    	    	    android:layout_width="45dp"
+		    	    	    android:layout_height="45dp"
+		    	    	    android:text="错误"
+		    	    	    android:textColor="#fff"
+		    	    	    android:gravity="center"
+		    	    	    android:layout_marginLeft="6dp"
+		    	    	    android:background="@drawable/buttonsharp_4"
+	    	    	    />
+	    	    	</LinearLayout>
+	    	    	<TextView 
+	    	    	    android:layout_width="60dp"
+	    	    	    android:layout_height="60dp"
+	    	    	    android:text="提交"
+	    	    	    android:textColor="#fff"
+	    	    	    android:gravity="center"
+	    	    	    android:layout_gravity="center"
+	    	    	    android:layout_marginTop="10dp"
+	    	    	    android:background="@drawable/buttonsharp_5"
+    	    	    />
+	    		</LinearLayout>
+	    		<!-- 阅卷记录 回评接口，分数逆序排列 -->
+	    		<LinearLayout
+	    		    android:id="@+id/ct_record_panel"
+		    	    android:layout_width="match_parent"
+			        android:layout_height="match_parent"
+			        android:orientation="vertical"
+			        android:background="@color/theme_color_1"
+	    	    >
+	    	    	<LinearLayout
+			    	    android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:orientation="horizontal"
+				        android:paddingTop="8dp"
+				        android:paddingBottom="8dp"
+		    	    >
+		    	    	<TextView 
+		    	    	    android:layout_width="0dp"
+		    	    	    android:layout_weight="1"
+		    	    	    android:layout_height="wrap_content"
+		    	    	    android:text="序号"
+		    	    	    android:textColor="#fff"
+		    	    	    android:gravity="center"
+		    	    	    android:layout_gravity="center"
+	    	    	    />
+		    	    	<TextView 
+		    	    	    android:layout_width="0dp"
+		    	    	    android:layout_weight="1"
+		    	    	    android:layout_height="wrap_content"
+		    	    	    android:text="评分"
+		    	    	    android:textColor="#fff"
+		    	    	    android:gravity="center"
+		    	    	    android:layout_gravity="center"
+	    	    	    />
+	    	    	</LinearLayout>
+	    	    	<TextView 
+	    	    	    android:layout_width="match_parent"
+				        android:layout_height="1dp"
+				        android:background="#fff"
+	    	    	    />
+			        <ListView
+				        android:id="@+id/correct_record_list_view"
+				        android:layout_width="match_parent"
+				        android:layout_weight="1"
+				        android:layout_height="0dp"
+				    	android:layout_marginTop="5dp"
+				        
+				        android:paddingLeft="5dp"
+				        android:paddingRight="0dp"
+				        android:divider="#00000000"
+					/>
+		        </LinearLayout>
+		    </AbsoluteLayout>
+
     	</LinearLayout>
     </LinearLayout>
 </LinearLayout>

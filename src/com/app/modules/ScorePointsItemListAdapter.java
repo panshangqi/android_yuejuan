@@ -20,11 +20,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class QuestionTaskItemListAdapter extends BaseAdapter{
+public class ScorePointsItemListAdapter extends BaseAdapter{
 	LayoutInflater inflater = null;
-    List<QuestionTaskItemInfo> listInfo;
+    List<ScorePointsItemInfo> listInfo;
     
-    public QuestionTaskItemListAdapter(Context context,List<QuestionTaskItemInfo> listInfo){
+    public ScorePointsItemListAdapter(Context context,List<ScorePointsItemInfo> listInfo){
     	
         inflater = LayoutInflater.from(context);
         this.listInfo = listInfo;
@@ -48,9 +48,9 @@ public class QuestionTaskItemListAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
         ViewHolder holder;
-        final QuestionTaskItemInfo itemInfo = listInfo.get(position);
+        final ScorePointsItemInfo itemInfo = listInfo.get(position);
         if(convertView == null || convertView.getTag() == null){
-            convertView = inflater.inflate(R.layout.list_item_question_task,null);
+            convertView = inflater.inflate(R.layout.list_item_score_potions,null);
             holder = new ViewHolder();
             holder.numView = (TextView)convertView.findViewById(R.id.qt_question_num);
             

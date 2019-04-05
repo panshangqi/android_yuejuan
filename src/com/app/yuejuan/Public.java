@@ -20,8 +20,11 @@ public class Public extends Application {
 	public String usersubject;
 	public String userpower;
 	
+	public static String imageHost = "http://49.4.48.115";///exam/appshowimage
+	
 	public static String responseID = "0001";
 	public static String responseIDOK = "0001";
+	
 	public static int isMarkingActivity = 1; //默认显示正评列表
 	public static Context context = null;
 	public static LayoutInflater inflater = null;
@@ -40,6 +43,9 @@ public class Public extends Application {
 		context = getApplicationContext();
 		inflater = LayoutInflater.from(context);
 	
+	}
+	public static String imageUrl(String imgPath){
+		return Public.imageHost + "/exam/appshowimage?path=" + imgPath;
 	}
 	public void setUserID(String _userid){
 		this.userid = _userid;

@@ -56,7 +56,7 @@
         android:textColor="#fff"
         android:background="@drawable/buttonsharp"
         android:textSize="16dp"
-        android:text="登 陆" />
+        android:text="登 录" />
 	<LinearLayout 
 	    android:layout_below="@id/login_button"
 	    android:layout_width="match_parent"

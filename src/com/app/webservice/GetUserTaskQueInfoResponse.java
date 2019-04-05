@@ -47,6 +47,7 @@ public class GetUserTaskQueInfoResponse {
 		public String fullmark;
 		public String scorepoints;
 		public List<SmallQueInfo> smallqueinfoList;
+		
 	}
 	public List<Datas> dataList;
 	

@@ -18,6 +18,8 @@ import android.view.View.OnTouchListener;
 import android.view.View.OnFocusChangeListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+
 import android.widget.TextView;
 
 public class ProgressItemListAdapter extends BaseAdapter{
@@ -44,6 +46,22 @@ public class ProgressItemListAdapter extends BaseAdapter{
         // TODO Auto-generated method stub
         return index;
     }
+    public class MyRunnable implements Runnable{
+    	public ViewHolder holder;
+    	public ProgressItemInfo itemInfo;
+    	public void setViewHolder(ViewHolder holder, ProgressItemInfo itemInfo){
+    		this.holder = holder;
+    		this.itemInfo = itemInfo;
+    	}
+    	public void run(){
+    		int barWidth = holder.progress_barView.getWidth();
+    		int blockWidth = (int)(barWidth * itemInfo.reat * 0.01);
+            LinearLayout.LayoutParams linearParams =(LinearLayout.LayoutParams) holder.progress_blockView.getLayoutParams(); //取控件textView当前的布局参数 linearParams.height = 20;// 控件的高强制设成20  
+            linearParams.width = blockWidth; 
+            holder.progress_blockView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+    		
+    	}
+    }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
@@ -57,7 +75,8 @@ public class ProgressItemListAdapter extends BaseAdapter{
             holder.taskTotalView = (TextView)convertView.findViewById(R.id.tp_task_total_count);
             holder.dealWithView = (TextView)convertView.findViewById(R.id.tp_deal_with_count);
             holder.dealPercentView = (TextView)convertView.findViewById(R.id.tp_deal_with_percent);
-            
+            holder.progress_barView = (LinearLayout)convertView.findViewById(R.id.progress_bar_h);
+            holder.progress_blockView = (LinearLayout)convertView.findViewById(R.id.progress_block_h);
             convertView.setTag(holder);
         }else{
              
@@ -68,15 +87,23 @@ public class ProgressItemListAdapter extends BaseAdapter{
         holder.questionNameView.setText(itemInfo.questionName);
         holder.taskTotalView.setText(String.valueOf(itemInfo.taskTotalCount));
         holder.dealWithView.setText(String.valueOf(itemInfo.dealWithCount));
-//        double percents = 0;
-//        if(itemInfo.dealWithCount > 0){
-//        	percents = (double)itemInfo.taskTotalCount / itemInfo.dealWithCount;
-//        }
-        //int percentInt = (int)(itemInfo.reat*100.00);
-        
-        
-        holder.dealPercentView.setText(String.valueOf(itemInfo.reat) +"%");
 
+        holder.dealPercentView.setText(String.valueOf(itemInfo.reat) +"%");
+        
+        //int barWidth = holder.progress_barView.getWidth();
+        //measure方法的参数值都设为0即可  
+        MyRunnable runable = new MyRunnable();
+        runable.setViewHolder(holder, itemInfo);
+        
+        	
+        
+        
+
+        holder.progress_barView.post(runable);
+        //获取组件宽度  
+        //holder.progress_barView
+        
+        
 //        holder.numView.setOnTouchListener(new OnTouchListener(){
 //
 //			@Override
@@ -107,5 +134,7 @@ public class ProgressItemListAdapter extends BaseAdapter{
         public TextView taskTotalView;
         public TextView dealWithView;
         public TextView dealPercentView;
+        public LinearLayout progress_barView;
+        public LinearLayout progress_blockView;
     }
 }
