@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme_bg_gray_color"
+    android:orientation="vertical"
+     >
+	<include layout="@layout/header_title_back_layout" />
+    
+	<RelativeLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:padding="25dp"
+	    android:orientation="vertical"
+	    android:background="@drawable/parent_request_bg"
+	    >
+	    
+	    <Button
+	        android:id="@+id/request_parent_button"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginBottom="40dp"
+	        android:onClick="onClick"
+	        android:textColor="#fff"
+	        android:textSize="20dp" 
+	        android:layout_alignParentBottom="true"
+	        android:background="@drawable/buttonsharp_1"
+	        android:text="开始邀请" />
+	</RelativeLayout>
+
+</LinearLayout>

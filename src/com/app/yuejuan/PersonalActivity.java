@@ -60,6 +60,7 @@ public class PersonalActivity extends MainBaseActivity {
 //  //方法：控件View的点击事件
     @Override
 	public void widgetClick(View v){
+    	Intent intent;
         switch (v.getId()) {
         case R.id.logout_button:
         	Public pub = (Public)this.getApplication();
@@ -70,7 +71,7 @@ public class PersonalActivity extends MainBaseActivity {
             HashMap<String, String> properties = new HashMap<String, String>();
             properties.put("arg0", userid);
             properties.put("arg1", token);
-            Intent intent =new Intent(PersonalActivity.this, LoginActivity.class);
+            intent =new Intent(PersonalActivity.this, LoginActivity.class);
         	startActivity(intent);
         	overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
         	Log.v("YJ","Login out");
@@ -93,8 +94,29 @@ public class PersonalActivity extends MainBaseActivity {
             break;
               
         case R.id.my_change_password_button:
-        	Intent intent1 =new Intent(PersonalActivity.this, ForgetPasswordActivity.class);
-        	startActivity(intent1);
+        	intent =new Intent(PersonalActivity.this, ModifyPasswordActivity.class);
+        	startActivity(intent);
+        	overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+        	break;
+        	
+        case R.id.my_request_button:
+        	intent =new Intent(PersonalActivity.this, ParentRequestActivity.class);
+        	startActivity(intent);
+        	overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+        	break;
+        case R.id.my_regiter_parent_button:
+        	intent =new Intent(PersonalActivity.this, ParentRegisterActivity.class);
+        	startActivity(intent);
+        	overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+        	break;
+        case R.id.my_help_center_button:
+        	intent =new Intent(PersonalActivity.this, HelpCenterActivity.class);
+        	startActivity(intent);
+        	overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+        	break;
+        case R.id.my_service_phone_button:
+        	intent =new Intent(PersonalActivity.this, ServicePhoneActivity.class);
+        	startActivity(intent);
         	overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
         	break;
         default:
