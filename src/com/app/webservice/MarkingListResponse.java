@@ -69,6 +69,9 @@ public class MarkingListResponse {
 	                data.flag_mode = subObject.get("flag_mode").getAsString();
 	                dataList.add(data);
 	            }
+				this.message = "";
+			}else{
+				this.message = object.get("message").getAsString();
 			}
 			
 		} catch (JsonIOException e) {

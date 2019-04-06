@@ -46,9 +46,20 @@
         android:text="888888"
         android:layout_marginTop="15dp"
         android:textSize="14dp" />
+	<EditText
+        android:id="@+id/login_ip"
+ 		android:layout_below="@id/login_password"
+   		android:background="@drawable/editsharp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:hint="输入学校IP地址和端口"
+        android:paddingLeft="20dp"
+        android:text=""
+        android:layout_marginTop="15dp"
+        android:textSize="14dp" />
 	<Button
         android:id="@+id/login_button"
-        android:layout_below="@id/login_password"
+        android:layout_below="@id/login_ip"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginTop="22dp"

@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.view.Menu;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.view.View;
 import android.widget.Toast;
 import android.content.Context;
@@ -44,13 +45,19 @@ import com.app.utils.WebServiceUtil;
 import com.app.webservice.*;
 
 public class LoginActivity extends Activity {
-
+	TextView ipET;
+	EditText passwordET;
+	EditText usernameET;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	Log.d("YJ", "onCreate func");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        
+        ipET = (TextView)this.findViewById(R.id.login_ip);
+        ipET.setText(Public.imageHost);
+        usernameET =(EditText)findViewById(R.id.login_username);
+        passwordET =(EditText)findViewById(R.id.login_password);
+        passwordET.setText("888888");
     }
 
 
@@ -63,16 +70,17 @@ public class LoginActivity extends Activity {
     }
     //登陆
 	public void toLoginClick(){
-		EditText usernameET =(EditText)findViewById(R.id.login_username);
+		
         String username = usernameET.getText().toString();
-        EditText passwordET =(EditText)findViewById(R.id.login_password);
         String password = passwordET.getText().toString();
-       
+        String ip = ipET.getText().toString();
+        
         HashMap<String, String> properties = new HashMap<String, String>();
         properties.put("arg0", username);
         properties.put("arg1", password);
         Public pub = (Public)this.getApplication();
         pub.setUserID(username);
+        Public.imageHost = ip;
         WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "UserLogin", properties, new WebServiceUtil.WebServiceCallBack() {
             @Override
             public void callBack(String result) {
@@ -84,18 +92,11 @@ public class LoginActivity extends Activity {
                     	//AppCookies.setToken(reponse.getAuthtoken());
                         Public pub = (Public)LoginActivity.this.getApplication();
                         pub.setToken(reponse.getAuthtoken());
+                        
                         LoginActivity.this.getUserInfo();
                        
-                    }else if("0002".equals(reponse.getCodeID())){
-                    	Toast.makeText(LoginActivity.this, "用户名或密码不能为空", Toast.LENGTH_SHORT).show();
-                    }else if("0003".equals(reponse.getCodeID())){
-                    	Toast.makeText(LoginActivity.this, "本系统暂不支持管理员登录", Toast.LENGTH_SHORT).show();
-                    }else if("0004".equals(reponse.getCodeID())){
-                    	Toast.makeText(LoginActivity.this, "服务器数据异常", Toast.LENGTH_SHORT).show();
-                    }else if("0005".equals(reponse.getCodeID())){
-                    	Toast.makeText(LoginActivity.this, "数据异常验证失败", Toast.LENGTH_SHORT).show();
-                    }else if("0006".equals(reponse.getCodeID())){
-                    	Toast.makeText(LoginActivity.this, "数据异常登录失败", Toast.LENGTH_SHORT).show();
+                    }else{
+                    	Toast.makeText(LoginActivity.this, reponse.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     
                 }

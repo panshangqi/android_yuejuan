@@ -7,7 +7,7 @@
         android:right="2dp"
         android:top="2dp" />
     <!-- 设置圆角矩形1 -->
-    <corners android:radius="6dp" />
+    <corners android:radius="7dp" />
 
     <stroke
         android:width="0px"

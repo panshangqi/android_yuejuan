@@ -12,15 +12,15 @@ import android.view.LayoutInflater;
 import android.view.WindowManager;
 public class Public extends Application {
 	public boolean isDebug = true;
-	public String userid;
-	public String token;
-	public String username;
-	public String usernowproject;
-	public String usersubjectid;
-	public String usersubject;
-	public String userpower;
+	public static String userid;
+	public static String token;
+	public static String username;
+	public static String usernowproject;
+	public static String usersubjectid;
+	public static String usersubject;
+	public static String userpower;
 	
-	public static String imageHost = "http://49.4.48.115";///exam/appshowimage
+	public static String imageHost = "49.4.48.115";///exam/appshowimage
 	
 	public static String responseID = "0001";
 	public static String responseIDOK = "0001";
@@ -32,20 +32,20 @@ public class Public extends Application {
 	public void onCreate(){
 		super.onCreate();
 		if(isDebug == true){
-			userid = "d001";
-			token = "Hz4ybVyXi2aBJIUrQjLnrg==";
-			username = "d001";
-			usernowproject = "实验";
-			usersubjectid = "100001";
-			usersubject = "高一地理综合";
-			userpower = "评卷老师";
+			Public.userid = "d001";
+			Public.token = "Hz4ybVyXi2aBJIUrQjLnrg==";
+			Public.username = "d001";
+			Public.usernowproject = "实验";
+			Public.usersubjectid = "100001";
+			Public.usersubject = "高一地理综合";
+			Public.userpower = "评卷老师";
 		}
 		context = getApplicationContext();
 		inflater = LayoutInflater.from(context);
 	
 	}
 	public static String imageUrl(String imgPath){
-		return Public.imageHost + "/exam/appshowimage?path=" + imgPath;
+		return "http://" + Public.imageHost + "/exam/appshowimage?path=" + imgPath;
 	}
 	public void setUserID(String _userid){
 		this.userid = _userid;

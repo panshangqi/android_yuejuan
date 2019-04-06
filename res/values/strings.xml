@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">YUEJUAN</string>
+    <string name="app_name">奥亚阅卷</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world12311!</string>
     <string name="login_title">登 录</string>
-
+    <string name="btn_h">24dp</string>
 </resources>

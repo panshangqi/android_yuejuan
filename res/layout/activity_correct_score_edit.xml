@@ -18,7 +18,7 @@
 		    android:orientation="horizontal"
 		    android:background="@drawable/button_bg_selector_1"
 		    android:onClick="onClick"
-		    android:padding="12dp"
+		    android:padding="10dp"
 	    >
 		    <ImageButton 
 		        android:layout_width="10dp"
@@ -52,7 +52,8 @@
 	    	android:layout_gravity="right"
 	    	android:textColor="#fff"
 	    	android:textSize="16dp"
-	    	android:padding="12dp"
+	    	android:padding="10dp"
+	    	android:onClick="onClick"
 	    	android:layout_marginLeft="20dp"
 	        />
 	    <TextView 
@@ -63,7 +64,8 @@
 	    	android:layout_gravity="right"
 	    	android:textColor="#fff"
 	    	android:textSize="16dp"
-	    	android:padding="12dp"
+	    	android:padding="10dp"
+	    	android:onClick="onClick"
 	    	android:layout_marginLeft="20dp"
 	        />
 	    <TextView 
@@ -75,7 +77,8 @@
 	    	android:gravity="right"
 	    	android:textColor="#fff"
 	    	android:textSize="16dp"
-	    	android:padding="12dp"
+	    	android:padding="10dp"
+	    	android:onClick="onClick"
 	    	android:layout_marginLeft="20dp"
 	    	android:layout_marginRight="10dp"
 	        />
@@ -89,21 +92,43 @@
 	    
 	    >
 	    <LinearLayout 
+	        
 		    android:layout_width="130dp"
 		    android:layout_height="match_parent"
 		    android:orientation="vertical"
 		    android:padding="12dp"
 		    >
+		    <LinearLayout 
+		        android:layout_width="match_parent"
+		        android:layout_height="0dp"
+		        android:layout_weight="1"
+		        android:orientation="vertical"
+		        >
+		        <TextView
+		            android:id="@+id/total_score_text_view"
+		            android:layout_width="match_parent"
+		            android:layout_height="match_parent"
+		            android:padding="6dp"
+	            />
+		    </LinearLayout>
+		    <LinearLayout 
+		        android:layout_width="match_parent"
+		        android:layout_height="0dp"
+		        android:layout_weight="1"
+		        android:orientation="vertical"
+		        >
+		    </LinearLayout>
 	    </LinearLayout>
 	    
 	    <LinearLayout 
-	        android:id="@+id/canvas_view"
+	        android:id="@+id/canvas_area"
 		    android:layout_width="0dp"
 	    	android:layout_weight="1"
 		    android:layout_height="match_parent"
 		    android:orientation="vertical"
 		    android:background="@color/silver"
 		    android:padding="1dp"
+		    android:onClick="onClick"
 	    >
 		    <ScrollView
 		        android:id="@+id/canvas_scroll_bar"
@@ -172,8 +197,8 @@
 		    	    	    android:id="@+id/score_show_box"
 		    	    	    android:layout_width="wrap_content"
 		    	    	    android:layout_height="wrap_content"
-		    	    	    android:text="2.5"
-		    	    	    android:textSize="29dp"
+		    	    	    android:text="0"
+		    	    	    android:textSize="22dp"
 		    	    	    android:textColor="#fff"
 		    	    	    android:layout_alignParentBottom="true"
 	    	    	    />
@@ -193,19 +218,23 @@
 				        android:layout_height="wrap_content"
 				        android:columnWidth="48dp"
 				        android:orientation="horizontal"
-				        android:layout_marginTop="10dp"
+				        android:layout_marginTop="7dp"
 		    	    >
 		    	    	<TextView 
+		    	    	    android:id="@+id/cul_btn_0"
+		    	    	    android:onClick="onClick"
 		    	    	    android:layout_width="45dp"
-		    	    	    android:layout_height="28dp"
+		    	    	    android:layout_height="24dp"
 		    	    	    android:text="0"
 		    	    	    android:gravity="center"
 		    	    	    android:textColor="#222"
 		    	    	    android:background="@drawable/buttonsharp_2"
 	    	    	    />
 		    	    	<TextView 
+		    	    	    android:id="@+id/cul_btn_1"
+		    	    	    android:onClick="onClick"
 		    	    	    android:layout_width="45dp"
-		    	    	    android:layout_height="28dp"
+		    	    	    android:layout_height="24dp"
 		    	    	    android:text="1"
 		    	    	    android:gravity="center"
 		    	    	    android:textColor="#222"
@@ -219,19 +248,23 @@
 				        android:layout_height="wrap_content"
 				        android:columnWidth="48dp"
 				        android:orientation="horizontal"
-				        android:layout_marginTop="10dp"
+				        android:layout_marginTop="6dp"
 		    	    >
 		    	    	<TextView 
+		    	    	    android:id="@+id/cul_btn_2"
+		    	    	    android:onClick="onClick"
 		    	    	    android:layout_width="45dp"
-		    	    	    android:layout_height="28dp"
+		    	    	    android:layout_height="24dp"
 		    	    	    android:text="2"
 		    	    	    android:gravity="center"
 		    	    	    android:textColor="#222"
 		    	    	    android:background="@drawable/buttonsharp_2"
 	    	    	    />
-		    	    	<TextView 
+		    	    	<TextView
+		    	    	    android:id="@+id/cul_btn_3"
+		    	    	    android:onClick="onClick" 
 		    	    	    android:layout_width="45dp"
-		    	    	    android:layout_height="28dp"
+		    	    	    android:layout_height="24dp"
 		    	    	    android:text="3"
 		    	    	    android:gravity="center"
 		    	    	    android:textColor="#222"
@@ -245,19 +278,23 @@
 				        android:layout_height="wrap_content"
 				        android:columnWidth="48dp"
 				        android:orientation="horizontal"
-				        android:layout_marginTop="10dp"
+				        android:layout_marginTop="6dp"
 		    	    >
-		    	    	<TextView 
+		    	    	<TextView
+		    	    	    android:id="@+id/cul_btn_4"
+		    	    	    android:onClick="onClick"
 		    	    	    android:layout_width="45dp"
-		    	    	    android:layout_height="28dp"
+		    	    	    android:layout_height="24dp"
 		    	    	    android:text="4"
 		    	    	    android:gravity="center"
 		    	    	    android:textColor="#222"
 		    	    	    android:background="@drawable/buttonsharp_2"
 	    	    	    />
-		    	    	<TextView 
+		    	    	<TextView
+		    	    	    android:id="@+id/cul_btn_5"
+		    	    	    android:onClick="onClick" 
 		    	    	    android:layout_width="45dp"
-		    	    	    android:layout_height="28dp"
+		    	    	    android:layout_height="24dp"
 		    	    	    android:text="5"
 		    	    	    android:gravity="center"
 		    	    	    android:textColor="#222"
@@ -272,19 +309,23 @@
 				        android:columnWidth="48dp"
 				        android:textColor="#222"
 				        android:orientation="horizontal"
-				        android:layout_marginTop="10dp"
+				        android:layout_marginTop="6dp"
 		    	    >
-		    	    	<TextView 
+		    	    	<TextView
+		    	    	    android:id="@+id/cul_btn_6"
+		    	    	    android:onClick="onClick" 
 		    	    	    android:layout_width="45dp"
-		    	    	    android:layout_height="28dp"
+		    	    	    android:layout_height="24dp"
 		    	    	    android:text="6"
 		    	    	    android:gravity="center"
 		    	    	    android:textColor="#222"
 		    	    	    android:background="@drawable/buttonsharp_2"
 	    	    	    />
-		    	    	<TextView 
+		    	    	<TextView
+		    	    	    android:id="@+id/cul_btn_7"
+		    	    	    android:onClick="onClick" 
 		    	    	    android:layout_width="45dp"
-		    	    	    android:layout_height="28dp"
+		    	    	    android:layout_height="24dp"
 		    	    	    android:text="7"
 		    	    	    android:gravity="center"
 		    	    	    android:textColor="#222"
@@ -298,19 +339,23 @@
 				        android:layout_height="wrap_content"
 				        android:columnWidth="48dp"
 				        android:orientation="horizontal"
-				        android:layout_marginTop="10dp"
+				        android:layout_marginTop="6dp"
 		    	    >
-		    	    	<TextView 
+		    	    	<TextView
+		    	    	    android:id="@+id/cul_btn_8"
+		    	    	    android:onClick="onClick" 
 		    	    	    android:layout_width="45dp"
-		    	    	    android:layout_height="28dp"
+		    	    	    android:layout_height="24dp"
 		    	    	    android:text="8"
 		    	    	    android:gravity="center"
 		    	    	    android:textColor="#222"
 		    	    	    android:background="@drawable/buttonsharp_2"
 	    	    	    />
-		    	    	<TextView 
+		    	    	<TextView
+		    	    	    android:id="@+id/cul_btn_9"
+		    	    	    android:onClick="onClick" 
 		    	    	    android:layout_width="45dp"
-		    	    	    android:layout_height="28dp"
+		    	    	    android:layout_height="24dp"
 		    	    	    android:text="9"
 		    	    	    android:gravity="center"
 		    	    	    android:textColor="#222"
@@ -324,19 +369,23 @@
 				        android:layout_height="wrap_content"
 				        android:columnWidth="48dp"
 				        android:orientation="horizontal"
-				        android:layout_marginTop="10dp"
+				        android:layout_marginTop="6dp"
 		    	    >
-		    	    	<TextView 
+		    	    	<TextView
+		    	    	    android:id="@+id/cul_btn_10"
+		    	    	    android:onClick="onClick" 
 		    	    	    android:layout_width="45dp"
-		    	    	    android:layout_height="28dp"
+		    	    	    android:layout_height="24dp"
 		    	    	    android:text="."
 		    	    	    android:textColor="#222"
 		    	    	    android:gravity="center"
 		    	    	    android:background="@drawable/buttonsharp_2"
 	    	    	    />
-		    	    	<ImageView 
+		    	    	<ImageView
+		    	    	    android:id="@+id/cul_btn_11"
+		    	    	    android:onClick="onClick" 
 		    	    	    android:layout_width="45dp"
-		    	    	    android:layout_height="28dp"
+		    	    	    android:layout_height="24dp"
 		    	    	    
 		    	    	    android:gravity="center"
 		    	    	    android:layout_marginLeft="6dp"
@@ -349,9 +398,11 @@
 				        android:layout_height="wrap_content"
 				        android:columnWidth="48dp"
 				        android:orientation="horizontal"
-				        android:layout_marginTop="10dp"
+				        android:layout_marginTop="6dp"
 		    	    >
-		    	    	<TextView 
+		    	    	<TextView
+		    	    	    android:id="@+id/cul_btn_12"
+		    	    	    android:onClick="onClick" 
 		    	    	    android:layout_width="45dp"
 		    	    	    android:layout_height="45dp"
 		    	    	    android:text="满分"
@@ -360,6 +411,8 @@
 		    	    	    android:background="@drawable/buttonsharp_3"
 	    	    	    />
 		    	    	<TextView 
+		    	    	    android:id="@+id/cul_btn_13"
+		    	    	    android:onClick="onClick"
 		    	    	    android:layout_width="45dp"
 		    	    	    android:layout_height="45dp"
 		    	    	    android:text="错误"
@@ -370,13 +423,15 @@
 	    	    	    />
 	    	    	</LinearLayout>
 	    	    	<TextView 
+	    	    	    android:id="@+id/cul_btn_14"
+	    	    	    android:onClick="onClick"
 	    	    	    android:layout_width="60dp"
 	    	    	    android:layout_height="60dp"
 	    	    	    android:text="提交"
 	    	    	    android:textColor="#fff"
 	    	    	    android:gravity="center"
 	    	    	    android:layout_gravity="center"
-	    	    	    android:layout_marginTop="10dp"
+	    	    	    android:layout_marginTop="6dp"
 	    	    	    android:background="@drawable/buttonsharp_5"
     	    	    />
 	    		</LinearLayout>
@@ -429,6 +484,27 @@
 				        android:paddingLeft="5dp"
 				        android:paddingRight="0dp"
 				        android:divider="#00000000"
+					/>
+		        </LinearLayout>
+		        <!-- 选择题目 -->
+	    		<LinearLayout
+	    		    android:id="@+id/ct_select_panel"
+		    	    android:layout_width="match_parent"
+			        android:layout_height="match_parent"
+			        android:orientation="vertical"
+			        android:background="@color/theme_color_1"
+	    	    >
+			        <ListView
+				        android:id="@+id/select_question_list_view"
+				        android:layout_width="match_parent"
+				        android:layout_weight="1"
+				        android:layout_height="0dp"
+				    	android:layout_marginTop="10dp"
+				        
+				        android:paddingLeft="5dp"
+				        android:paddingRight="5dp"
+				        android:divider="@android:color/transparent"
+			        	android:dividerHeight="10dp"
 					/>
 		        </LinearLayout>
 		    </AbsoluteLayout>
