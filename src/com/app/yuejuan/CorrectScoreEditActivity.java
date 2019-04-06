@@ -45,6 +45,7 @@ import android.graphics.Paint;
 //import javax.xml.namespace.QName;
 //import java.lang.Integer;
 //import javax.xml.rpc.ParameterMode;
+import android.util.Base64;
 import android.util.Log;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -58,6 +59,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -128,6 +130,12 @@ class MarkingScoreData{ //正评分数需要提交的数据
 }
 public class CorrectScoreEditActivity extends Activity {
 
+	//画布参数
+	Bitmap mainBitmap;
+	Canvas mainCanvas;
+	
+	
+	
 	LinearLayout score_panel_back_button;
 	//LinearLayout canvas_view;
 	private ImageView imageView;  
@@ -267,7 +275,34 @@ public class CorrectScoreEditActivity extends Activity {
         //imgLoadTask.execute(url1);//execute里面是图片的地址
 
 	}
-	
+	public String bitmapToBase64(Bitmap bitmap){
+		String result = null;  
+	    ByteArrayOutputStream baos = null;  
+	    try {  
+	        if (bitmap != null) {  
+	            baos = new ByteArrayOutputStream();  
+	            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);  
+	  
+	            baos.flush();  
+	            baos.close();  
+	  
+	            byte[] bitmapBytes = baos.toByteArray();  
+	            result = Base64.encodeToString(bitmapBytes, Base64.DEFAULT);  
+	        }  
+	    } catch (IOException e) {  
+	        e.printStackTrace();  
+	    } finally {  
+	        try {  
+	            if (baos != null) {  
+	                baos.flush();  
+	                baos.close();  
+	            }  
+	        } catch (IOException e) {  
+	            e.printStackTrace();  
+	        }  
+	    }  
+	    return result; 
+	}
     public void save(View view) {  
     	  try {  
 			File file = new File(Environment.getExternalStorageDirectory(),System.currentTimeMillis() + ".jpg");
@@ -1065,6 +1100,12 @@ public class CorrectScoreEditActivity extends Activity {
         	Log.v("YJ","submit_sub_total_score_button onclick");
         	
         	break;
+        case R.id.save_image_button:
+        	
+        	Toast.makeText(CorrectScoreEditActivity.this, "保存图片", 0).show();
+        	String base64Str = this.bitmapToBase64(mainBitmap);
+        	Log.v("YJ",base64Str);
+        	break;
         case R.id.score_panel_back_button:
         	
         	Intent intent;
@@ -1121,149 +1162,151 @@ public class CorrectScoreEditActivity extends Activity {
             break;
         }
     }
-}
-class ImgLoadTask extends AsyncTask<String,Integer,Bitmap>{
+    //异步绘图
+    public class ImgLoadTask extends AsyncTask<String,Integer,Bitmap>{
 
-    private ImageView imageView;
-    private Bitmap curBitmap;
-    //为什么要加一个构造方法--有传值的需求
-    public  ImgLoadTask(ImageView imageView){
-        this.imageView=imageView;
-    }
-    public void getCanvasBitmap(){
-    	
-    }
-    @Override
-    protected Bitmap doInBackground(String... strings) {
-
-        //加载网络图片，最后获取到一个Bitmap对象，返回Bitmap对象
-    	Log.v("YJ","start load image");
-        Bitmap bm=null;
-        try {
-        	//创建URL对象
-            URL url=new URL(strings[0]);
-            //通过URL对象得到HttpURLConnection
-            HttpURLConnection connection= (HttpURLConnection) url.openConnection();//这边需要强制转换）
-            //得到输入流
-            connection.setDoInput(true);
-            connection.connect();
-            if(connection.getResponseCode() == 200){
-            	InputStream inputStream=connection.getInputStream();
-                //把输入流转换成Bitmap类型对象
-                bm= BitmapFactory.decodeStream(inputStream);
-                Log.v("YJ","end load image");
-                inputStream.close();
-            }else{
-            	Log.v("YJ response code","url get fail code" +String.valueOf(connection.getResponseCode()));
-            }
-            
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        private ImageView imageView;
+        private Bitmap curBitmap;
+        //为什么要加一个构造方法--有传值的需求
+        public  ImgLoadTask(ImageView imageView){
+            this.imageView=imageView;
         }
+        public void getCanvasBitmap(){
+        	
+        }
+        @Override
+        protected Bitmap doInBackground(String... strings) {
 
-        return bm;
-    }
-    
-    /** 
-     * 得到bitmap的大小 
-     */  
-    
-    @Override
-    protected void onPostExecute(Bitmap bitmap) {
-        super.onPostExecute(bitmap);
-        // 获得图片的宽高   
-        try{
-        	int width = bitmap.getWidth();   
-            int height = bitmap.getHeight();  
-            int imgViewW = imageView.getWidth();
-            int imgViewH = 300;//imageView.getHeight();
-            float scaleW = imgViewW*1.0f / width;
-            //float scaleH = imgViewH / height;
-            imgViewH = (int)(scaleW * height);
-            Log.v("YJ scale",String.valueOf(scaleW) + "," + String.valueOf(scaleW));
-            Log.v("YJ",String.valueOf(width) + "," + String.valueOf(height));
-            Log.v("YJ",String.valueOf(imgViewW) + "," + String.valueOf(imgViewH));
+            //加载网络图片，最后获取到一个Bitmap对象，返回Bitmap对象
+        	Log.v("YJ","start load image");
+            Bitmap bm=null;
+            try {
+            	//创建URL对象
+                URL url=new URL(strings[0]);
+                //通过URL对象得到HttpURLConnection
+                HttpURLConnection connection= (HttpURLConnection) url.openConnection();//这边需要强制转换）
+                //得到输入流
+                connection.setDoInput(true);
+                connection.connect();
+                if(connection.getResponseCode() == 200){
+                	InputStream inputStream=connection.getInputStream();
+                    //把输入流转换成Bitmap类型对象
+                    bm= BitmapFactory.decodeStream(inputStream);
+                    Log.v("YJ","end load image");
+                    inputStream.close();
+                }else{
+                	Log.v("YJ response code","url get fail code" +String.valueOf(connection.getResponseCode()));
+                }
+                
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-            // 取得想要缩放的matrix参数   
-            Matrix matrix = new Matrix();   
-            matrix.postScale(scaleW, scaleW);
-            this.curBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);  
-            
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(imgViewW,imgViewH);
-            imageView.setLayoutParams(params);
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);//使图片充满控件大小,very imporment
-            
-    		
-    		// 创建一张画布
-    		Canvas canvas = new Canvas(this.curBitmap);
-
-    		// 创建画笔
-    		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);//消除锯齿
-    		// 画笔颜色为红色
-    		paint.setColor(Color.RED);
-    		// 宽度5个像素
-    		paint.setStrokeWidth(1);
-    		
-    		// 先将灰色背景画上
-    		canvas.drawBitmap(this.curBitmap, new Matrix(), paint);
-    		
-    		imageView.setImageBitmap(this.curBitmap);
-    		// 设置view监听
-    		imageView.setOnTouchListener(new CanvasTouchListener(canvas, paint, imageView));
-        }catch(Exception e){
-        	e.printStackTrace();
+            return bm;
         }
         
-        Log.v("YJ","show succss.");
+        /** 
+         * 得到bitmap的大小 
+         */  
+        
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            // 获得图片的宽高   
+            try{
+            	int width = bitmap.getWidth();   
+                int height = bitmap.getHeight();  
+                int imgViewW = imageView.getWidth();
+                int imgViewH = 300;//imageView.getHeight();
+                float scaleW = imgViewW*1.0f / width;
+                //float scaleH = imgViewH / height;
+                imgViewH = (int)(scaleW * height);
+                Log.v("YJ scale",String.valueOf(scaleW) + "," + String.valueOf(scaleW));
+                Log.v("YJ",String.valueOf(width) + "," + String.valueOf(height));
+                Log.v("YJ",String.valueOf(imgViewW) + "," + String.valueOf(imgViewH));
+
+                // 取得想要缩放的matrix参数   
+                Matrix matrix = new Matrix();   
+                matrix.postScale(scaleW, scaleW);
+                this.curBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);  
+                mainBitmap = this.curBitmap;
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(imgViewW,imgViewH);
+                imageView.setLayoutParams(params);
+                imageView.setScaleType(ImageView.ScaleType.FIT_XY);//使图片充满控件大小,very imporment
+                
+        		
+        		// 创建一张画布
+        		Canvas canvas = new Canvas(this.curBitmap);
+        		mainCanvas = canvas;
+        		// 创建画笔
+        		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);//消除锯齿
+        		// 画笔颜色为红色
+        		paint.setColor(Color.RED);
+        		// 宽度5个像素
+        		paint.setStrokeWidth(1);
+        		
+        		// 先将灰色背景画上
+        		canvas.drawBitmap(this.curBitmap, new Matrix(), paint);
+        		
+        		imageView.setImageBitmap(this.curBitmap);
+        		// 设置view监听
+        		imageView.setOnTouchListener(new CanvasTouchListener(canvas, paint, imageView));
+            }catch(Exception e){
+            	e.printStackTrace();
+            }
+            
+            Log.v("YJ","show succss.");
+
+        }
+    }
+    //绘图事件监听
+    class CanvasTouchListener implements OnTouchListener {
+    	float downx, downy, x, y;
+    	ImageView image;
+    	Canvas canvas;
+    	Paint paint;
+    	public CanvasTouchListener(Canvas canvas, Paint paint, ImageView image){
+    		this.canvas = canvas;
+    		this.image = image;
+    		this.paint = paint;
+    	}
+    	@Override
+    	public boolean onTouch(View v, MotionEvent event) {
+    		int action = event.getAction();
+
+    		switch (action) {
+    		// 按下
+    		case MotionEvent.ACTION_DOWN:
+    			downx = event.getX();
+    			downy = event.getY();
+    			//return true;
+    		// 移动
+    		case MotionEvent.ACTION_MOVE:
+    			// 路径画板
+    			x = event.getX();
+    			y = event.getY();
+    			// 画线
+    			Log.v("YJ move", String.valueOf(x) + "," + String.valueOf(y));
+    			this.canvas.drawLine(downx, downy, x, y, this.paint);
+    			// 刷新image
+    			this.image.invalidate();
+    			downx = x;
+    			downy = y;
+    			Log.v("YJ","11");
+    			//return false;
+    			
+    		case MotionEvent.ACTION_UP:
+    			break;
+
+    		default:
+    			break;
+    		}
+    		// true：告诉系统，这个触摸事件由我来处理
+    		// false：告诉系统，这个触摸事件我不处理，这时系统会把触摸事件传递给imageview的父节点
+    		return true;
+    	}
 
     }
-}
-class CanvasTouchListener implements OnTouchListener {
-	float downx, downy, x, y;
-	ImageView image;
-	Canvas canvas;
-	Paint paint;
-	public CanvasTouchListener(Canvas canvas, Paint paint, ImageView image){
-		this.canvas = canvas;
-		this.image = image;
-		this.paint = paint;
-	}
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		int action = event.getAction();
-
-		switch (action) {
-		// 按下
-		case MotionEvent.ACTION_DOWN:
-			downx = event.getX();
-			downy = event.getY();
-			//return true;
-		// 移动
-		case MotionEvent.ACTION_MOVE:
-			// 路径画板
-			x = event.getX();
-			y = event.getY();
-			// 画线
-			Log.v("YJ move", String.valueOf(x) + "," + String.valueOf(y));
-			this.canvas.drawLine(downx, downy, x, y, this.paint);
-			// 刷新image
-			this.image.invalidate();
-			downx = x;
-			downy = y;
-			Log.v("YJ","11");
-			//return false;
-			
-		case MotionEvent.ACTION_UP:
-			break;
-
-		default:
-			break;
-		}
-		// true：告诉系统，这个触摸事件由我来处理
-		// false：告诉系统，这个触摸事件我不处理，这时系统会把触摸事件传递给imageview的父节点
-		return true;
-	}
-
 }

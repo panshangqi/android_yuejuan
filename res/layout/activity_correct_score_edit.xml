@@ -143,7 +143,53 @@
 		        android:layout_height="0dp"
 		        android:layout_weight="1"
 		        android:orientation="vertical"
+		        android:gravity="center"
 		        >
+		        <ImageView 
+		            android:id="@+id/canvas_pen_button"
+		            android:layout_width="32dp"
+		        	android:layout_height="32dp"
+		        	android:layout_gravity="center"
+		        	android:layout_marginTop="5dp"
+		        	android:onClick="onClick"
+		        	android:background="@drawable/canvas_pen"
+		            />
+		        <ImageView 
+		            android:id="@+id/canvas_delete_button"
+		            android:layout_width="32dp"
+		        	android:layout_height="32dp"
+		        	android:layout_gravity="center"
+		        	android:layout_marginTop="5dp"
+		        	android:onClick="onClick"
+		        	android:background="@drawable/canvas_delete"
+		            />
+		        <ImageView 
+		            android:id="@+id/canvas_dui_button"
+		            android:layout_width="32dp"
+		        	android:layout_height="32dp"
+		        	android:layout_gravity="center"
+		        	android:layout_marginTop="5dp"
+		        	android:onClick="onClick"
+		        	android:background="@drawable/canvas_dui"
+		            />
+		        <ImageView 
+		            android:id="@+id/canvas_bandui_button"
+		            android:layout_width="32dp"
+		        	android:layout_height="32dp"
+		        	android:layout_gravity="center"
+		        	android:layout_marginTop="5dp"
+		        	android:onClick="onClick"
+		        	android:background="@drawable/canvas_bandui"
+		            />
+		        <ImageView 
+		            android:id="@+id/canvas_wrong_button"
+		            android:layout_width="32dp"
+		        	android:layout_height="32dp"
+		        	android:layout_gravity="center"
+		        	android:layout_marginTop="5dp"
+		        	android:onClick="onClick"
+		        	android:background="@drawable/canvas_wrong"
+		            />
 		    </LinearLayout>
 	    </LinearLayout>
 	    
@@ -175,6 +221,21 @@
 			        />
 			    </LinearLayout>
 		    </ScrollView>
+		    <Button 
+		        android:id="@+id/save_image_button"
+		        android:layout_width="50dp"
+			    android:layout_height="50dp"
+			    android:text="提交"
+			    android:textSize="14dp"
+			    android:textColor="#fff"
+			    android:background="@drawable/buttonsharp_7"
+			    android:layout_alignBottom="@id/canvas_scroll_bar"
+			    android:layout_marginBottom="80dp"
+			    android:layout_marginLeft="25dp"
+			    android:gravity="center"
+			    android:button="@null"
+			    android:onClick="onClick"
+		        />
 		    <Button 
 		        android:id="@+id/submit_sub_total_score_button"
 		        android:layout_width="50dp"
