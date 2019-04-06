@@ -44,44 +44,54 @@
 	    	android:text=""
 	    	android:textColor="#fff"
 	    />
-	    <TextView 
-	        android:id="@+id/ct_record_button"
-	        android:layout_width="wrap_content"
-	    	android:layout_height="wrap_content"
-	    	android:text="阅卷记录"
-	    	android:layout_gravity="right"
-	    	android:textColor="#fff"
-	    	android:textSize="16dp"
-	    	android:padding="10dp"
-	    	android:onClick="onClick"
-	    	android:layout_marginLeft="20dp"
+	    <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+		    <RadioButton
+		        android:id="@+id/ct_record_button"
+		        android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:text="阅卷记录"
+		    	android:layout_gravity="right"
+		    	android:textColor="#fff"
+		    	android:textSize="16dp"
+		    	android:padding="10dp"
+		    	android:onClick="onClick"
+		    	android:button="@null"
+		    	android:layout_marginLeft="20dp"
+		        />
+		    <RadioButton
+		        android:id="@+id/ct_score_button"
+		        android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:text="打分板"
+		    	android:layout_gravity="right"
+		    	android:textColor="#fff"
+		    	android:textSize="16dp"
+		    	android:padding="10dp"
+		    	android:onClick="onClick"
+		    	android:button="@null"
+		    	android:layout_marginLeft="20dp"
+		        />
+		    <RadioButton
+		        android:id="@+id/ct_select_button"
+		        android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:text="选题"
+		    	android:layout_gravity="right"
+		    	android:gravity="right"
+		    	android:textColor="#fff"
+		    	android:textSize="16dp"
+		    	android:padding="10dp"
+		    	android:button="@null"
+		    	android:onClick="onClick"
+		    	android:layout_marginLeft="20dp"
+		    	android:layout_marginRight="10dp"
 	        />
-	    <TextView 
-	        android:id="@+id/ct_score_button"
-	        android:layout_width="wrap_content"
-	    	android:layout_height="wrap_content"
-	    	android:text="打分板"
-	    	android:layout_gravity="right"
-	    	android:textColor="#fff"
-	    	android:textSize="16dp"
-	    	android:padding="10dp"
-	    	android:onClick="onClick"
-	    	android:layout_marginLeft="20dp"
-	        />
-	    <TextView 
-	        android:id="@+id/ct_select_button"
-	        android:layout_width="wrap_content"
-	    	android:layout_height="wrap_content"
-	    	android:text="选题"
-	    	android:layout_gravity="right"
-	    	android:gravity="right"
-	    	android:textColor="#fff"
-	    	android:textSize="16dp"
-	    	android:padding="10dp"
-	    	android:onClick="onClick"
-	    	android:layout_marginLeft="20dp"
-	    	android:layout_marginRight="10dp"
-	        />
+        </RadioGroup>
+	    
 	</LinearLayout>
 	<LinearLayout 
 	    android:layout_width="match_parent"
@@ -178,17 +188,75 @@
 			    android:layout_marginTop="5dp"
 			    android:layout_marginLeft="5dp"
 		        >
-		        <ListView
-			        android:id="@+id/score_points_list_view"
+			    <LinearLayout 
 			        android:layout_width="match_parent"
 			        android:layout_height="match_parent"
-			    	android:layout_marginTop="5dp"
-			        android:background="@color/lightgray2"
-			        android:paddingLeft="5dp"
-			        android:paddingRight="0dp"
-			        android:divider="@android:color/transparent"
-			        android:dividerHeight="6dp"
-				/>
+			        android:orientation="vertical"
+			        >
+			        <ListView
+				        android:id="@+id/score_points_list_view"
+				        android:layout_width="match_parent"
+				        android:layout_height="match_parent"
+				    	android:layout_marginTop="5dp"
+				        android:background="@color/lightgray2"
+				        android:paddingLeft="5dp"
+				        android:paddingRight="0dp"
+				        android:divider="@android:color/transparent"
+				        android:dividerHeight="6dp"
+					/>
+			    </LinearLayout>
+		        
+	    		<LinearLayout
+	    		    android:id="@+id/ct_record_panel"
+		    	    android:layout_width="match_parent"
+			        android:layout_height="match_parent"
+			        android:orientation="vertical"
+			        android:background="@color/theme_color_1"
+			        
+	    	    >
+	    	    	<LinearLayout
+			    	    android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:orientation="horizontal"
+				        android:paddingTop="8dp"
+				        android:paddingBottom="8dp"
+		    	    >
+		    	    	<TextView 
+		    	    	    android:layout_width="0dp"
+		    	    	    android:layout_weight="1"
+		    	    	    android:layout_height="wrap_content"
+		    	    	    android:text="序号"
+		    	    	    android:textColor="#fff"
+		    	    	    android:gravity="center"
+		    	    	    android:layout_gravity="center"
+	    	    	    />
+		    	    	<TextView 
+		    	    	    android:layout_width="0dp"
+		    	    	    android:layout_weight="1"
+		    	    	    android:layout_height="wrap_content"
+		    	    	    android:text="评分"
+		    	    	    android:textColor="#fff"
+		    	    	    android:gravity="center"
+		    	    	    android:layout_gravity="center"
+	    	    	    />
+	    	    	</LinearLayout>
+	    	    	<TextView 
+	    	    	    android:layout_width="match_parent"
+				        android:layout_height="1dp"
+				        android:background="#fff"
+	    	    	    />
+			        <ListView
+				        android:id="@+id/correct_record_list_view"
+				        android:layout_width="match_parent"
+				        android:layout_weight="1"
+				        android:layout_height="0dp"
+				    	android:layout_marginTop="5dp"
+				        
+				        android:paddingLeft="5dp"
+				        android:paddingRight="0dp"
+				        android:divider="#00000000"
+					/>
+		        </LinearLayout>
 		        <!-- 打分板 -->
 		    	<LinearLayout
 		    	    android:id="@+id/ct_score_panel"
@@ -450,57 +518,7 @@
 	    	    	    android:background="@drawable/buttonsharp_5"
     	    	    />
 	    		</LinearLayout>
-	    		<!-- 阅卷记录 回评接口，分数逆序排列 -->
-	    		<LinearLayout
-	    		    android:id="@+id/ct_record_panel"
-		    	    android:layout_width="match_parent"
-			        android:layout_height="match_parent"
-			        android:orientation="vertical"
-			        android:background="@color/theme_color_1"
-	    	    >
-	    	    	<LinearLayout
-			    	    android:layout_width="match_parent"
-				        android:layout_height="wrap_content"
-				        android:orientation="horizontal"
-				        android:paddingTop="8dp"
-				        android:paddingBottom="8dp"
-		    	    >
-		    	    	<TextView 
-		    	    	    android:layout_width="0dp"
-		    	    	    android:layout_weight="1"
-		    	    	    android:layout_height="wrap_content"
-		    	    	    android:text="序号"
-		    	    	    android:textColor="#fff"
-		    	    	    android:gravity="center"
-		    	    	    android:layout_gravity="center"
-	    	    	    />
-		    	    	<TextView 
-		    	    	    android:layout_width="0dp"
-		    	    	    android:layout_weight="1"
-		    	    	    android:layout_height="wrap_content"
-		    	    	    android:text="评分"
-		    	    	    android:textColor="#fff"
-		    	    	    android:gravity="center"
-		    	    	    android:layout_gravity="center"
-	    	    	    />
-	    	    	</LinearLayout>
-	    	    	<TextView 
-	    	    	    android:layout_width="match_parent"
-				        android:layout_height="1dp"
-				        android:background="#fff"
-	    	    	    />
-			        <ListView
-				        android:id="@+id/correct_record_list_view"
-				        android:layout_width="match_parent"
-				        android:layout_weight="1"
-				        android:layout_height="0dp"
-				    	android:layout_marginTop="5dp"
-				        
-				        android:paddingLeft="5dp"
-				        android:paddingRight="0dp"
-				        android:divider="#00000000"
-					/>
-		        </LinearLayout>
+	    		
 		        <!-- 选择题目 -->
 	    		<LinearLayout
 	    		    android:id="@+id/ct_select_panel"

@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.view.View;
@@ -131,7 +132,8 @@ public class CorrectScoreEditActivity extends Activity {
 	public String imageUrl;
 	public String selectedQueID;
 	public String selectedQueName = "";
-	TextView recordButton, scoreButton, selectButton, scoreShowTextView;
+	RadioButton recordButton, scoreButton, selectButton;
+	TextView scoreShowTextView;
 	LinearLayout recordPanel, scorePanel, selectPanel;
 	ImgLoadTask imgLoadTask;
 	//打分板按钮
@@ -153,9 +155,9 @@ public class CorrectScoreEditActivity extends Activity {
         quenameView = (TextView)this.findViewById(R.id.hd_que_name);
         //canvas_view = (LinearLayout)this.findViewById(R.id.canvas_view);
         this.imageView = (ImageView) this.findViewById(R.id.iv);
-        this.recordButton = (TextView) this.findViewById(R.id.ct_record_button);
-        this.scoreButton = (TextView) this.findViewById(R.id.ct_score_button);
-        this.selectButton = (TextView) this.findViewById(R.id.ct_select_button);
+        this.recordButton = (RadioButton) this.findViewById(R.id.ct_record_button);
+        this.scoreButton = (RadioButton) this.findViewById(R.id.ct_score_button);
+        this.selectButton = (RadioButton) this.findViewById(R.id.ct_select_button);
         this.scoreShowTextView = (TextView)this.findViewById(R.id.score_show_box);
         this.recordPanel = (LinearLayout) this.findViewById(R.id.ct_record_panel);
         this.scorePanel = (LinearLayout) this.findViewById(R.id.ct_score_panel);
@@ -455,42 +457,42 @@ public class CorrectScoreEditActivity extends Activity {
 		scoreJson = this.markScoreJson.toJsonString();
 		Log.v("YJ save result", scoreJson);
 		
-    	Public pub = (Public)this.getApplication();
-        
-        
-        HashMap<String, String> properties = new HashMap<String, String>();
-        properties.put("arg0", pub.userid);
-        properties.put("arg1", pub.token);
-        properties.put("arg2", scoreJson);
-        
-        Log.v("YJ", pub.token); //
-        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "SaveNormalScore", properties, new WebServiceUtil.WebServiceCallBack() {
-            @Override
-            public void callBack(String result) {
-                if (result != null) {
-                    Log.v("YJ",result);
-                    
-                    SaveMarkingScoreResponse reponse = new SaveMarkingScoreResponse(result);
-                    if("0001".equals(reponse.getCodeID())){
-                    	//List<MarkingListResponse.Datas> itemsList = reponse.dataList;
-                    	//TODO
-                    	//CorrectScoreEditActivity.this.renderSelectQueList(itemsList);
-                    	
-                    	//显示给分点列表
-                    	CorrectScoreEditActivity.this.getGetUserTaskQueInfoFromService();
-                		//加载对应的图片
-                    	CorrectScoreEditActivity.this.getExamTaskListFromService();
-                       
-                    }else if("0002".equals(reponse.getCodeID())){
-                    	//Toast.makeText(AlreadyMarkActivity.this, reponse.getMessage(), Toast.LENGTH_SHORT).show();
-                    	Intent intent =new Intent(CorrectScoreEditActivity.this, LoginActivity.class);
-                    	startActivity(intent);
-                    }else{
-                    	Toast.makeText(CorrectScoreEditActivity.this, reponse.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
+//    	Public pub = (Public)this.getApplication();
+//        
+//        
+//        HashMap<String, String> properties = new HashMap<String, String>();
+//        properties.put("arg0", pub.userid);
+//        properties.put("arg1", pub.token);
+//        properties.put("arg2", scoreJson);
+//        
+//        Log.v("YJ", pub.token); //
+//        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "SaveNormalScore", properties, new WebServiceUtil.WebServiceCallBack() {
+//            @Override
+//            public void callBack(String result) {
+//                if (result != null) {
+//                    Log.v("YJ",result);
+//                    
+//                    SaveMarkingScoreResponse reponse = new SaveMarkingScoreResponse(result);
+//                    if("0001".equals(reponse.getCodeID())){
+//                    	//List<MarkingListResponse.Datas> itemsList = reponse.dataList;
+//                    	//TODO
+//                    	//CorrectScoreEditActivity.this.renderSelectQueList(itemsList);
+//                    	
+//                    	//显示给分点列表
+//                    	CorrectScoreEditActivity.this.getGetUserTaskQueInfoFromService();
+//                		//加载对应的图片
+//                    	CorrectScoreEditActivity.this.getExamTaskListFromService();
+//                       
+//                    }else if("0002".equals(reponse.getCodeID())){
+//                    	//Toast.makeText(AlreadyMarkActivity.this, reponse.getMessage(), Toast.LENGTH_SHORT).show();
+//                    	Intent intent =new Intent(CorrectScoreEditActivity.this, LoginActivity.class);
+//                    	startActivity(intent);
+//                    }else{
+//                    	Toast.makeText(CorrectScoreEditActivity.this, reponse.getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            }
+//        });
     }
     //获取标志试卷类别信息
     public void getTetstPaperSignFromService(){
