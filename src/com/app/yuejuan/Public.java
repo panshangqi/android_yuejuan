@@ -32,9 +32,9 @@ public class Public extends Application {
 	public void onCreate(){
 		super.onCreate();
 		if(isDebug == true){
-			Public.userid = "d001";
+			Public.userid = "1001";
 			Public.token = "Hz4ybVyXi2aBJIUrQjLnrg==";
-			Public.username = "d001";
+			Public.username = "1001";
 			Public.usernowproject = "实验";
 			Public.usersubjectid = "100001";
 			Public.usersubject = "高一地理综合";

@@ -80,6 +80,8 @@ import com.app.modules.ScorePointsItemListAdapter;
 import com.app.modules.SelectQuestionItemInfo;
 import com.app.modules.SelectQuestionItemListAdapter;
 import com.app.modules.SelectQuestionItemListAdapter.ItemClickInterfaceListener;
+import com.app.modules.TotalScoreItemInfo;
+import com.app.modules.TotalScoreItemListAdapter;
 import com.app.utils.CanvasView;
 import com.app.utils.WebServiceUtil;
 import com.app.webservice.*;
@@ -138,16 +140,20 @@ public class CorrectScoreEditActivity extends Activity {
 	public String selectedQueID;
 	public String selectedQueName = "";
 	public String selectedScretid;
-	public String TYPE = "0";
-	RadioButton recordButton, scoreButton, selectButton;
-	TextView scoreShowTextView;
-	LinearLayout fixedScorePabel ,recordPanel, scorePanel, selectPanel;
-	ImgLoadTask imgLoadTask;
+	public String TYPE = "0";  //正平=0还是回评=1；
+	public RadioButton recordButton, scoreButton, selectButton;
+	public TextView scoreShowTextView;
+	public LinearLayout fixedScorePabel ,recordPanel, scorePanel, selectPanel;
+	public ImgLoadTask imgLoadTask;
 	//打分板按钮
-	String full_marks = "0"; //满分
-	String scoreShowText = "";
-	MarkingScoreData markScoreJson;
-	
+	public String full_marks = "0"; //满分
+	public String scoreShowText = "";
+	public MarkingScoreData markScoreJson;
+	//小题
+	public Button submitTotalButton;
+	public TotalScoreItemListAdapter tsAdapter;
+	public GetUserTaskQueInfoResponse.Datas subQueList; //小题数据结构
+	public int selectSubQueID = 0;
 	int[] rids = {R.id.cul_btn_0,R.id.cul_btn_1,R.id.cul_btn_2,R.id.cul_btn_3,R.id.cul_btn_4,
 			R.id.cul_btn_5,R.id.cul_btn_6,R.id.cul_btn_7,R.id.cul_btn_8,R.id.cul_btn_9,
 			R.id.cul_btn_10,R.id.cul_btn_11,R.id.cul_btn_12,R.id.cul_btn_13,R.id.cul_btn_14
@@ -170,11 +176,14 @@ public class CorrectScoreEditActivity extends Activity {
         this.scorePanel = (LinearLayout) this.findViewById(R.id.ct_score_panel);
         this.selectPanel = (LinearLayout) this.findViewById(R.id.ct_select_panel);
         this.scoreShowTextView = (TextView) this.findViewById(R.id.cul_score_text);
+        
+        this.submitTotalButton = (Button) this.findViewById(R.id.submit_sub_total_score_button);
+        
         //默认三个面板都不显示
         this.recordPanel.setVisibility(View.INVISIBLE);
         this.scorePanel.setVisibility(View.INVISIBLE);
         this.selectPanel.setVisibility(View.INVISIBLE);
-        
+        this.submitTotalButton.setVisibility(View.INVISIBLE);
         markScoreJson = new MarkingScoreData();
         
         
@@ -315,28 +324,52 @@ public class CorrectScoreEditActivity extends Activity {
     	
     	theListView.setAdapter(qtAdapter);
     }
-    public void renderGivePointsList(List<GetUserTaskQueInfoResponse.Datas> itemsList){
-    	List<ScorePointsItemInfo> listInfo = new ArrayList();
-    	Log.v("YJ","开始渲染打分表");
-    	List<String> scorePointsList = new ArrayList();
-    	for(int i=0;i<itemsList.size();i++){
-    		GetUserTaskQueInfoResponse.Datas data = itemsList.get(i);
-    		Log.v("YJ queid",data.queid);
-    		if(this.selectedQueID.equals(data.queid)){
-    			this.full_marks = data.fullmark;
-    			if(data.smallqueinfoList.size() == 0) //没有小题的情况
-    			{
-    				Log.v("YJ","没有小题的情况");
-    				this.markScoreJson.hasSubQuestion = false;
-    				scorePointsList = this.getScorePoints(data.scorepoints);
-    			}else{
-    				Log.v("YJ","有小题的情况");
-    				this.markScoreJson.hasSubQuestion = true;
-    			}
-    			break;
-    		}
-    	}
+    //渲染出小题给分编辑框列表。左侧
+    public void loadTotalScoreList(GetUserTaskQueInfoResponse.Datas subQueData){
+    	List<GetUserTaskQueInfoResponse.SmallQueInfo> subqueArr = subQueData.smallqueinfoList;
     	
+    	List<TotalScoreItemInfo> listInfo = new ArrayList();
+    	for(int i=0;i<subqueArr.size();i++){
+    		GetUserTaskQueInfoResponse.SmallQueInfo subItem = subqueArr.get(i);
+    		TotalScoreItemInfo item = new TotalScoreItemInfo();
+    		item.smallqueid = subItem.smallqueid;
+    		item.quenum = subItem.smallquename;
+        	item.quescore = "";
+        	item.index = i;
+        	Log.v("YJ >>>",item.quenum);
+    		listInfo.add(item);	
+    	}
+
+    	Log.v("YJ","getBackMarkList()");
+    	
+
+    	tsAdapter = new TotalScoreItemListAdapter(Public.context, listInfo, subQueData.queid, new TotalScoreItemListAdapter.ItemClickInterfaceListener() {
+			
+			@Override
+			public void Callback(TotalScoreItemInfo itemInfo) {
+				// TODO Auto-generated method stub
+				Log.v("YJ smallqueid", "smallqueid = "+itemInfo.smallqueid);
+				CorrectScoreEditActivity.this.selectSubQueID = itemInfo.index;
+				List<GetUserTaskQueInfoResponse.SmallQueInfo> subqueArr = CorrectScoreEditActivity.this.subQueList.smallqueinfoList;
+				for(int i=0;i<subqueArr.size();i++){
+		    		GetUserTaskQueInfoResponse.SmallQueInfo subItem = subqueArr.get(i);
+		    		if(subItem.smallqueid.equals(itemInfo.smallqueid)){
+		    			CorrectScoreEditActivity.this.tsAdapter.setSelectedPosition(i);
+		    			//CorrectScoreEditActivity.this.tsAdapter.notifyDataSetInvalidated();
+		    			List<String> scorePointsList = CorrectScoreEditActivity.this.getScorePoints(subItem.smallscorepoints);
+		    			CorrectScoreEditActivity.this.loadGivePointsList(scorePointsList);
+		    			break;
+		    		}
+		    	}				
+			}
+		});
+
+    	ListView QueTaskListView = (ListView)findViewById(R.id.total_score_list_view_1);
+    	
+    	QueTaskListView.setAdapter(this.tsAdapter);
+    }
+    public void loadGivePointsList(List<String> scorePointsList){
+    	List<ScorePointsItemInfo> listInfo = new ArrayList();
     	for(int i=0;i<scorePointsList.size();i++){
     		
     		ScorePointsItemInfo item = new ScorePointsItemInfo();
@@ -355,14 +388,43 @@ public class CorrectScoreEditActivity extends Activity {
 				Log.v("YJ score", itemInfo.score);
 				if("0".equals(TYPE)){
 					//提交正评分数
-					if(CorrectScoreEditActivity.this.markScoreJson.hasSubQuestion){
-						
+					if(markScoreJson.hasSubQuestion){
+						Log.v("YJ","提交正评分数，有小题");
+						//把分数 存在左侧框框 并计算 总分；
+						tsAdapter.setScoreByPosition(selectSubQueID,itemInfo.score);
+						selectSubQueID ++;
+						tsAdapter.setSelectedPosition(selectSubQueID);
+						String total_score = tsAdapter.getTotalScore();
+						((TextView)CorrectScoreEditActivity.this.findViewById(R.id.total_score_text_view)).setText(total_score);
+						if(selectSubQueID >= tsAdapter.getCount()){
+							Log.v("YJ","submit haha");
+						}
+						if(tsAdapter.getAll()){
+							submitTotalButton.setVisibility(View.VISIBLE);
+						}else{
+							submitTotalButton.setVisibility(View.GONE);
+						}
 					}else{
-						CorrectScoreEditActivity.this.saveMarkingScore(itemInfo.score, "");
+						saveMarkingScore(itemInfo.score, "");
 					}
 				}else{
 					//提交回评分数
 					if(CorrectScoreEditActivity.this.markScoreJson.hasSubQuestion){
+						Log.v("YJ","提交回评分数，有小题");
+						//把分数 存在左侧框框 并计算 总分；
+						tsAdapter.setScoreByPosition(selectSubQueID,itemInfo.score);
+						selectSubQueID ++;
+						tsAdapter.setSelectedPosition(selectSubQueID);
+						String total_score = tsAdapter.getTotalScore();
+						((TextView)CorrectScoreEditActivity.this.findViewById(R.id.total_score_text_view)).setText(total_score);
+						if(selectSubQueID >= tsAdapter.getCount()){
+							Log.v("YJ","submit haha");
+						}
+						if(tsAdapter.getAll()){
+							submitTotalButton.setVisibility(View.VISIBLE);
+						}else{
+							submitTotalButton.setVisibility(View.GONE);
+						}
 						
 					}else{
 						CorrectScoreEditActivity.this.saveAlreadyMarkScore(itemInfo.score, "");
@@ -376,6 +438,41 @@ public class CorrectScoreEditActivity extends Activity {
     	ListView QueTaskListView = (ListView)findViewById(R.id.score_points_list_view);
     	
     	QueTaskListView.setAdapter(qtAdapter);
+    }
+    public void renderGivePointsList(List<GetUserTaskQueInfoResponse.Datas> itemsList){
+    	
+    	Log.v("YJ","开始渲染打分表");
+    	List<String> scorePointsList = new ArrayList();
+    	for(int i=0;i<itemsList.size();i++){
+    		GetUserTaskQueInfoResponse.Datas data = itemsList.get(i);
+    		Log.v("YJ queid",data.queid);
+    		if(this.selectedQueID.equals(data.queid)){
+    			this.full_marks = data.fullmark;
+    			if(data.smallqueinfoList.size() == 0) //没有小题的情况
+    			{
+    				Log.v("YJ","没有小题的情况");
+    				this.markScoreJson.hasSubQuestion = false;
+    				scorePointsList = this.getScorePoints(data.scorepoints);
+    			}else{
+    				Log.v("YJ","有小题的情况");
+    				this.markScoreJson.hasSubQuestion = true;
+    				this.subQueList = data;
+    				
+    				//默认给出第一个给分点
+    				if(data.smallqueinfoList.size()>0){
+    					GetUserTaskQueInfoResponse.SmallQueInfo smallInfo = data.smallqueinfoList.get(0);
+    					this.selectSubQueID = 0;
+    					scorePointsList = this.getScorePoints(smallInfo.smallscorepoints);
+    					
+    				}
+    				this.loadTotalScoreList(this.subQueList); //总分列表
+    			}
+    			break;
+    		}
+    	}
+    	
+    	this.loadGivePointsList(scorePointsList);
+    	
     }
     public void renderCorrectScoreItemList(List<AlreadyMarkListResponse.Datas> itemsList){
     	List<CorrectRecordItemInfo> listInfo = new ArrayList();
@@ -574,7 +671,17 @@ public class CorrectScoreEditActivity extends Activity {
                     	//List<MarkingListResponse.Datas> itemsList = reponse.dataList;
                     	//TODO
                     	//CorrectScoreEditActivity.this.renderSelectQueList(itemsList);
-                    	
+                    	if(markScoreJson.hasSubQuestion){
+                    		//如果有小题
+                    		tsAdapter.ClearData();
+                    		tsAdapter.setSelectedPosition(0);
+                    		selectSubQueID = 0;
+                    		submitTotalButton.setVisibility(View.GONE);
+                    		
+                    		Log.v("YJ","有小题，清理并继续加载下一个任务");
+                    	}else{
+                    		Log.v("YJ","没有小题，继续加载下一个任务");
+                    	}
                 		//加载对应的图片
                     	CorrectScoreEditActivity.this.getExamTaskListFromService();
 
@@ -665,7 +772,7 @@ public class CorrectScoreEditActivity extends Activity {
             @Override
             public void callBack(String result) {
                 if (result != null) {
-                	Log.v("YJ","GetAlreadmarkinfo");
+                	Log.v("YJ","GetAlreadmarkinfo获取回评信息");
                     Log.v("YJ",result);
                     GetAlreadyMarkInfoResponse reponse = new GetAlreadyMarkInfoResponse(result);
                     if("0001".equals(reponse.getCodeID())){
@@ -877,6 +984,22 @@ public class CorrectScoreEditActivity extends Activity {
 		}
 		
         switch (v.getId()) {
+        case R.id.submit_sub_total_score_button:
+        	//提交正评分数
+			if("0".equals(TYPE)){
+				String totalScore = this.tsAdapter.getTotalScore();
+				String smallscores = this.tsAdapter.getSubScoreList();
+				this.saveMarkingScore(totalScore, smallscores);
+			}else{
+				//提交回评分数
+				String totalScore = this.tsAdapter.getTotalScore();
+				String smallscores = this.tsAdapter.getSubScoreList();
+				this.saveAlreadyMarkScore(totalScore, smallscores);
+				
+			}
+        	Log.v("YJ","submit_sub_total_score_button onclick");
+        	
+        	break;
         case R.id.score_panel_back_button:
         	
         	Intent intent;
@@ -928,6 +1051,7 @@ public class CorrectScoreEditActivity extends Activity {
         	}
         	Log.v("YJ canvas area","click");
         	break;
+        	
         default:
             break;
         }

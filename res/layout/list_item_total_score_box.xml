@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/tsb_box"
     android:orientation="horizontal" >
     
     <!-- 下面两个是用来给  activity_main.xml里的ListView赋值,-->
@@ -13,23 +14,22 @@
 	  android:layout_height="wrap_content"
 	  android:text="--/--"
 	  android:textColor="#333"
-	  android:background="#fff"
 	  android:textSize="16dp"
 	  android:gravity="center"
 	  android:padding="6dp"
 	  android:layout_gravity="center"
 	/>
-	 <EditView
+	
+	 <TextView
 	  android:id="@+id/tsb_score"
 	  android:layout_width="0dp"
 	  android:layout_weight="1"
 	  android:layout_height="wrap_content"
 	  android:text="--/--"
 	  android:textColor="#333"
-	  android:background="#fff"
-	  android:textSize="16dp"
+	  android:background="@drawable/editsharp_3"
+	  android:textSize="14dp"
 	  android:gravity="center"
-	  android:padding="6dp"
 	  android:layout_gravity="center"
 	/>
     

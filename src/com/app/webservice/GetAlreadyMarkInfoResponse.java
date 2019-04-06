@@ -104,13 +104,13 @@ public class GetAlreadyMarkInfoResponse {
 	                data.commentimage = subObject.get("commentimage").getAsString();
 	                data.scorepoints =  subObject.get("scorepoints").getAsString();
 	                data.smallqueinfoList = new ArrayList();
-	                JsonArray smallQueArr = subObject.get("smallqueinfo").getAsJsonArray();
+	                JsonArray smallQueArr = subObject.getAsJsonArray("smallqueinfo");
 	                for(int j=0;j<smallQueArr.size();j++){
 	                	SmallQueInfo sqInfo = new SmallQueInfo();
-	                	JsonObject sqObject=jsonArr.get(j).getAsJsonObject();
+	                	JsonObject sqObject=smallQueArr.get(j).getAsJsonObject();
 		                sqInfo.smallqueid = sqObject.get("smallqueid").getAsString();
 		                sqInfo.smallquename = sqObject.get("smallquename").getAsString();
-		                sqInfo.smallfullmark = sqObject.get("smallfullmark").getAsString();
+		                sqInfo.smallfullmark = sqObject.get("samllfullmark").getAsString();
 		                sqInfo.smallscorepoints = sqObject.get("smallscorepoints").getAsString();
 		                
 		                data.smallqueinfoList.add(sqInfo);

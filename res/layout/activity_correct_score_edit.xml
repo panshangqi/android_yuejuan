@@ -125,16 +125,17 @@
 		            android:padding="2dp"
 		            android:background="@color/theme_color"
 	            />
+		        
 		        <ListView
-			        android:id="@+id/total_score_list_view"
+			        android:id="@+id/total_score_list_view_1"
 			        android:layout_width="match_parent"
 			        android:layout_height="match_parent"
 			    	android:layout_marginTop="5dp"
-			        android:background="@color/lightgray2"
+			        android:background="#fff"
 			        android:paddingLeft="5dp"
 			        android:paddingRight="0dp"
 			        android:divider="@android:color/transparent"
-			        android:dividerHeight="6dp"
+			        android:dividerHeight="3dp"
 				/>
 		    </LinearLayout>
 		    <LinearLayout 
@@ -146,7 +147,7 @@
 		    </LinearLayout>
 	    </LinearLayout>
 	    
-	    <LinearLayout 
+	    <RelativeLayout 
 	        android:id="@+id/canvas_area"
 		    android:layout_width="0dp"
 	    	android:layout_weight="1"
@@ -174,7 +175,22 @@
 			        />
 			    </LinearLayout>
 		    </ScrollView>
-	    </LinearLayout>
+		    <Button 
+		        android:id="@+id/submit_sub_total_score_button"
+		        android:layout_width="50dp"
+			    android:layout_height="50dp"
+			    android:text="提交"
+			    android:textSize="14dp"
+			    android:textColor="#fff"
+			    android:background="@drawable/buttonsharp_7"
+			    android:layout_alignBottom="@id/canvas_scroll_bar"
+			    android:layout_marginBottom="10dp"
+			    android:layout_marginLeft="25dp"
+			    android:gravity="center"
+			    android:button="@null"
+			    android:onClick="onClick"
+		        />
+	    </RelativeLayout>
 	    
 	    <LinearLayout 
 		    android:layout_width="115dp"

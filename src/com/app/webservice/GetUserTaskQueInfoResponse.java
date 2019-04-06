@@ -46,6 +46,7 @@ public class GetUserTaskQueInfoResponse {
 		public String quename;
 		public String fullmark;
 		public String scorepoints;
+		public int smallquenum;
 		public List<SmallQueInfo> smallqueinfoList;
 		
 	}
@@ -76,15 +77,19 @@ public class GetUserTaskQueInfoResponse {
 	                data.quename = subObject.get("quename").getAsString();
 	                data.fullmark = subObject.get("fullmark").getAsString();
 	                data.scorepoints = subObject.get("scorepoints").getAsString();
-	                
+	                data.smallquenum =  subObject.get("smallquenum").getAsInt();
 	                data.smallqueinfoList = new ArrayList();
-	                JsonArray smallQueArr = subObject.get("smallqueinfo").getAsJsonArray();
+	                //JsonArray smallQueArr = subObject.get("smallqueinfo").getAsJsonObject() ;//.getAsJsonArray();
+	                JsonArray smallQueArr = subObject.getAsJsonArray("smallqueinfo");//.getAsJsonArray();
+
 	                for(int j=0;j<smallQueArr.size();j++){
 	                	SmallQueInfo sqInfo = new SmallQueInfo();
-	                	JsonObject sqObject=jsonArr.get(j).getAsJsonObject();
+	                	JsonObject sqObject=smallQueArr.get(j).getAsJsonObject();
+	                	
+	                	
 		                sqInfo.smallqueid = sqObject.get("smallqueid").getAsString();
 		                sqInfo.smallquename = sqObject.get("smallquename").getAsString();
-		                sqInfo.smallfullmark = sqObject.get("smallfullmark").getAsString();
+		                sqInfo.smallfullmark = sqObject.get("samllfullmark").getAsString();
 		                sqInfo.smallscorepoints = sqObject.get("smallscorepoints").getAsString();
 		                
 		                data.smallqueinfoList.add(sqInfo);
