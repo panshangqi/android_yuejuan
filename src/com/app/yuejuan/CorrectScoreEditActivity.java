@@ -93,8 +93,9 @@ class MarkingScoreData{ //正评分数需要提交的数据
 	public String commentimage;  //批注图片
 	public long startTime;
 	public long endTime;
+	public boolean hasSubQuestion = false; // 是否有小题
 	private String KeyValue(String key, String value, boolean dot){
-		String kv = "\" + key + \":\"" + value + "\"";
+		String kv = "\"" + key + "\":\"" + value + "\"";
 		if(dot){
 			kv += ",";
 		}
@@ -305,9 +306,11 @@ public class CorrectScoreEditActivity extends Activity {
     			if(data.smallqueinfoList.size() == 0) //没有小题的情况
     			{
     				Log.v("YJ","没有小题的情况");
+    				this.markScoreJson.hasSubQuestion = false;
     				scorePointsList = this.getScorePoints(data.scorepoints);
     			}else{
     				Log.v("YJ","有小题的情况");
+    				this.markScoreJson.hasSubQuestion = true;
     			}
     			break;
     		}
@@ -316,14 +319,28 @@ public class CorrectScoreEditActivity extends Activity {
     	for(int i=0;i<scorePointsList.size();i++){
     		
     		ScorePointsItemInfo item = new ScorePointsItemInfo();
-        	item.queid = scorePointsList.get(i);
-        	Log.v("YJ",item.queid);
+        	item.score = scorePointsList.get(i);
+        	//Log.v("YJ",item.score);
     		listInfo.add(item);	
     	}
 
     	Log.v("YJ","getBackMarkList()");
     	
-    	ScorePointsItemListAdapter qtAdapter = new ScorePointsItemListAdapter(Public.context, listInfo);
+    	ScorePointsItemListAdapter qtAdapter = new ScorePointsItemListAdapter(Public.context, listInfo, new ScorePointsItemListAdapter.ItemClickInterfaceListener() {
+			
+			@Override
+			public void Callback(ScorePointsItemInfo itemInfo) {
+				// TODO Auto-generated method stub
+				Log.v("YJ score", itemInfo.score);
+				//提交正评分数
+				if(CorrectScoreEditActivity.this.markScoreJson.hasSubQuestion){
+					
+				}else{
+					CorrectScoreEditActivity.this.saveMarkingScore(itemInfo.score, "");
+				}
+				
+			}
+		});
 
     	ListView QueTaskListView = (ListView)findViewById(R.id.score_points_list_view);
     	
@@ -429,12 +446,17 @@ public class CorrectScoreEditActivity extends Activity {
 	String comment       批注信息
 	String commentimage  批注图片
      */
-    public void saveMarkingScore(){
+    public void saveMarkingScore(String score, String smallscore){
+    	String scoreJson = "";
     	this.markScoreJson.endTime = System.currentTimeMillis();
     	this.markScoreJson.usedtime = String.valueOf(this.markScoreJson.endTime - this.markScoreJson.startTime);
+		this.markScoreJson.score = score;
+		this.markScoreJson.smallscore = smallscore;
+		scoreJson = this.markScoreJson.toJsonString();
+		Log.v("YJ save result", scoreJson);
 		
     	Public pub = (Public)this.getApplication();
-        String scoreJson = "";
+        
         
         HashMap<String, String> properties = new HashMap<String, String>();
         properties.put("arg0", pub.userid);
@@ -442,17 +464,22 @@ public class CorrectScoreEditActivity extends Activity {
         properties.put("arg2", scoreJson);
         
         Log.v("YJ", pub.token); //
-        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetWorkprogress", properties, new WebServiceUtil.WebServiceCallBack() {
+        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "SaveNormalScore", properties, new WebServiceUtil.WebServiceCallBack() {
             @Override
             public void callBack(String result) {
                 if (result != null) {
                     Log.v("YJ",result);
                     
-                    MarkingListResponse reponse = new MarkingListResponse(result);
+                    SaveMarkingScoreResponse reponse = new SaveMarkingScoreResponse(result);
                     if("0001".equals(reponse.getCodeID())){
-                    	List<MarkingListResponse.Datas> itemsList = reponse.dataList;
+                    	//List<MarkingListResponse.Datas> itemsList = reponse.dataList;
                     	//TODO
-                    	CorrectScoreEditActivity.this.renderSelectQueList(itemsList);
+                    	//CorrectScoreEditActivity.this.renderSelectQueList(itemsList);
+                    	
+                    	//显示给分点列表
+                    	CorrectScoreEditActivity.this.getGetUserTaskQueInfoFromService();
+                		//加载对应的图片
+                    	CorrectScoreEditActivity.this.getExamTaskListFromService();
                        
                     }else if("0002".equals(reponse.getCodeID())){
                     	//Toast.makeText(AlreadyMarkActivity.this, reponse.getMessage(), Toast.LENGTH_SHORT).show();
@@ -638,33 +665,50 @@ public class CorrectScoreEditActivity extends Activity {
     }
     public void onClick(View v) {
 		int eventID = v.getId();
-		for(int i=0;i<rids.length;i++){
-			if(rids[i] == eventID){
-				try{
-					if(i>=0&&i<=9){
-						this.scoreShowText += String.valueOf(i);
-					}else if(i==10){
-						this.scoreShowText += ".";
-					}else if(i==11){
-						if(this.scoreShowText.length() > 0){
-							this.scoreShowText = this.scoreShowText.substring(0, this.scoreShowText.length()-1);	
-						}
-					}else if(i==12){ //满分
-						this.scoreShowText = this.full_marks;
-					}else if(i==13){ //零分
-						this.scoreShowText = "0";
-					}else if(i==14){ //提交分数
-						
-					}
-					this.scoreShowText = this.checkScoreLegal(this.scoreShowText );
-					this.scoreShowTextView.setText(this.scoreShowText);
-				}catch(Exception e){
-					e.printStackTrace();
-				}
-				
-				return;
-			}
-		}
+		Toast.makeText(CorrectScoreEditActivity.this, "分数最高为", 0).show();
+		
+//		for(int i=0;i<rids.length;i++){
+//			if(rids[i] == eventID){
+//				try{
+//					if(i>=0&&i<=9){
+//						this.scoreShowText += String.valueOf(i);
+//					}else if(i==10){
+//						this.scoreShowText += ".";
+//					}else if(i==11){
+//						if(this.scoreShowText.length() > 0){
+//							this.scoreShowText = this.scoreShowText.substring(0, this.scoreShowText.length()-1);	
+//						}
+//					}else if(i==12){ //满分
+//						this.scoreShowText = this.full_marks;
+//					}else if(i==13){ //零分
+//						this.scoreShowText = "0";
+//					}else if(i==14){ //提交分数
+//						float scoreF = Float.parseFloat(this.scoreShowText);
+//						float scoreFullF = Float.parseFloat(this.full_marks);
+//						if(scoreF > scoreFullF){
+//							Toast.makeText(CorrectScoreEditActivity.this, "分数最高为" + this.full_marks, 0).show();
+//							this.scoreShowText = "0";
+//							
+//						}else{
+//							//提交正评分数
+//							if(this.markScoreJson.hasSubQuestion){
+//								
+//							}else{
+//								this.saveMarkingScore(this.scoreShowText, "");
+//								this.scoreShowText = "0";
+//							}
+//						}
+//						
+//					}
+//					this.scoreShowText = this.checkScoreLegal(this.scoreShowText );
+//					this.scoreShowTextView.setText(this.scoreShowText);
+//				}catch(Exception e){
+//					e.printStackTrace();
+//				}
+//				
+//				return;
+//			}
+//		}
 		
         switch (v.getId()) {
         case R.id.score_panel_back_button:
@@ -840,7 +884,7 @@ class CanvasTouchListener implements OnTouchListener {
 		case MotionEvent.ACTION_DOWN:
 			downx = event.getX();
 			downy = event.getY();
-			return true;
+			//return true;
 		// 移动
 		case MotionEvent.ACTION_MOVE:
 			// 路径画板

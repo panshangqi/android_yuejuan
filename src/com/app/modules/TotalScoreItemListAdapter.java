@@ -2,7 +2,6 @@ package com.app.modules;
 
 import java.util.List;
 
-import com.app.modules.SelectQuestionItemListAdapter.ItemClickInterfaceListener;
 import com.app.yuejuan.R;
 import com.app.yuejuan.R.drawable;
 import com.app.yuejuan.R.id;
@@ -18,17 +17,20 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.View.OnFocusChangeListener;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ScorePointsItemListAdapter extends BaseAdapter{
+public class TotalScoreItemListAdapter extends BaseAdapter{
 	LayoutInflater inflater = null;
-    List<ScorePointsItemInfo> listInfo;
+    List<TotalScoreItemInfo> listInfo;
+    String queid;
     ItemClickInterfaceListener itemClickListener;
-    public ScorePointsItemListAdapter(Context context,List<ScorePointsItemInfo> listInfo,ItemClickInterfaceListener itemClickListener){
+    public TotalScoreItemListAdapter(Context context,List<TotalScoreItemInfo> listInfo, String queid, ItemClickInterfaceListener itemClickListener){
     	
         inflater = LayoutInflater.from(context);
         this.listInfo = listInfo;
+        this.queid = queid;
         this.itemClickListener = itemClickListener;
     }
     @Override
@@ -50,11 +52,13 @@ public class ScorePointsItemListAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
         ViewHolder holder;
-        final ScorePointsItemInfo itemInfo = listInfo.get(position);
+        final TotalScoreItemInfo itemInfo = listInfo.get(position);
         if(convertView == null || convertView.getTag() == null){
-            convertView = inflater.inflate(R.layout.list_item_score_potions,null);
+            convertView = inflater.inflate(R.layout.list_item_total_score_box,null);
             holder = new ViewHolder();
-            holder.numView = (TextView)convertView.findViewById(R.id.qt_question_num);
+            holder.quenumView = (TextView)convertView.findViewById(R.id.tsb_num);
+            holder.quescoreView = (EditText)convertView.findViewById(R.id.tsb_score);
+            
             
             convertView.setTag(holder);
         }else{
@@ -62,26 +66,28 @@ public class ScorePointsItemListAdapter extends BaseAdapter{
             holder = (ViewHolder)convertView.getTag();
         }
 
-        holder.numView.setText(itemInfo.score);
-
-        holder.numView.setOnTouchListener(new OnTouchListener(){
-
-			@Override
-			public boolean onTouch(View arg0, MotionEvent arg1) {
-				// TODO Auto-generated method stub
-				itemClickListener.Callback(itemInfo);
-				return false;
-			}
-        	
-        });
-
+        holder.quenumView.setText(itemInfo.quenum);
+        holder.quescoreView.setText(itemInfo.quescore);
+//        if(this.queid.equals(itemInfo.queid)){
+//        	holder.quenameView.setTextColor(android.graphics.Color.RED);
+//        }else{
+//        	holder.quenameView.setTextColor(0xff555555);
+//        }
+//        holder.quenameView.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				
+//				itemClickListener.Callback(itemInfo);
+//			}
+//		});
         return convertView;
     }
     public class ViewHolder{
     	
-        public TextView numView;
+        public TextView quenumView;
+        public EditText quescoreView;
     }
     public static interface ItemClickInterfaceListener{
-    	public void Callback(ScorePointsItemInfo itemInfo);
+    	public void Callback(SelectQuestionItemInfo itemInfo);
     }
 }

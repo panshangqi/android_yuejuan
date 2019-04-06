@@ -3,5 +3,5 @@ import java.io.Serializable;
 
 public class ScorePointsItemInfo implements Serializable{
 
-	public String queid;
+	public String score;
 }
