@@ -189,6 +189,7 @@
 			    android:layout_marginLeft="5dp"
 		        >
 			    <LinearLayout 
+			        android:id="@+id/ct_fixed_score_panel"
 			        android:layout_width="match_parent"
 			        android:layout_height="match_parent"
 			        android:orientation="vertical"
@@ -205,14 +206,14 @@
 				        android:dividerHeight="6dp"
 					/>
 			    </LinearLayout>
-		        
+		        <!-- 阅卷记录 -->
 	    		<LinearLayout
 	    		    android:id="@+id/ct_record_panel"
 		    	    android:layout_width="match_parent"
 			        android:layout_height="match_parent"
 			        android:orientation="vertical"
 			        android:background="@color/theme_color_1"
-			        
+			        android:clickable="true"
 	    	    >
 	    	    	<LinearLayout
 			    	    android:layout_width="match_parent"
@@ -266,6 +267,7 @@
 			        android:padding="6dp"
 			        android:columnWidth="48dp"
 			        android:orientation="vertical"
+			        android:clickable="true"
 	    	    >
 				    <!-- 分数显示 -->
 				    <LinearLayout
@@ -277,7 +279,7 @@
 				        android:gravity="center_horizontal"
 		    	    >
 		    	    	<TextView 
-		    	    	    android:id="@+id/score_show_box"
+		    	    	    android:id="@+id/cul_score_text"
 		    	    	    android:layout_width="wrap_content"
 		    	    	    android:layout_height="wrap_content"
 		    	    	    android:text="0"
@@ -303,22 +305,24 @@
 				        android:orientation="horizontal"
 				        android:layout_marginTop="7dp"
 		    	    >
-		    	    	<TextView 
+		    	    	<Button 
 		    	    	    android:id="@+id/cul_btn_0"
 		    	    	    android:onClick="onClick"
 		    	    	    android:layout_width="45dp"
 		    	    	    android:layout_height="24dp"
 		    	    	    android:text="0"
+		    	    	    android:button="@null"
 		    	    	    android:gravity="center"
 		    	    	    android:textColor="#222"
 		    	    	    android:background="@drawable/buttonsharp_2"
 	    	    	    />
-		    	    	<TextView 
+		    	    	<Button 
 		    	    	    android:id="@+id/cul_btn_1"
 		    	    	    android:onClick="onClick"
 		    	    	    android:layout_width="45dp"
 		    	    	    android:layout_height="24dp"
 		    	    	    android:text="1"
+		    	    	    android:button="@null"
 		    	    	    android:gravity="center"
 		    	    	    android:textColor="#222"
 		    	    	    android:layout_marginLeft="6dp"
@@ -333,7 +337,7 @@
 				        android:orientation="horizontal"
 				        android:layout_marginTop="6dp"
 		    	    >
-		    	    	<TextView 
+		    	    	<Button 
 		    	    	    android:id="@+id/cul_btn_2"
 		    	    	    android:onClick="onClick"
 		    	    	    android:layout_width="45dp"
@@ -341,9 +345,10 @@
 		    	    	    android:text="2"
 		    	    	    android:gravity="center"
 		    	    	    android:textColor="#222"
+		    	    	    android:button="@null"
 		    	    	    android:background="@drawable/buttonsharp_2"
 	    	    	    />
-		    	    	<TextView
+		    	    	<Button
 		    	    	    android:id="@+id/cul_btn_3"
 		    	    	    android:onClick="onClick" 
 		    	    	    android:layout_width="45dp"
@@ -352,6 +357,7 @@
 		    	    	    android:gravity="center"
 		    	    	    android:textColor="#222"
 		    	    	    android:layout_marginLeft="6dp"
+		    	    	    android:button="@null"
 		    	    	    android:background="@drawable/buttonsharp_2"
 	    	    	    />
 	    	    	</LinearLayout>
@@ -363,7 +369,7 @@
 				        android:orientation="horizontal"
 				        android:layout_marginTop="6dp"
 		    	    >
-		    	    	<TextView
+		    	    	<Button
 		    	    	    android:id="@+id/cul_btn_4"
 		    	    	    android:onClick="onClick"
 		    	    	    android:layout_width="45dp"
@@ -371,9 +377,10 @@
 		    	    	    android:text="4"
 		    	    	    android:gravity="center"
 		    	    	    android:textColor="#222"
+		    	    	    android:button="@null"
 		    	    	    android:background="@drawable/buttonsharp_2"
 	    	    	    />
-		    	    	<TextView
+		    	    	<Button
 		    	    	    android:id="@+id/cul_btn_5"
 		    	    	    android:onClick="onClick" 
 		    	    	    android:layout_width="45dp"
@@ -382,6 +389,7 @@
 		    	    	    android:gravity="center"
 		    	    	    android:textColor="#222"
 		    	    	    android:layout_marginLeft="6dp"
+		    	    	    android:button="@null"
 		    	    	    android:background="@drawable/buttonsharp_2"
 	    	    	    />
 	    	    	</LinearLayout>
@@ -394,7 +402,7 @@
 				        android:orientation="horizontal"
 				        android:layout_marginTop="6dp"
 		    	    >
-		    	    	<TextView
+		    	    	<Button
 		    	    	    android:id="@+id/cul_btn_6"
 		    	    	    android:onClick="onClick" 
 		    	    	    android:layout_width="45dp"
@@ -402,9 +410,10 @@
 		    	    	    android:text="6"
 		    	    	    android:gravity="center"
 		    	    	    android:textColor="#222"
+		    	    	    android:button="@null"
 		    	    	    android:background="@drawable/buttonsharp_2"
 	    	    	    />
-		    	    	<TextView
+		    	    	<Button
 		    	    	    android:id="@+id/cul_btn_7"
 		    	    	    android:onClick="onClick" 
 		    	    	    android:layout_width="45dp"
@@ -413,6 +422,7 @@
 		    	    	    android:gravity="center"
 		    	    	    android:textColor="#222"
 		    	    	    android:layout_marginLeft="6dp"
+		    	    	    android:button="@null"
 		    	    	    android:background="@drawable/buttonsharp_2"
 	    	    	    />
 	    	    	</LinearLayout>
@@ -424,7 +434,7 @@
 				        android:orientation="horizontal"
 				        android:layout_marginTop="6dp"
 		    	    >
-		    	    	<TextView
+		    	    	<Button
 		    	    	    android:id="@+id/cul_btn_8"
 		    	    	    android:onClick="onClick" 
 		    	    	    android:layout_width="45dp"
@@ -432,9 +442,10 @@
 		    	    	    android:text="8"
 		    	    	    android:gravity="center"
 		    	    	    android:textColor="#222"
+		    	    	    android:button="@null"
 		    	    	    android:background="@drawable/buttonsharp_2"
 	    	    	    />
-		    	    	<TextView
+		    	    	<Button
 		    	    	    android:id="@+id/cul_btn_9"
 		    	    	    android:onClick="onClick" 
 		    	    	    android:layout_width="45dp"
@@ -443,6 +454,7 @@
 		    	    	    android:gravity="center"
 		    	    	    android:textColor="#222"
 		    	    	    android:layout_marginLeft="6dp"
+		    	    	    android:button="@null"
 		    	    	    android:background="@drawable/buttonsharp_2"
 	    	    	    />
 	    	    	</LinearLayout>
@@ -454,7 +466,7 @@
 				        android:orientation="horizontal"
 				        android:layout_marginTop="6dp"
 		    	    >
-		    	    	<TextView
+		    	    	<Button
 		    	    	    android:id="@+id/cul_btn_10"
 		    	    	    android:onClick="onClick" 
 		    	    	    android:layout_width="45dp"
@@ -462,6 +474,7 @@
 		    	    	    android:text="."
 		    	    	    android:textColor="#222"
 		    	    	    android:gravity="center"
+		    	    	    android:button="@null"
 		    	    	    android:background="@drawable/buttonsharp_2"
 	    	    	    />
 		    	    	<ImageView
@@ -469,7 +482,7 @@
 		    	    	    android:onClick="onClick" 
 		    	    	    android:layout_width="45dp"
 		    	    	    android:layout_height="24dp"
-		    	    	    
+		    	    	    android:button="@null"
 		    	    	    android:gravity="center"
 		    	    	    android:layout_marginLeft="6dp"
 		    	    	    android:background="@drawable/score_delete"
@@ -483,7 +496,7 @@
 				        android:orientation="horizontal"
 				        android:layout_marginTop="6dp"
 		    	    >
-		    	    	<TextView
+		    	    	<Button
 		    	    	    android:id="@+id/cul_btn_12"
 		    	    	    android:onClick="onClick" 
 		    	    	    android:layout_width="45dp"
@@ -491,9 +504,10 @@
 		    	    	    android:text="满分"
 		    	    	    android:gravity="center"
 		    	    	    android:textColor="#fff"
+		    	    	    android:button="@null"
 		    	    	    android:background="@drawable/buttonsharp_3"
 	    	    	    />
-		    	    	<TextView 
+		    	    	<Button 
 		    	    	    android:id="@+id/cul_btn_13"
 		    	    	    android:onClick="onClick"
 		    	    	    android:layout_width="45dp"
@@ -502,10 +516,11 @@
 		    	    	    android:textColor="#fff"
 		    	    	    android:gravity="center"
 		    	    	    android:layout_marginLeft="6dp"
+		    	    	    android:button="@null"
 		    	    	    android:background="@drawable/buttonsharp_4"
 	    	    	    />
 	    	    	</LinearLayout>
-	    	    	<TextView 
+	    	    	<Button 
 	    	    	    android:id="@+id/cul_btn_14"
 	    	    	    android:onClick="onClick"
 	    	    	    android:layout_width="60dp"
@@ -515,17 +530,19 @@
 	    	    	    android:gravity="center"
 	    	    	    android:layout_gravity="center"
 	    	    	    android:layout_marginTop="6dp"
+	    	    	    android:button="@null"
 	    	    	    android:background="@drawable/buttonsharp_5"
     	    	    />
 	    		</LinearLayout>
 	    		
-		        <!-- 选择题目 -->
+		        <!-- 选题 选择题目 -->
 	    		<LinearLayout
 	    		    android:id="@+id/ct_select_panel"
 		    	    android:layout_width="match_parent"
 			        android:layout_height="match_parent"
 			        android:orientation="vertical"
 			        android:background="@color/theme_color_1"
+			        android:clickable="true"
 	    	    >
 			        <ListView
 				        android:id="@+id/select_question_list_view"

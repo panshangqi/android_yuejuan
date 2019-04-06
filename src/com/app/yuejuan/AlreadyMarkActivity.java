@@ -100,6 +100,7 @@ public class AlreadyMarkActivity extends MainBaseActivity {
             }
         });
     }
+    //渲染回评列表
     public void renderItemList(List<AlreadyMarkListResponse.Datas> itemList){
 
     	List<AlreadyMarkItemInfo> listInfo = new ArrayList(1);
@@ -107,14 +108,27 @@ public class AlreadyMarkActivity extends MainBaseActivity {
     	for(int i=0;i<itemList.size();i++){
     		AlreadyMarkListResponse.Datas data = itemList.get(i);
     		AlreadyMarkItemInfo item = new AlreadyMarkItemInfo();
-    		item.que_num = data.quename;
+    		item.quename = data.quename;
         	item.que_score = data.firstmark;
         	item.que_time = data.submittime;
+        	item.secretid = data.secretid;
         	listInfo.add(item);
     	}
     	Log.v("YJ","renderItemList()");
     	
-    	AlreadyMarkItemListAdapter bmilAdapter = new AlreadyMarkItemListAdapter(Public.context, listInfo);
+    	AlreadyMarkItemListAdapter bmilAdapter = new AlreadyMarkItemListAdapter(Public.context, listInfo, new AlreadyMarkItemListAdapter.ItemClickInterfaceListener() {
+			
+			@Override
+			public void Callback(AlreadyMarkItemInfo itemInfo) {
+				// TODO Auto-generated method stub
+//				Log.v("YJ","Click");
+				Intent intent =new Intent(AlreadyMarkActivity.this, CorrectScoreEditActivity.class);
+				intent.putExtra("secretid", itemInfo.secretid);
+				intent.putExtra("quename", itemInfo.quename);
+				intent.putExtra("type", "1"); //回评
+            	startActivity(intent);
+			}
+		});
     	ListView AlreadyMackListView = (ListView)findViewById(R.id.already_mark_list_view);
     	AlreadyMackListView.setAdapter(bmilAdapter);
     }

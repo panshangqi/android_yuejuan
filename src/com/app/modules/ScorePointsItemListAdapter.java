@@ -64,13 +64,16 @@ public class ScorePointsItemListAdapter extends BaseAdapter{
 
         holder.numView.setText(itemInfo.score);
 
-        holder.numView.setOnTouchListener(new OnTouchListener(){
+        holder.numView.setOnClickListener(new OnClickListener(){
+
+
 
 			@Override
-			public boolean onTouch(View arg0, MotionEvent arg1) {
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
 				// TODO Auto-generated method stub
 				itemClickListener.Callback(itemInfo);
-				return false;
+	
 			}
         	
         });

@@ -2,6 +2,7 @@ package com.app.modules;
 
 import java.util.List;
 
+import com.app.modules.TotalScoreItemListAdapter.ItemClickInterfaceListener;
 import com.app.yuejuan.R;
 import com.app.yuejuan.R.drawable;
 import com.app.yuejuan.R.id;
@@ -23,11 +24,12 @@ import android.widget.TextView;
 public class AlreadyMarkItemListAdapter extends BaseAdapter{
 	LayoutInflater inflater = null;
     List<AlreadyMarkItemInfo> listInfo;
-    
-    public AlreadyMarkItemListAdapter(Context context,List<AlreadyMarkItemInfo> listInfo){
+    ItemClickInterfaceListener itemClickListener;
+    public AlreadyMarkItemListAdapter(Context context,List<AlreadyMarkItemInfo> listInfo, ItemClickInterfaceListener itemClickListener){
     	
         inflater = LayoutInflater.from(context);
         this.listInfo = listInfo;
+        this.itemClickListener = itemClickListener;
     }
     @Override
     public int getCount() {
@@ -52,6 +54,7 @@ public class AlreadyMarkItemListAdapter extends BaseAdapter{
         if(convertView == null || convertView.getTag() == null){
             convertView = inflater.inflate(R.layout.list_item_already_mark,null);
             holder = new ViewHolder();
+            holder.itemBox = convertView;
             holder.numView = (TextView)convertView.findViewById(R.id.que_num);
             holder.scoreView = (TextView)convertView.findViewById(R.id.que_score);
             holder.timeView = (TextView)convertView.findViewById(R.id.que_time);
@@ -63,38 +66,26 @@ public class AlreadyMarkItemListAdapter extends BaseAdapter{
         }
         
         
-        holder.numView.setText(itemInfo.que_num);
+        holder.numView.setText(itemInfo.quename);
         holder.scoreView.setText(itemInfo.que_score);
         holder.timeView.setText(itemInfo.que_time);
 
-        holder.numView.setOnTouchListener(new OnTouchListener(){
-
-			@Override
-			public boolean onTouch(View arg0, MotionEvent arg1) {
-				// TODO Auto-generated method stub
-				
-				return false;
-			}
-        	
-        });
-        holder.scoreView.setOnClickListener(new OnClickListener() {
+        
+        holder.itemBox.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//wifiListener.Callback(itemInfo);
-			}
-		});
-        holder.timeView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//wifiListener.CallbackInfo(itemInfo);
+				itemClickListener.Callback(itemInfo);
 			}
 		});
         return convertView;
     }
     public class ViewHolder{
-    	
+    	View itemBox;
         public TextView numView;
         public TextView scoreView;
         public TextView timeView;
+    }
+    public static interface ItemClickInterfaceListener{
+    	public void Callback(AlreadyMarkItemInfo itemInfo);
     }
 }

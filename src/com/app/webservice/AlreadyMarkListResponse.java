@@ -33,7 +33,7 @@ public class AlreadyMarkListResponse {
 		public String signname;
 		public String submittime;
 		public String quename;
-		public int secretid;
+		public String secretid;
 	}
 	public List<Datas> dataList;
 	
@@ -64,7 +64,7 @@ public class AlreadyMarkListResponse {
 	                data.flagmode = subObject.get("flagmode").getAsString();
 	                data.signname = subObject.get("signname").getAsString();
 	                data.submittime = subObject.get("submittime").getAsString();
-	                data.secretid = subObject.get("secretid").getAsInt();
+	                data.secretid = subObject.get("secretid").getAsString();
 	                dataList.add(data);
 	            }
 				this.message = "";

@@ -174,6 +174,7 @@ public class MarkingActivity extends MainBaseActivity {
 				Intent intent =new Intent(MarkingActivity.this, CorrectScoreEditActivity.class);
 				intent.putExtra("queid", itemInfo.queid);
 				intent.putExtra("quename", itemInfo.questionName);
+				intent.putExtra("type", "0"); //正平
             	startActivity(intent);
 			}
 		};
