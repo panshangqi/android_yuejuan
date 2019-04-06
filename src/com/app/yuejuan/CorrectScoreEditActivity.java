@@ -154,6 +154,7 @@ public class CorrectScoreEditActivity extends Activity {
 	public TotalScoreItemListAdapter tsAdapter;
 	public GetUserTaskQueInfoResponse.Datas subQueList; //小题数据结构
 	public int selectSubQueID = 0;
+	public String full_sub_marks = "0" ;//每道小题的最高分
 	int[] rids = {R.id.cul_btn_0,R.id.cul_btn_1,R.id.cul_btn_2,R.id.cul_btn_3,R.id.cul_btn_4,
 			R.id.cul_btn_5,R.id.cul_btn_6,R.id.cul_btn_7,R.id.cul_btn_8,R.id.cul_btn_9,
 			R.id.cul_btn_10,R.id.cul_btn_11,R.id.cul_btn_12,R.id.cul_btn_13,R.id.cul_btn_14
@@ -334,6 +335,7 @@ public class CorrectScoreEditActivity extends Activity {
     		TotalScoreItemInfo item = new TotalScoreItemInfo();
     		item.smallqueid = subItem.smallqueid;
     		item.quenum = subItem.smallquename;
+    		item.smallfullmark = subItem.smallfullmark;
         	item.quescore = "";
         	item.index = i;
         	Log.v("YJ >>>",item.quenum);
@@ -946,31 +948,94 @@ public class CorrectScoreEditActivity extends Activity {
 					}else if(i==13){ //零分
 						this.scoreShowText = "0";
 					}else if(i==14){ //提交分数
-						float scoreF = Float.parseFloat(this.scoreShowText);
-						float scoreFullF = Float.parseFloat(this.full_marks);
-						if(scoreF > scoreFullF){
-							Toast.makeText(CorrectScoreEditActivity.this, "分数最高为" + this.full_marks, 0).show();
-							this.scoreShowText = "0";
-							
-						}else{
-							//提交正评分数
-							if("0".equals(TYPE)){
-								if(this.markScoreJson.hasSubQuestion){
+						
+						
+						//提交正评分数
+						if("0".equals(TYPE)){
+							if(this.markScoreJson.hasSubQuestion){
+								//判断分数合法性
+								float scoreF = Float.parseFloat(this.scoreShowText);
+								float scoreFullF = Float.parseFloat(tsAdapter.getFullMark());
+								if(scoreF > scoreFullF){
+									Toast.makeText(CorrectScoreEditActivity.this, "分数最高为" + scoreFullF, 0).show();
+									this.scoreShowText = "0";
+									
+								}else{
+									//把分数 存在左侧框框 并计算 总分；
+									tsAdapter.setScoreByPosition(selectSubQueID,this.scoreShowText);
+									selectSubQueID ++;
+									tsAdapter.setSelectedPosition(selectSubQueID);
+									String total_score = tsAdapter.getTotalScore();
+									((TextView)CorrectScoreEditActivity.this.findViewById(R.id.total_score_text_view)).setText(total_score);
+									if(selectSubQueID >= tsAdapter.getCount()){
+										Log.v("YJ","submit haha");
+									}
+									if(tsAdapter.getAll()){
+										submitTotalButton.setVisibility(View.VISIBLE);
+									}else{
+										submitTotalButton.setVisibility(View.GONE);
+									}
+									this.scoreShowText = "0";
+								}
+								
+								
+								
+							}else{
+								//判断分数合法性
+								float scoreF = Float.parseFloat(this.scoreShowText);
+								float scoreFullF = Float.parseFloat(this.full_marks);
+								if(scoreF > scoreFullF){
+									Toast.makeText(CorrectScoreEditActivity.this, "分数最高为" + scoreFullF, 0).show();
+									this.scoreShowText = "0";
 									
 								}else{
 									this.saveMarkingScore(this.scoreShowText, "");
 									this.scoreShowText = "0";
 								}
+							}
+						}else{
+							//提交回评分数
+							//提交回评分数
+							if(this.markScoreJson.hasSubQuestion){
+								//判断分数合法性
+								float scoreF = Float.parseFloat(this.scoreShowText);
+								float scoreFullF = Float.parseFloat(tsAdapter.getFullMark());
+								if(scoreF > scoreFullF){
+									Toast.makeText(CorrectScoreEditActivity.this, "分数最高为" + scoreFullF, 0).show();
+									this.scoreShowText = "0";
+									
+								}else{
+									//把分数 存在左侧框框 并计算 总分；
+									tsAdapter.setScoreByPosition(selectSubQueID,this.scoreShowText);
+									selectSubQueID ++;
+									tsAdapter.setSelectedPosition(selectSubQueID);
+									String total_score = tsAdapter.getTotalScore();
+									((TextView)CorrectScoreEditActivity.this.findViewById(R.id.total_score_text_view)).setText(total_score);
+									if(selectSubQueID >= tsAdapter.getCount()){
+										Log.v("YJ","submit haha");
+									}
+									if(tsAdapter.getAll()){
+										submitTotalButton.setVisibility(View.VISIBLE);
+									}else{
+										submitTotalButton.setVisibility(View.GONE);
+									}
+									this.scoreShowText = "0";
+								}
+								
 							}else{
-								//提交回评分数
-								//提交回评分数
-								if(this.markScoreJson.hasSubQuestion){
+								//判断分数合法性
+								float scoreF = Float.parseFloat(this.scoreShowText);
+								float scoreFullF = Float.parseFloat(this.full_marks);
+								if(scoreF > scoreFullF){
+									Toast.makeText(CorrectScoreEditActivity.this, "分数最高为" + scoreFullF, 0).show();
+									this.scoreShowText = "0";
 									
 								}else{
 									this.saveAlreadyMarkScore(this.scoreShowText, "");
 								}
 							}
 						}
+						
 						
 					}
 					this.scoreShowText = this.checkScoreLegal(this.scoreShowText );

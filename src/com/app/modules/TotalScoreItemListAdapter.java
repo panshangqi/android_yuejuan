@@ -86,6 +86,12 @@ public class TotalScoreItemListAdapter extends BaseAdapter{
     	}
 		return res;
     }
+    public String getFullMark(){
+    	if(selectedPosition < this.listInfo.size()){
+    		return this.listInfo.get(selectedPosition).smallfullmark;
+    	}
+    	return "0";
+    }
     public void ClearData(){
     	for(int i=0;i<this.listInfo.size();i++){
     		this.listInfo.get(i).quescore = "";
@@ -106,6 +112,7 @@ public class TotalScoreItemListAdapter extends BaseAdapter{
     	this.listInfo.get(position).quescore = score;
     	this.notifyDataSetInvalidated();
     }
+    
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
