@@ -24,7 +24,7 @@ public class Public extends Application {
 	
 	public static String responseID = "0001";
 	public static String responseIDOK = "0001";
-	
+	public static String cachePath = "/data/data/com.app.yuejuan/cache/";
 	public static int isMarkingActivity = 1; //默认显示正评列表
 	public static Context context = null;
 	public static LayoutInflater inflater = null;

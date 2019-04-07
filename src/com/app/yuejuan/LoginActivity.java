@@ -152,7 +152,7 @@ public class LoginActivity extends Activity {
             break;
         case R.id.loginforget:
         	
-        	Toast.makeText(LoginActivity.this, "btn1:", Toast.LENGTH_SHORT).show();
+        	//Toast.makeText(LoginActivity.this, "btn1:", Toast.LENGTH_SHORT).show();
         	Intent intent =new Intent(LoginActivity.this, ForgetPasswordActivity.class);
         	startActivity(intent);
             

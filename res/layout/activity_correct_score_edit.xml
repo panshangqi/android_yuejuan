@@ -152,7 +152,7 @@
 		        	android:layout_gravity="center"
 		        	android:layout_marginTop="5dp"
 		        	android:onClick="onClick"
-		        	android:background="@drawable/canvas_pen"
+		        	android:background="@drawable/button_bg_selector_2"
 		            />
 		        <ImageView 
 		            android:id="@+id/canvas_delete_button"
@@ -161,7 +161,7 @@
 		        	android:layout_gravity="center"
 		        	android:layout_marginTop="5dp"
 		        	android:onClick="onClick"
-		        	android:background="@drawable/canvas_delete"
+		        	android:background="@drawable/button_bg_selector_3"
 		            />
 		        <ImageView 
 		            android:id="@+id/canvas_dui_button"
@@ -170,7 +170,7 @@
 		        	android:layout_gravity="center"
 		        	android:layout_marginTop="5dp"
 		        	android:onClick="onClick"
-		        	android:background="@drawable/canvas_dui"
+		        	android:background="@drawable/button_bg_selector_4"
 		            />
 		        <ImageView 
 		            android:id="@+id/canvas_bandui_button"
@@ -179,7 +179,7 @@
 		        	android:layout_gravity="center"
 		        	android:layout_marginTop="5dp"
 		        	android:onClick="onClick"
-		        	android:background="@drawable/canvas_bandui"
+		        	android:background="@drawable/button_bg_selector_5"
 		            />
 		        <ImageView 
 		            android:id="@+id/canvas_wrong_button"
@@ -188,7 +188,7 @@
 		        	android:layout_gravity="center"
 		        	android:layout_marginTop="5dp"
 		        	android:onClick="onClick"
-		        	android:background="@drawable/canvas_wrong"
+		        	android:background="@drawable/button_bg_selector_6"
 		            />
 		    </LinearLayout>
 	    </LinearLayout>
@@ -199,17 +199,17 @@
 	    	android:layout_weight="1"
 		    android:layout_height="match_parent"
 		    android:orientation="vertical"
-		    android:background="@color/silver"
+		    android:background="#00ff12"
 		    android:padding="1dp"
 	    >
-		    <ScrollView
+		    <com.app.utils.MyScrollView
 		        android:id="@+id/canvas_scroll_bar"
 			    android:layout_width="match_parent"
 			    android:layout_height="match_parent"
 			    >
-			    <LinearLayout 
+			    <RelativeLayout 
 				    android:layout_width="match_parent"
-				    android:layout_height="1500dp"
+				    android:layout_height="wrap_content"
 				    android:orientation="vertical"
 				    android:gravity="top"
 			    >
@@ -219,8 +219,17 @@
 				    	android:layout_height="150dp"
 				    	android:gravity="top"
 			        />
-			    </LinearLayout>
-		    </ScrollView>
+				    <!-- 透明绘图图层 -->
+				    <ImageView 
+				        android:id="@+id/iv_face"
+				        android:layout_alignTop="@id/iv"
+				        android:layout_width="match_parent"
+				    	android:layout_height="150dp"
+				    	android:gravity="top"
+				    	
+			        />
+			    </RelativeLayout>
+		    </com.app.utils.MyScrollView>
 		    <Button 
 		        android:id="@+id/save_image_button"
 		        android:layout_width="50dp"

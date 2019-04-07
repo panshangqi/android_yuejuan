@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.view.View;
@@ -29,6 +30,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -85,6 +87,7 @@ import com.app.modules.SelectQuestionItemListAdapter.ItemClickInterfaceListener;
 import com.app.modules.TotalScoreItemInfo;
 import com.app.modules.TotalScoreItemListAdapter;
 import com.app.utils.CanvasView;
+import com.app.utils.MyScrollView;
 import com.app.utils.WebServiceUtil;
 import com.app.webservice.*;
 class MarkingScoreData{ //正评分数需要提交的数据
@@ -133,17 +136,32 @@ public class CorrectScoreEditActivity extends Activity {
 	//画布参数
 	Bitmap mainBitmap;
 	Canvas mainCanvas;
+	Bitmap mainFaceBitmp;
+	int scrollTop = 0;
+	int[] canvasIds = {R.id.canvas_pen_button, R.id.canvas_delete_button, R.id.canvas_dui_button,
+			R.id.canvas_bandui_button, R.id.canvas_wrong_button
+	};
+	int canvasBtnSelectId = -1; //当前那个操作被选中
+	boolean isPenOP = false; //是否ing在进行画笔操作
 	
-	
+//	int[] canvasBtnsBg = {R.drawable.canvas_pen, R.drawable.canvas_delete, R.drawable.canvas_dui,
+//			R.drawable.canvas_bandui, R.drawable.canvas_wrong
+//	};
+//	int[] canvasActiveBtnsBg = {R.drawable.canvas_pen_active, R.drawable.canvas_delete, R.drawable.canvas_dui,
+//			R.drawable.canvas_bandui, R.drawable.canvas_wrong
+//	};
+	List<ImageView> canvasOpBtns;
 	
 	LinearLayout score_panel_back_button;
 	//LinearLayout canvas_view;
 	private ImageView imageView;  
+	private ImageView imageViewFace;
+	
 	private Bitmap baseBitmap;  
 	private TextView quenameView;
 	private Canvas canvas;  
 	private Paint paint; 
-	ScrollView scrollView;
+	public MyScrollView scrollView;
 	public String imageUrl;
 	public String selectedQueID;
 	public String selectedQueName = "";
@@ -173,10 +191,13 @@ public class CorrectScoreEditActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_correct_score_edit);
         score_panel_back_button = (LinearLayout)this.findViewById(R.id.score_panel_back_button);
-        scrollView = (ScrollView)this.findViewById(R.id.canvas_scroll_bar);
+        scrollView = (MyScrollView)this.findViewById(R.id.canvas_scroll_bar);
         quenameView = (TextView)this.findViewById(R.id.hd_que_name);
         //canvas_view = (LinearLayout)this.findViewById(R.id.canvas_view);
         this.imageView = (ImageView) this.findViewById(R.id.iv);
+        this.imageViewFace = (ImageView) this.findViewById(R.id.iv_face);
+        
+        
         this.recordButton = (RadioButton) this.findViewById(R.id.ct_record_button);
         this.scoreButton = (RadioButton) this.findViewById(R.id.ct_score_button);
         this.selectButton = (RadioButton) this.findViewById(R.id.ct_select_button);
@@ -195,7 +216,21 @@ public class CorrectScoreEditActivity extends Activity {
         this.submitTotalButton.setVisibility(View.INVISIBLE);
         markScoreJson = new MarkingScoreData();
         
+        canvasOpBtns = new ArrayList();
+        for(int i=0;i<canvasIds.length;i++){
+        	canvasOpBtns.add((ImageView)this.findViewById(canvasIds[i]));
+        }
         
+        this.scrollView.setOnScrollListener(new MyScrollView.OnScrollListener() {
+			
+			@Override
+			public void onScroll(int scrollY) {
+				// TODO Auto-generated method stub
+				Log.v("YJ", "Y = " + String.valueOf(scrollY));
+				scrollTop = scrollY;
+				
+			}
+		});
         //get params queid
         try{
         	Intent intent = getIntent();
@@ -227,6 +262,32 @@ public class CorrectScoreEditActivity extends Activity {
         }
         
         this.initView();
+    }
+    public void setCanvasButtonsVisible(int index, boolean vis){
+    	for(int i=0;i<canvasIds.length;i++){
+    		if(i == index){
+    			if(canvasBtnSelectId == -1){
+    				canvasBtnSelectId = i;
+    				canvasOpBtns.get(i).setSelected(true);
+    				
+    			}else{
+    				canvasBtnSelectId = -1;
+    				canvasOpBtns.get(i).setSelected(false);
+    			}
+    			
+    		}else{
+    			canvasOpBtns.get(i).setSelected(false);
+    		}
+    		
+    		if(canvasBtnSelectId == 0){
+    			
+    			isPenOP = true;
+				
+    		}else{
+    			isPenOP = false; 
+    		}
+        	//canvasOpBtns.add((ImageView)this.findViewById(canvasIds[i]));
+        }
     }
     public void setVisibleRecord(boolean vis){
     	if(vis){
@@ -303,20 +364,21 @@ public class CorrectScoreEditActivity extends Activity {
 	    }  
 	    return result; 
 	}
-    public void save(View view) {  
+    public void savePngImage(Bitmap mBitmap) {  
     	  try {  
-			File file = new File(Environment.getExternalStorageDirectory(),System.currentTimeMillis() + ".jpg");
+			File file = new File(Public.cachePath +"hah.png");
 			OutputStream stream = new FileOutputStream(file);
-			baseBitmap.compress(CompressFormat.JPEG, 100, stream);
+			mBitmap.compress(CompressFormat.JPEG, 100, stream);
 			stream.close();
-			// 模拟一个广播，通知系统sdcard被挂载
-			Intent intent = new Intent();
-			intent.setAction(Intent.ACTION_MEDIA_MOUNTED);
-			intent.setData(Uri.fromFile(Environment.getExternalStorageDirectory()));
-			sendBroadcast(intent);
-			Toast.makeText(this, "保存图片成功", 0).show();
+//			// 模拟一个广播，通知系统sdcard被挂载
+//			Intent intent = new Intent();
+//			intent.setAction(Intent.ACTION_MEDIA_MOUNTED);
+//			intent.setData(Uri.fromFile(Environment.getExternalStorageDirectory()));
+//			sendBroadcast(intent);
+			Log.v("YJ","保存图片成功");
 		} catch (Exception e) {
-			Toast.makeText(this, "保存图片失败", 0).show();
+			//Toast.makeText(this, "保存图片失败", 0).show();
+			Log.v("YJ","保存图片失败");
 			e.printStackTrace();
 		}
     }  
@@ -1082,7 +1144,14 @@ public class CorrectScoreEditActivity extends Activity {
 				return;
 			}
 		}
-		
+		for(int i=0;i<canvasIds.length;i++){
+			if(canvasIds[i] == eventID){
+				
+				this.setCanvasButtonsVisible(i, true);
+				
+				return;
+			}
+		}
         switch (v.getId()) {
         case R.id.submit_sub_total_score_button:
         	//提交正评分数
@@ -1102,9 +1171,11 @@ public class CorrectScoreEditActivity extends Activity {
         	break;
         case R.id.save_image_button:
         	
-        	Toast.makeText(CorrectScoreEditActivity.this, "保存图片", 0).show();
-        	String base64Str = this.bitmapToBase64(mainBitmap);
-        	Log.v("YJ",base64Str);
+        	//Toast.makeText(CorrectScoreEditActivity.this, "保存图片", 0).show();
+        	Log.v("YJ","save image");
+        	//String base64Str = this.bitmapToBase64(mainFaceBitmp);
+        	savePngImage(mainFaceBitmp);
+        	//Log.v("YJ",base64Str);
         	break;
         case R.id.score_panel_back_button:
         	
@@ -1230,16 +1301,25 @@ public class CorrectScoreEditActivity extends Activity {
                 // 取得想要缩放的matrix参数   
                 Matrix matrix = new Matrix();   
                 matrix.postScale(scaleW, scaleW);
-                this.curBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);  
-                mainBitmap = this.curBitmap;
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(imgViewW,imgViewH);
+                mainBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);  
+                
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(imgViewW,imgViewH);
                 imageView.setLayoutParams(params);
                 imageView.setScaleType(ImageView.ScaleType.FIT_XY);//使图片充满控件大小,very imporment
                 
-        		
+                imageViewFace.setLayoutParams(params);
+//                mainFaceBitmp=BitmapFactory
+//             		   .decodeResource(getResources(),R.drawable.canvas_pen)
+//             		   .copy(Bitmap.Config.ARGB_8888,true);
+                mainFaceBitmp = Bitmap.createBitmap(imgViewW, imgViewH, Config.ARGB_8888);
+                //mainFaceBitmp.setHasAlpha(true);
+                
+                
+                
         		// 创建一张画布
-        		Canvas canvas = new Canvas(this.curBitmap);
+        		Canvas canvas = new Canvas(mainFaceBitmp);
         		mainCanvas = canvas;
+        		canvas.drawARGB(50,250,20,20);
         		// 创建画笔
         		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);//消除锯齿
         		// 画笔颜色为红色
@@ -1248,11 +1328,16 @@ public class CorrectScoreEditActivity extends Activity {
         		paint.setStrokeWidth(1);
         		
         		// 先将灰色背景画上
-        		canvas.drawBitmap(this.curBitmap, new Matrix(), paint);
+        		canvas.drawBitmap(mainFaceBitmp, new Matrix(), paint);
         		
-        		imageView.setImageBitmap(this.curBitmap);
+        		//背景图片绘制到ImageView
+        		imageView.setImageBitmap(mainBitmap);
+        		//imageView.setBackgroundColor(Color.TRANSPARENT);
+        		
+        		imageViewFace.setImageBitmap(mainFaceBitmp);
+        		imageViewFace.setBackgroundColor(Color.TRANSPARENT);
         		// 设置view监听
-        		imageView.setOnTouchListener(new CanvasTouchListener(canvas, paint, imageView));
+        		scrollView.setOnTouchListener(new CanvasTouchListener(canvas, paint, imageViewFace));
             }catch(Exception e){
             	e.printStackTrace();
             }
@@ -1275,37 +1360,43 @@ public class CorrectScoreEditActivity extends Activity {
     	@Override
     	public boolean onTouch(View v, MotionEvent event) {
     		int action = event.getAction();
+//    		if(!isPenOP){ //
+//    			return true;
+//    		}
+    		if(isPenOP){
+    			switch (action) {
+        		// 按下
+        		case MotionEvent.ACTION_DOWN:
+        			downx = event.getX();
+        			downy = event.getY() +scrollTop;
+        			//return true;
+        			break;
+        		// 移动
+        		case MotionEvent.ACTION_MOVE:
+        			// 路径画板
+        			x = event.getX();
+        			y = event.getY()+scrollTop;
+        			// 画线
+        			Log.v("YJ move", String.valueOf(x) + "," + String.valueOf(y));
+        			this.canvas.drawLine(downx, downy, x, y, this.paint);
+        			// 刷新image
+        			this.image.invalidate();
+        			downx = x;
+        			downy = y;
+        			Log.v("YJ","11");
+        			//return false;
+        			break;
+        		case MotionEvent.ACTION_UP:
+        			break;
 
-    		switch (action) {
-    		// 按下
-    		case MotionEvent.ACTION_DOWN:
-    			downx = event.getX();
-    			downy = event.getY();
-    			//return true;
-    		// 移动
-    		case MotionEvent.ACTION_MOVE:
-    			// 路径画板
-    			x = event.getX();
-    			y = event.getY();
-    			// 画线
-    			Log.v("YJ move", String.valueOf(x) + "," + String.valueOf(y));
-    			this.canvas.drawLine(downx, downy, x, y, this.paint);
-    			// 刷新image
-    			this.image.invalidate();
-    			downx = x;
-    			downy = y;
-    			Log.v("YJ","11");
-    			//return false;
-    			
-    		case MotionEvent.ACTION_UP:
-    			break;
-
-    		default:
-    			break;
+        		default:
+        			break;
+        		}
     		}
+    		
     		// true：告诉系统，这个触摸事件由我来处理
     		// false：告诉系统，这个触摸事件我不处理，这时系统会把触摸事件传递给imageview的父节点
-    		return true;
+    		return isPenOP ? true : false; //false 禁止滚动， true滚动
     	}
 
     }
