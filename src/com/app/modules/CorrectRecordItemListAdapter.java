@@ -23,10 +23,11 @@ import android.widget.TextView;
 public class CorrectRecordItemListAdapter extends BaseAdapter{
 	LayoutInflater inflater = null;
     List<CorrectRecordItemInfo> listInfo;
-    
-    public CorrectRecordItemListAdapter(Context context,List<CorrectRecordItemInfo> listInfo){
+    ItemClickInterfaceListener itemListener;
+    public CorrectRecordItemListAdapter(Context context,List<CorrectRecordItemInfo> listInfo, ItemClickInterfaceListener itemListener){
     	
         inflater = LayoutInflater.from(context);
+        this.itemListener = itemListener;
         this.listInfo = listInfo;
     }
     @Override
@@ -52,6 +53,7 @@ public class CorrectRecordItemListAdapter extends BaseAdapter{
         if(convertView == null || convertView.getTag() == null){
             convertView = inflater.inflate(R.layout.list_item_correct_record,null);
             holder = new ViewHolder();
+            holder.boxView = (View)convertView;
             holder.orderView = (TextView)convertView.findViewById(R.id.ct_order);
             holder.scoreView = (TextView)convertView.findViewById(R.id.ct_score);
             
@@ -63,14 +65,22 @@ public class CorrectRecordItemListAdapter extends BaseAdapter{
 
         holder.orderView.setText(itemInfo.order);
         holder.scoreView.setText(itemInfo.score);
-
+        holder.boxView.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				itemListener.Callback(itemInfo);
+			}
         
-
+        });
         return convertView;
     }
     public class ViewHolder{
     	
         public TextView orderView;
         public TextView scoreView;
+        public View boxView;
+    }
+    public interface ItemClickInterfaceListener{
+    	public void Callback(CorrectRecordItemInfo itemInfo);
     }
 }

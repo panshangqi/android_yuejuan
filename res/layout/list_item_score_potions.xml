@@ -15,7 +15,7 @@
 	  android:background="@drawable/button_bg_selector"
 	  android:textSize="16dp"
 	  android:gravity="center"
-	  android:padding="6dp"
+	  android:padding="3dp"
 	  android:layout_gravity="center"
 	/>
 		 

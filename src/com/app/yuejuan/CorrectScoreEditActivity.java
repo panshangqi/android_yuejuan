@@ -466,15 +466,21 @@ public class CorrectScoreEditActivity extends Activity {
     	
     	SelectQuestionItemListAdapter qtAdapter = new SelectQuestionItemListAdapter(Public.context, listInfo, this.selectedQueID, new ItemClickInterfaceListener(){
     		public void Callback(SelectQuestionItemInfo itemInfo){
-    			CorrectScoreEditActivity.this.selectedQueID = itemInfo.queid;
-    			CorrectScoreEditActivity.this.selectedQueName = itemInfo.quename;
-    			CorrectScoreEditActivity.this.quenameView.setText(itemInfo.quename);
-    			//更新需要阅卷的信息包括图片什么的
-    			CorrectScoreEditActivity.this.setVisibleSelect(false);
-    			CorrectScoreEditActivity.this.getExamTaskListFromService();
-    			
-    			//更新 显示给分点列表
-            	CorrectScoreEditActivity.this.getGetUserTaskQueInfoFromService();
+//    			CorrectScoreEditActivity.this.selectedQueID = itemInfo.queid;
+//    			CorrectScoreEditActivity.this.selectedQueName = itemInfo.quename;
+//    			CorrectScoreEditActivity.this.quenameView.setText(itemInfo.quename);
+//    			//更新需要阅卷的信息包括图片什么的
+//    			CorrectScoreEditActivity.this.setVisibleSelect(false);
+//    			CorrectScoreEditActivity.this.getExamTaskListFromService();
+//    			
+//    			//更新 显示给分点列表
+//            	CorrectScoreEditActivity.this.getGetUserTaskQueInfoFromService();
+    			//TODO 局部刷新太他么麻烦了，还是重新跳转该页面吧，日
+    			Intent intent =new Intent(CorrectScoreEditActivity.this, CorrectScoreEditActivity.class);
+				intent.putExtra("queid", itemInfo.queid);
+				intent.putExtra("quename", itemInfo.quename);
+				intent.putExtra("type", "0"); //正平
+            	startActivity(intent);
     		}
     	});
 
@@ -598,6 +604,10 @@ public class CorrectScoreEditActivity extends Activity {
     				Log.v("YJ","有小题的情况");
     				this.markScoreJson.hasSubQuestion = true;
     				this.subQueList = data;   //very very important
+    				if("1".equals(TYPE)){
+    					//回评如果有小题显示提交按钮
+        				submitTotalButton.setVisibility(View.VISIBLE);
+    				}
     				
     				//默认给出第一个给分点
     				if(data.smallqueinfoList.size()>0){
@@ -696,12 +706,22 @@ public class CorrectScoreEditActivity extends Activity {
     		CorrectRecordItemInfo item = new CorrectRecordItemInfo();
     		item.order = String.valueOf(i+1);
     		item.score = data.firstmark;
+    		item.secretid = data.secretid;
+    		item.quename = data.quename;
     		listInfo.add(item);
     	}
 
     	Log.v("YJ","getBackMarkList()");
     	
-    	CorrectRecordItemListAdapter qtAdapter = new CorrectRecordItemListAdapter(Public.context, listInfo);
+    	CorrectRecordItemListAdapter qtAdapter = new CorrectRecordItemListAdapter(Public.context, listInfo, new CorrectRecordItemListAdapter.ItemClickInterfaceListener(){
+    		public void Callback(CorrectRecordItemInfo itemInfo){
+    			Intent intent =new Intent(CorrectScoreEditActivity.this, CorrectScoreEditActivity.class);
+				intent.putExtra("secretid", itemInfo.secretid);
+				intent.putExtra("quename", itemInfo.quename);
+				intent.putExtra("type", "1"); //回评
+            	startActivity(intent);
+    		}
+    	});
 
     	ListView theListView = (ListView)findViewById(R.id.correct_record_list_view);
     	

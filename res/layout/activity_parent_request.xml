@@ -7,7 +7,7 @@
      >
 	<include layout="@layout/header_title_back_layout" />
     
-	<RelativeLayout 
+	<RelativeLayout
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
 	    android:padding="25dp"

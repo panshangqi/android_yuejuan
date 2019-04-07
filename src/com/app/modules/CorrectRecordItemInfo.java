@@ -5,4 +5,6 @@ public class CorrectRecordItemInfo implements Serializable{
 
 	public String order;
 	public String score;
+	public String secretid;
+	public String quename;
 }
