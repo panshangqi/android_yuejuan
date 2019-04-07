@@ -94,6 +94,7 @@ public class GetAlreadyMarkInfoResponse {
 	                data.queid = subObject.get("queid").getAsString();
 	                data.quename = subObject.get("quename").getAsString();
 	                data.firstmark = subObject.get("firstmark").getAsString();
+	                data.firstsmallmark = subObject.get("firstsmallmark").getAsString();
 	                data.fullmark = subObject.get("fullmark").getAsString();
 	                data.scorepoints = subObject.get("scorepoints").getAsString();
 	                data.examid = subObject.get("examid").getAsString();

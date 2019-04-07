@@ -109,9 +109,14 @@ class MarkingScoreData{ //正评分数需要提交的数据
 	public String comment;       //批注信息
 	public String commentimage;  //批注图片
 	public String invalidscore;//  修改前总分
+	
 	public long startTime;
 	public long endTime;
 	public boolean hasSubQuestion = false; // 是否有小题
+	//
+	public String firstmark = "";
+	public String firstsmallmark = "";
+	
 	private String KeyValue(String key, String value, boolean dot){
 		String kv = "\"" + key + "\":\"" + value + "\"";
 		if(dot){
@@ -140,6 +145,7 @@ class MarkingScoreData{ //正评分数需要提交的数据
 public class CorrectScoreEditActivity extends Activity {
 
 	//画布参数
+	public boolean isMarkBiaozhu = false;
 	Bitmap mainBitmap;
 	Canvas mainCanvas;
 	Bitmap mainFaceBitmp;
@@ -323,6 +329,7 @@ public class CorrectScoreEditActivity extends Activity {
 	    		        mainCanvas.drawPaint(p);
 	    		        //mainCanvas.drawARGB(0,250,20,20);
 		    			imageViewFace.invalidate();
+		    			isMarkBiaozhu = false;
 		            	dialog.cancel();
 		            }
 	        });
@@ -479,6 +486,7 @@ public class CorrectScoreEditActivity extends Activity {
     public void loadTotalScoreList(GetUserTaskQueInfoResponse.Datas subQueData){
     	List<GetUserTaskQueInfoResponse.SmallQueInfo> subqueArr = subQueData.smallqueinfoList;
     	
+    	
     	List<TotalScoreItemInfo> listInfo = new ArrayList();
     	for(int i=0;i<subqueArr.size();i++){
     		GetUserTaskQueInfoResponse.SmallQueInfo subItem = subqueArr.get(i);
@@ -491,8 +499,30 @@ public class CorrectScoreEditActivity extends Activity {
         	Log.v("YJ >>>",item.quenum);
     		listInfo.add(item);	
     	}
-
-    	Log.v("YJ","getBackMarkList()");
+    	
+    	if("1".equals(TYPE)){
+    		//回评
+    		Log.v("YJ "," 回评初始化分分数");
+    		if(markScoreJson.hasSubQuestion){ //有小题，初始化左边分数
+        		((TextView)this.findViewById(R.id.total_score_text_view)).setText(markScoreJson.firstmark);
+        		//无小题
+        		Log.v("YJ >>>>", markScoreJson.firstsmallmark);
+        		if(markScoreJson.firstsmallmark != null){
+        			List<String> scoresList = this.getScorePoints(markScoreJson.firstsmallmark);
+            		for(int i=0;i<scoresList.size();i++){
+            			if(listInfo.get(i)!=null){
+            				listInfo.get(i).quescore = scoresList.get(i);	
+            			}
+            			
+            		}
+        		}
+        		
+        	}else{
+        		Log.v("YJ "," 回评，没有小题，该题分数" + markScoreJson.firstmark);
+        		((TextView)this.findViewById(R.id.total_score_text_view)).setText(markScoreJson.firstmark);
+        	}
+    	}
+    	Log.v("YJ","loadTotalScoreList()");
     	
 
     	tsAdapter = new TotalScoreItemListAdapter(Public.context, listInfo, subQueData.queid, new TotalScoreItemListAdapter.ItemClickInterfaceListener() {
@@ -563,6 +593,7 @@ public class CorrectScoreEditActivity extends Activity {
     				this.markScoreJson.hasSubQuestion = false;
     				
     				listInfo = this.getScorePointsList(data.scorepoints);
+    				((TextView)this.findViewById(R.id.total_score_text_view)).setText(markScoreJson.firstmark);
     			}else{
     				Log.v("YJ","有小题的情况");
     				this.markScoreJson.hasSubQuestion = true;
@@ -575,7 +606,7 @@ public class CorrectScoreEditActivity extends Activity {
     					listInfo = this.getScorePointsList(this.getSmallquescorepoints(0));
     					
     				}
-    				this.loadTotalScoreList(this.subQueList); //总分列表
+    				this.loadTotalScoreList(this.subQueList); //左侧总分列表
     			}
     			break;
     		}
@@ -676,7 +707,7 @@ public class CorrectScoreEditActivity extends Activity {
     	
     	theListView.setAdapter(qtAdapter);
     }
-    //获取题目id，name,满分，给分点scorepoints 小题信息
+    //获取题目id，name,满分，给分点scorepoints 小题信息 //所有可批阅的题目信息
     public void getGetUserTaskQueInfoFromService(){
     	Public pub = (Public)this.getApplication();
        
@@ -750,7 +781,12 @@ public class CorrectScoreEditActivity extends Activity {
     	this.markScoreJson.usedtime = String.valueOf(this.markScoreJson.endTime - this.markScoreJson.startTime);
 		this.markScoreJson.score = score;
 		this.markScoreJson.smallscore = smallscore;
-		this.markScoreJson.commentimage = this.bitmapToBase64(this.mainFaceBitmp);
+		if(isMarkBiaozhu == true){
+			this.markScoreJson.commentimage = this.bitmapToBase64(this.mainFaceBitmp);	
+		}else{
+			this.markScoreJson.commentimage = "";
+		}
+		//this.markScoreJson.commentimage = this.bitmapToBase64(this.mainFaceBitmp);
 		scoreJson = this.markScoreJson.toJsonString();
 		Log.v("YJ save result", scoreJson);
 		
@@ -851,7 +887,12 @@ public class CorrectScoreEditActivity extends Activity {
 
 			this.markScoreJson.commentimage = imagebase64;
 		}else{
-			this.markScoreJson.commentimage = this.bitmapToBase64(this.mainFaceBitmp);
+			if(isMarkBiaozhu == true){
+				this.markScoreJson.commentimage = this.bitmapToBase64(this.mainFaceBitmp);	
+			}else{
+				this.markScoreJson.commentimage = "";
+			}
+			
 		}
 		
 		scoreJson = this.markScoreJson.toJsonString();
@@ -997,11 +1038,13 @@ public class CorrectScoreEditActivity extends Activity {
                     		CorrectScoreEditActivity.this.markScoreJson.comment = "";
                     		CorrectScoreEditActivity.this.markScoreJson.commentimage = data.commentimage; //显示已有标注过则为空
                     		CorrectScoreEditActivity.this.markScoreJson.invalidscore = data.firstmark;
+                    		CorrectScoreEditActivity.this.markScoreJson.firstsmallmark = data.firstsmallmark;
+                    		CorrectScoreEditActivity.this.markScoreJson.firstmark = data.firstmark;
                     		String url = Public.imageUrl(data.imgurl);
                     		ImgLoadTask imgLoadTask=new ImgLoadTask(imageView);
                     		imgLoadTask.execute(url);//execute里面是图片的地址
                     		CorrectScoreEditActivity.this.selectedQueID = data.queid;
-                    		CorrectScoreEditActivity.this.getGetUserTaskQueInfoFromService(); 
+                    		CorrectScoreEditActivity.this.getGetUserTaskQueInfoFromService(); //选题目
                     		//总分设为0
                     		((TextView)CorrectScoreEditActivity.this.findViewById(R.id.total_score_text_view)).setText("0");
                     	}
@@ -1073,6 +1116,7 @@ public class CorrectScoreEditActivity extends Activity {
         });
     }
     public List<String> getScorePoints(String str){
+    	
     	List<String> lists = new ArrayList();
     	String score = "";
     	for(int i=0;i<str.length();i++){
@@ -1441,11 +1485,12 @@ public class CorrectScoreEditActivity extends Activity {
             		mainFaceBitmp = Bitmap.createBitmap(tempBitmap, 0, 0, tempBitmap.getWidth(), tempBitmap.getHeight(), _matrix, true);
                 	
                 	
-                	
+            		isMarkBiaozhu = true;
                 	Log.v("YJ manFaceWidth w h = ", String.valueOf(mainFaceBitmp.getWidth()) + "," + String.valueOf(mainFaceBitmp.getHeight()));
                 }else{
                 	//没有标注,重新创建画布
                 	Log.v("YJ","没有标注,重新创建画布");
+                	isMarkBiaozhu = false;
                 	mainFaceBitmp = Bitmap.createBitmap(imgViewW, imgViewH, Config.ARGB_8888);
                 }
                 
@@ -1497,12 +1542,14 @@ public class CorrectScoreEditActivity extends Activity {
 //    			return true;
 //    		}
     		if(isDuiOP){
+    			
     			switch (action) {
         		// 按下
         		case MotionEvent.ACTION_DOWN:
         			Log.v("YJ scrollTop", String.valueOf(scrollTop));
         			downx = event.getX();
         			downy = event.getY() +scrollTop;
+        			isMarkBiaozhu = true;
         			//return true;
         			// 创建画笔
             		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);//消除锯齿
@@ -1520,12 +1567,14 @@ public class CorrectScoreEditActivity extends Activity {
         		}
     		}
     		if(isBanduiOP){
+    			
     			switch (action) {
         		// 按下
         		case MotionEvent.ACTION_DOWN:
         			downx = event.getX();
         			downy = event.getY() +scrollTop;
         			//return true;
+        			isMarkBiaozhu = true;
         			// 创建画笔
             		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);//消除锯齿
             		// 画笔颜色为红色
@@ -1548,6 +1597,7 @@ public class CorrectScoreEditActivity extends Activity {
         		case MotionEvent.ACTION_DOWN:
         			downx = event.getX();
         			downy = event.getY() +scrollTop;
+        			isMarkBiaozhu = true;
         			//return true;
         			// 创建画笔
             		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);//消除锯齿
@@ -1576,6 +1626,7 @@ public class CorrectScoreEditActivity extends Activity {
         		// 移动
         		case MotionEvent.ACTION_MOVE:
         			// 路径画板
+        			isMarkBiaozhu = true;
         			x = event.getX();
         			y = event.getY()+scrollTop;
         			// 画线
