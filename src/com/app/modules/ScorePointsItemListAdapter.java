@@ -46,6 +46,10 @@ public class ScorePointsItemListAdapter extends BaseAdapter{
         // TODO Auto-generated method stub
         return index;
     }
+    public void updateItemList(List<ScorePointsItemInfo> listInfo){
+    	this.listInfo = listInfo;
+    	this.notifyDataSetInvalidated();
+    }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub

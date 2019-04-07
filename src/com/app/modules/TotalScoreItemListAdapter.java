@@ -50,6 +50,10 @@ public class TotalScoreItemListAdapter extends BaseAdapter{
         // TODO Auto-generated method stub
         return index;
     }
+    public void updateItemList(List<TotalScoreItemInfo> listInfo){
+    	this.listInfo = listInfo;
+    	this.notifyDataSetInvalidated();
+    }
     public String getTotalScore(){
     	float total = 0;
     	for(int i=0;i<this.listInfo.size();i++){

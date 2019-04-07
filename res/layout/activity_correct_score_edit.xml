@@ -199,7 +199,7 @@
 	    	android:layout_weight="1"
 		    android:layout_height="match_parent"
 		    android:orientation="vertical"
-		    android:background="#00ff12"
+		    android:background="#eeeeee"
 		    android:padding="1dp"
 	    >
 		    <com.app.utils.MyScrollView
@@ -234,7 +234,7 @@
 		        android:id="@+id/save_image_button"
 		        android:layout_width="50dp"
 			    android:layout_height="50dp"
-			    android:text="提交"
+			    android:text="保存"
 			    android:textSize="14dp"
 			    android:textColor="#fff"
 			    android:background="@drawable/buttonsharp_7"
@@ -244,6 +244,7 @@
 			    android:gravity="center"
 			    android:button="@null"
 			    android:onClick="onClick"
+			    android:visibility="gone"
 		        />
 		    <Button 
 		        android:id="@+id/submit_sub_total_score_button"

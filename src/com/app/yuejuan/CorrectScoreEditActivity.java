@@ -1,5 +1,5 @@
 package com.app.yuejuan;
-
+//import org.apache.commons.codec.binary.Base64;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -36,6 +36,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffXfermode;
 
 //import java.util.Date;
 //import java.text.DateFormat;
@@ -47,6 +49,7 @@ import android.graphics.Paint;
 //import javax.xml.namespace.QName;
 //import java.lang.Integer;
 //import javax.xml.rpc.ParameterMode;
+
 import android.util.Base64;
 import android.util.Log;
 import org.ksoap2.SoapEnvelope;
@@ -61,11 +64,14 @@ import com.google.gson.reflect.TypeToken;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -143,7 +149,9 @@ public class CorrectScoreEditActivity extends Activity {
 	};
 	int canvasBtnSelectId = -1; //当前那个操作被选中
 	boolean isPenOP = false; //是否ing在进行画笔操作
-	
+	boolean isDuiOP = false;
+	boolean isBanduiOP = false;
+	boolean isWrongOP = false;
 //	int[] canvasBtnsBg = {R.drawable.canvas_pen, R.drawable.canvas_delete, R.drawable.canvas_dui,
 //			R.drawable.canvas_bandui, R.drawable.canvas_wrong
 //	};
@@ -178,6 +186,7 @@ public class CorrectScoreEditActivity extends Activity {
 	//小题
 	public Button submitTotalButton;
 	public TotalScoreItemListAdapter tsAdapter;
+	public ScorePointsItemListAdapter scorePointsAdapter; //默认给分列表
 	public GetUserTaskQueInfoResponse.Datas subQueList; //小题数据结构
 	public int selectSubQueID = 0;
 	public String full_sub_marks = "0" ;//每道小题的最高分
@@ -220,7 +229,8 @@ public class CorrectScoreEditActivity extends Activity {
         for(int i=0;i<canvasIds.length;i++){
         	canvasOpBtns.add((ImageView)this.findViewById(canvasIds[i]));
         }
-        
+        //设置保存图片按钮不可见 debug
+    	((Button)this.findViewById(R.id.save_image_button)).setVisibility(View.GONE);
         this.scrollView.setOnScrollListener(new MyScrollView.OnScrollListener() {
 			
 			@Override
@@ -266,28 +276,69 @@ public class CorrectScoreEditActivity extends Activity {
     public void setCanvasButtonsVisible(int index, boolean vis){
     	for(int i=0;i<canvasIds.length;i++){
     		if(i == index){
-    			if(canvasBtnSelectId == -1){
+    			if(canvasBtnSelectId == -1){ //都没有选中，第一次
     				canvasBtnSelectId = i;
     				canvasOpBtns.get(i).setSelected(true);
     				
     			}else{
-    				canvasBtnSelectId = -1;
-    				canvasOpBtns.get(i).setSelected(false);
+    				if(i == canvasBtnSelectId){ //点击被选中的按钮，变为不选中
+    					canvasOpBtns.get(i).setSelected(false);
+    					canvasBtnSelectId = -1;
+    				}else{
+    					canvasOpBtns.get(i).setSelected(true); //否则选中
+    					canvasBtnSelectId = i;
+    				}	
     			}
     			
+    			if(canvasBtnSelectId == 0){
+        			isPenOP = true;
+        		}else{
+        			isPenOP = false; 
+        		}
+        		isDuiOP = canvasBtnSelectId == 2 ? true: false;
+        		isBanduiOP = canvasBtnSelectId == 3 ? true: false;
+        		isWrongOP = canvasBtnSelectId == 4 ? true: false;
+        		
     		}else{
     			canvasOpBtns.get(i).setSelected(false);
     		}
     		
-    		if(canvasBtnSelectId == 0){
-    			
-    			isPenOP = true;
-				
-    		}else{
-    			isPenOP = false; 
-    		}
+    		
         	//canvasOpBtns.add((ImageView)this.findViewById(canvasIds[i]));
         }
+    	if(index == 1){//清空画布
+			Log.v("YJ","清空画布");
+			final AlertDialog.Builder normalDialog = new AlertDialog.Builder(CorrectScoreEditActivity.this);
+	        //normalDialog.setIcon(R.drawable.icon_dialog);
+	        normalDialog.setTitle("提示");
+	        normalDialog.setMessage("确定要清空所有标注吗?");
+	        normalDialog.setPositiveButton("确定", 
+	            new DialogInterface.OnClickListener() {
+		            @Override
+		            public void onClick(DialogInterface dialog, int which) {
+		                //...To-do
+		            	 Paint p = new Paint();
+	    		        //清屏
+	    		        p.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
+	    		        mainCanvas.drawPaint(p);
+	    		        //mainCanvas.drawARGB(0,250,20,20);
+		    			imageViewFace.invalidate();
+		            	dialog.cancel();
+		            }
+	        });
+	        normalDialog.setNegativeButton("关闭", 
+	            new DialogInterface.OnClickListener() {
+		            @Override
+		            public void onClick(DialogInterface dialog, int which) {
+		                //...To-do
+		            	dialog.cancel();
+		            }
+	        });
+	        // 显示
+	        normalDialog.show();
+	        canvasOpBtns.get(index).setSelected(false);
+			
+		}
     }
     public void setVisibleRecord(boolean vis){
     	if(vis){
@@ -337,7 +388,7 @@ public class CorrectScoreEditActivity extends Activity {
 
 	}
 	public String bitmapToBase64(Bitmap bitmap){
-		String result = null;  
+		String result = "";  
 	    ByteArrayOutputStream baos = null;  
 	    try {  
 	        if (bitmap != null) {  
@@ -347,8 +398,10 @@ public class CorrectScoreEditActivity extends Activity {
 	            baos.flush();  
 	            baos.close();  
 	  
-	            byte[] bitmapBytes = baos.toByteArray();  
-	            result = Base64.encodeToString(bitmapBytes, Base64.DEFAULT);  
+	            byte[] bitmapBytes = baos.toByteArray(); 
+	            result += Base64.encodeToString(bitmapBytes, Base64.DEFAULT);  
+	            result = result.replaceAll("[\\s*\t\n\r]", "");
+
 	        }  
 	    } catch (IOException e) {  
 	        e.printStackTrace();  
@@ -368,7 +421,8 @@ public class CorrectScoreEditActivity extends Activity {
     	  try {  
 			File file = new File(Public.cachePath +"hah.png");
 			OutputStream stream = new FileOutputStream(file);
-			mBitmap.compress(CompressFormat.JPEG, 100, stream);
+			
+			mBitmap.compress(CompressFormat.PNG, 100, stream);
 			stream.close();
 //			// 模拟一个广播，通知系统sdcard被挂载
 //			Intent intent = new Intent();
@@ -402,7 +456,6 @@ public class CorrectScoreEditActivity extends Activity {
     		listInfo.add(item);
     	}
 
-    	Log.v("YJ","getBackMarkList()");
     	
     	SelectQuestionItemListAdapter qtAdapter = new SelectQuestionItemListAdapter(Public.context, listInfo, this.selectedQueID, new ItemClickInterfaceListener(){
     		public void Callback(SelectQuestionItemInfo itemInfo){
@@ -455,8 +508,11 @@ public class CorrectScoreEditActivity extends Activity {
 		    		if(subItem.smallqueid.equals(itemInfo.smallqueid)){
 		    			CorrectScoreEditActivity.this.tsAdapter.setSelectedPosition(i);
 		    			//CorrectScoreEditActivity.this.tsAdapter.notifyDataSetInvalidated();
-		    			List<String> scorePointsList = CorrectScoreEditActivity.this.getScorePoints(subItem.smallscorepoints);
-		    			CorrectScoreEditActivity.this.loadGivePointsList(scorePointsList);
+		    			//List<String> scorePointsList = CorrectScoreEditActivity.this.getScorePoints(subItem.smallscorepoints);
+		    			//CorrectScoreEditActivity.this.loadGivePointsList(scorePointsList);
+		    			List<ScorePointsItemInfo> listInfo = getScorePointsList(subItem.smallscorepoints);
+		    			scorePointsAdapter.updateItemList(listInfo);
+		    			//更新打分适配器
 		    			break;
 		    		}
 		    	}				
@@ -467,7 +523,20 @@ public class CorrectScoreEditActivity extends Activity {
     	
     	QueTaskListView.setAdapter(this.tsAdapter);
     }
-    public void loadGivePointsList(List<String> scorePointsList){
+
+    //获取小题给分点
+    public String getSmallquescorepoints(int index){
+    	List<GetUserTaskQueInfoResponse.SmallQueInfo> smalllist = this.subQueList.smallqueinfoList;
+    	for(int i=0;i<smalllist.size();i++){
+    		if(index == i){
+    			return smalllist.get(i).smallscorepoints;
+    		}
+    	}
+    	return "";
+    }
+    //把给分点解析成列表适配器数据
+    public List<ScorePointsItemInfo> getScorePointsList(String str){
+    	List<String> scorePointsList = this.getScorePoints(str);
     	List<ScorePointsItemInfo> listInfo = new ArrayList();
     	for(int i=0;i<scorePointsList.size();i++){
     		
@@ -476,10 +545,46 @@ public class CorrectScoreEditActivity extends Activity {
         	//Log.v("YJ",item.score);
     		listInfo.add(item);	
     	}
-
+    	return listInfo;
+    }
+    public void renderGivePointsList(List<GetUserTaskQueInfoResponse.Datas> itemsList){
+    	
+    	Log.v("YJ","开始渲染打分表");
+    	
+    	List<ScorePointsItemInfo> listInfo = new ArrayList();
+    	for(int i=0;i<itemsList.size();i++){
+    		GetUserTaskQueInfoResponse.Datas data = itemsList.get(i);
+    		Log.v("YJ queid",data.queid);
+    		if(this.selectedQueID.equals(data.queid)){
+    			this.full_marks = data.fullmark;
+    			if(data.smallqueinfoList.size() == 0) //没有小题的情况
+    			{
+    				Log.v("YJ","没有小题的情况");
+    				this.markScoreJson.hasSubQuestion = false;
+    				
+    				listInfo = this.getScorePointsList(data.scorepoints);
+    			}else{
+    				Log.v("YJ","有小题的情况");
+    				this.markScoreJson.hasSubQuestion = true;
+    				this.subQueList = data;   //very very important
+    				
+    				//默认给出第一个给分点
+    				if(data.smallqueinfoList.size()>0){
+    					
+    					this.selectSubQueID = 0;
+    					listInfo = this.getScorePointsList(this.getSmallquescorepoints(0));
+    					
+    				}
+    				this.loadTotalScoreList(this.subQueList); //总分列表
+    			}
+    			break;
+    		}
+    	}
+    	
+    	//this.loadGivePointsList(scorePointsList);
     	Log.v("YJ","getBackMarkList()");
     	
-    	ScorePointsItemListAdapter qtAdapter = new ScorePointsItemListAdapter(Public.context, listInfo, new ScorePointsItemListAdapter.ItemClickInterfaceListener() {
+    	scorePointsAdapter = new ScorePointsItemListAdapter(Public.context, listInfo, new ScorePointsItemListAdapter.ItemClickInterfaceListener() {
 			
 			@Override
 			public void Callback(ScorePointsItemInfo itemInfo) {
@@ -492,17 +597,24 @@ public class CorrectScoreEditActivity extends Activity {
 						//把分数 存在左侧框框 并计算 总分；
 						tsAdapter.setScoreByPosition(selectSubQueID,itemInfo.score);
 						selectSubQueID ++;
+						
 						tsAdapter.setSelectedPosition(selectSubQueID);
 						String total_score = tsAdapter.getTotalScore();
 						((TextView)CorrectScoreEditActivity.this.findViewById(R.id.total_score_text_view)).setText(total_score);
 						if(selectSubQueID >= tsAdapter.getCount()){
 							Log.v("YJ","submit haha");
+						}else{
+							//------------------------更新打分适配器
+							List<ScorePointsItemInfo> listInfo = getScorePointsList(getSmallquescorepoints(selectSubQueID));
+			    			scorePointsAdapter.updateItemList(listInfo);
+			    			//------------------------
 						}
 						if(tsAdapter.getAll()){
 							submitTotalButton.setVisibility(View.VISIBLE);
 						}else{
 							submitTotalButton.setVisibility(View.GONE);
 						}
+						
 					}else{
 						saveMarkingScore(itemInfo.score, "");
 					}
@@ -518,6 +630,11 @@ public class CorrectScoreEditActivity extends Activity {
 						((TextView)CorrectScoreEditActivity.this.findViewById(R.id.total_score_text_view)).setText(total_score);
 						if(selectSubQueID >= tsAdapter.getCount()){
 							Log.v("YJ","submit haha");
+						}else{
+							//------------------------更新打分适配器
+							List<ScorePointsItemInfo> listInfo = getScorePointsList(getSmallquescorepoints(selectSubQueID));
+			    			scorePointsAdapter.updateItemList(listInfo);
+			    			//------------------------
 						}
 						if(tsAdapter.getAll()){
 							submitTotalButton.setVisibility(View.VISIBLE);
@@ -536,41 +653,7 @@ public class CorrectScoreEditActivity extends Activity {
 
     	ListView QueTaskListView = (ListView)findViewById(R.id.score_points_list_view);
     	
-    	QueTaskListView.setAdapter(qtAdapter);
-    }
-    public void renderGivePointsList(List<GetUserTaskQueInfoResponse.Datas> itemsList){
-    	
-    	Log.v("YJ","开始渲染打分表");
-    	List<String> scorePointsList = new ArrayList();
-    	for(int i=0;i<itemsList.size();i++){
-    		GetUserTaskQueInfoResponse.Datas data = itemsList.get(i);
-    		Log.v("YJ queid",data.queid);
-    		if(this.selectedQueID.equals(data.queid)){
-    			this.full_marks = data.fullmark;
-    			if(data.smallqueinfoList.size() == 0) //没有小题的情况
-    			{
-    				Log.v("YJ","没有小题的情况");
-    				this.markScoreJson.hasSubQuestion = false;
-    				scorePointsList = this.getScorePoints(data.scorepoints);
-    			}else{
-    				Log.v("YJ","有小题的情况");
-    				this.markScoreJson.hasSubQuestion = true;
-    				this.subQueList = data;
-    				
-    				//默认给出第一个给分点
-    				if(data.smallqueinfoList.size()>0){
-    					GetUserTaskQueInfoResponse.SmallQueInfo smallInfo = data.smallqueinfoList.get(0);
-    					this.selectSubQueID = 0;
-    					scorePointsList = this.getScorePoints(smallInfo.smallscorepoints);
-    					
-    				}
-    				this.loadTotalScoreList(this.subQueList); //总分列表
-    			}
-    			break;
-    		}
-    	}
-    	
-    	this.loadGivePointsList(scorePointsList);
+    	QueTaskListView.setAdapter(scorePointsAdapter);
     	
     }
     public void renderCorrectScoreItemList(List<AlreadyMarkListResponse.Datas> itemsList){
@@ -667,6 +750,7 @@ public class CorrectScoreEditActivity extends Activity {
     	this.markScoreJson.usedtime = String.valueOf(this.markScoreJson.endTime - this.markScoreJson.startTime);
 		this.markScoreJson.score = score;
 		this.markScoreJson.smallscore = smallscore;
+		this.markScoreJson.commentimage = this.bitmapToBase64(this.mainFaceBitmp);
 		scoreJson = this.markScoreJson.toJsonString();
 		Log.v("YJ save result", scoreJson);
 		
@@ -747,6 +831,29 @@ public class CorrectScoreEditActivity extends Activity {
     	this.markScoreJson.usedtime = String.valueOf(this.markScoreJson.endTime - this.markScoreJson.startTime);
 		this.markScoreJson.score = score;
 		this.markScoreJson.smallscore = smallscore;
+		
+		//File f=new File(R.drawable.testbase64);
+		if(false){
+			InputStream inputStream = getResources().openRawResource(R.raw.testbase64);
+			InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+			BufferedReader reader = new BufferedReader(inputStreamReader);
+			String line,imagebase64="";
+			try {
+				while ((line = reader.readLine()) != null) {
+					imagebase64 += line;
+				}
+				inputStream.close();
+				inputStreamReader.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+
+			this.markScoreJson.commentimage = imagebase64;
+		}else{
+			this.markScoreJson.commentimage = this.bitmapToBase64(this.mainFaceBitmp);
+		}
+		
 		scoreJson = this.markScoreJson.toJsonString();
 		Log.v("YJ save result", scoreJson);
 		
@@ -888,7 +995,7 @@ public class CorrectScoreEditActivity extends Activity {
                     		CorrectScoreEditActivity.this.markScoreJson.startTime = System.currentTimeMillis();
                     		CorrectScoreEditActivity.this.markScoreJson.signid = "0";
                     		CorrectScoreEditActivity.this.markScoreJson.comment = "";
-                    		CorrectScoreEditActivity.this.markScoreJson.commentimage = ""; //没有标注过则为空
+                    		CorrectScoreEditActivity.this.markScoreJson.commentimage = data.commentimage; //显示已有标注过则为空
                     		CorrectScoreEditActivity.this.markScoreJson.invalidscore = data.firstmark;
                     		String url = Public.imageUrl(data.imgurl);
                     		ImgLoadTask imgLoadTask=new ImgLoadTask(imageView);
@@ -1281,7 +1388,10 @@ public class CorrectScoreEditActivity extends Activity {
         /** 
          * 得到bitmap的大小 
          */  
-        
+        public Bitmap base64ToBitmap(String base64Data) {
+            byte[] bytes = Base64.decode(base64Data, Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        }
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
@@ -1308,18 +1418,41 @@ public class CorrectScoreEditActivity extends Activity {
                 imageView.setScaleType(ImageView.ScaleType.FIT_XY);//使图片充满控件大小,very imporment
                 
                 imageViewFace.setLayoutParams(params);
+                imageViewFace.setScaleType(ImageView.ScaleType.FIT_XY);
 //                mainFaceBitmp=BitmapFactory
 //             		   .decodeResource(getResources(),R.drawable.canvas_pen)
 //             		   .copy(Bitmap.Config.ARGB_8888,true);
-                mainFaceBitmp = Bitmap.createBitmap(imgViewW, imgViewH, Config.ARGB_8888);
+                //mainFaceBitmp = Bitmap.createBitmap(imgViewW, imgViewH, Config.ARGB_8888);
                 //mainFaceBitmp.setHasAlpha(true);
                 
-                
+                //如果回评有标注，则把已有标注图层画上去
+                if(markScoreJson.commentimage.length() > 0){
+                	Log.v("YJ","有标注,转化画布");
+                	Bitmap tempBitmap = base64ToBitmap(markScoreJson.commentimage);
+                	
+                	Matrix _matrix = new Matrix();   
+                	float _scaleW = imgViewW*1.0f / tempBitmap.getWidth();
+                	Log.v("YJ _scale",String.valueOf(_scaleW) + "," + String.valueOf(_scaleW));
+                	
+                	if(Math.abs(_scaleW - 1.0f) < 0.01f){
+                		_scaleW = 0.99f;
+                	}
+                	_matrix.postScale(_scaleW, _scaleW);
+            		mainFaceBitmp = Bitmap.createBitmap(tempBitmap, 0, 0, tempBitmap.getWidth(), tempBitmap.getHeight(), _matrix, true);
+                	
+                	
+                	
+                	Log.v("YJ manFaceWidth w h = ", String.valueOf(mainFaceBitmp.getWidth()) + "," + String.valueOf(mainFaceBitmp.getHeight()));
+                }else{
+                	//没有标注,重新创建画布
+                	Log.v("YJ","没有标注,重新创建画布");
+                	mainFaceBitmp = Bitmap.createBitmap(imgViewW, imgViewH, Config.ARGB_8888);
+                }
                 
         		// 创建一张画布
         		Canvas canvas = new Canvas(mainFaceBitmp);
         		mainCanvas = canvas;
-        		canvas.drawARGB(50,250,20,20);
+        		canvas.drawARGB(0,250,20,20);
         		// 创建画笔
         		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);//消除锯齿
         		// 画笔颜色为红色
@@ -1363,6 +1496,75 @@ public class CorrectScoreEditActivity extends Activity {
 //    		if(!isPenOP){ //
 //    			return true;
 //    		}
+    		if(isDuiOP){
+    			switch (action) {
+        		// 按下
+        		case MotionEvent.ACTION_DOWN:
+        			Log.v("YJ scrollTop", String.valueOf(scrollTop));
+        			downx = event.getX();
+        			downy = event.getY() +scrollTop;
+        			//return true;
+        			// 创建画笔
+            		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);//消除锯齿
+            		// 画笔颜色为红色
+            		paint.setColor(Color.RED);
+            		// 宽度5个像素
+            		paint.setStrokeWidth(3);
+            		this.canvas.drawLine(downx-20, downy, downx, downy + 20, paint);
+            		this.canvas.drawLine(downx -1, downy + 19, downx + 40, downy - 20, paint);
+        			// 刷新image
+        			this.image.invalidate();
+        			break;
+        		default:
+        			break;
+        		}
+    		}
+    		if(isBanduiOP){
+    			switch (action) {
+        		// 按下
+        		case MotionEvent.ACTION_DOWN:
+        			downx = event.getX();
+        			downy = event.getY() +scrollTop;
+        			//return true;
+        			// 创建画笔
+            		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);//消除锯齿
+            		// 画笔颜色为红色
+            		paint.setColor(Color.RED);
+            		// 宽度5个像素
+            		paint.setStrokeWidth(3);
+            		this.canvas.drawLine(downx-20, downy, downx, downy + 20, paint);
+            		this.canvas.drawLine(downx-1, downy + 19, downx + 40, downy - 20, paint);
+            		this.canvas.drawLine(downx, downy -12, downx + 35, downy + 20, paint);
+        			// 刷新image
+        			this.image.invalidate();
+        			break;
+        		default:
+        			break;
+        		}
+    		}
+    		if(isWrongOP){
+    			switch (action) {
+        		// 按下
+        		case MotionEvent.ACTION_DOWN:
+        			downx = event.getX();
+        			downy = event.getY() +scrollTop;
+        			//return true;
+        			// 创建画笔
+            		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);//消除锯齿
+            		// 画笔颜色为红色
+            		paint.setColor(Color.RED);
+            		// 宽度5个像素
+            		paint.setStrokeWidth(3);
+            		this.canvas.drawLine(downx-20, downy-20, downx+20, downy + 20, paint);
+            		this.canvas.drawLine(downx-20, downy + 20, downx + 20, downy - 20, paint);
+        			// 刷新image
+        			this.image.invalidate();
+        			break;
+        		default:
+        			break;
+        		}
+    		}
+    	
     		if(isPenOP){
     			switch (action) {
         		// 按下
