@@ -208,7 +208,7 @@ public class MarkingActivity extends MainBaseActivity {
                     }else if("0002".equals(reponse.getCodeID())){
                     	Intent intent =new Intent(MarkingActivity.this, LoginActivity.class);
                     	startActivity(intent);
-                    	Toast.makeText(MarkingActivity.this, "用户名信息验证失败", Toast.LENGTH_SHORT).show();
+                    	//Toast.makeText(MarkingActivity.this, "用户名信息验证失败", Toast.LENGTH_SHORT).show();
                     }else if("0003".equals(reponse.getCodeID())){
                     	Toast.makeText(MarkingActivity.this, "服务器数据异常", Toast.LENGTH_SHORT).show();
                     }

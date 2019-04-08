@@ -22,6 +22,10 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.Toast;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -200,6 +204,8 @@ public class CorrectScoreEditActivity extends Activity {
 			R.id.cul_btn_5,R.id.cul_btn_6,R.id.cul_btn_7,R.id.cul_btn_8,R.id.cul_btn_9,
 			R.id.cul_btn_10,R.id.cul_btn_11,R.id.cul_btn_12,R.id.cul_btn_13,R.id.cul_btn_14
 	};
+	ImageView imageGif;
+	Animation rotate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	Log.d("YJ", "onCreate func");
@@ -231,6 +237,14 @@ public class CorrectScoreEditActivity extends Activity {
         this.submitTotalButton.setVisibility(View.INVISIBLE);
         markScoreJson = new MarkingScoreData();
         
+        imageGif = (ImageView)this.findViewById(R.id.loading_image);
+
+        rotate = AnimationUtils.loadAnimation(this, R.anim.rotate);  
+        LinearInterpolator lin = new LinearInterpolator();  //setInterpolator表示设置旋转速率。LinearInterpolator为匀速效果，
+        rotate.setInterpolator(lin);
+        
+          
+
         canvasOpBtns = new ArrayList();
         for(int i=0;i<canvasIds.length;i++){
         	canvasOpBtns.add((ImageView)this.findViewById(canvasIds[i]));
@@ -1034,7 +1048,8 @@ public class CorrectScoreEditActivity extends Activity {
         properties.put("arg2", subjectid);
         properties.put("arg3", this.selectedScretid);
         //properties.put("arg4", "");
-        
+        imageGif.startAnimation(rotate);
+        imageGif.setVisibility(View.VISIBLE);
         WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetAlreadmarkinfo", properties, new WebServiceUtil.WebServiceCallBack() {
             @Override
             public void callBack(String result) {
@@ -1094,7 +1109,8 @@ public class CorrectScoreEditActivity extends Activity {
         properties.put("arg2", subjectid);
         properties.put("arg3", queid);
         //properties.put("arg4", "");
-        
+        imageGif.startAnimation(rotate);
+        imageGif.setVisibility(View.VISIBLE);
         WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetExamtaskinfo", properties, new WebServiceUtil.WebServiceCallBack() {
             @Override
             public void callBack(String result) {
@@ -1534,7 +1550,9 @@ public class CorrectScoreEditActivity extends Activity {
         		
         		imageViewFace.setImageBitmap(mainFaceBitmp);
         		imageViewFace.setBackgroundColor(Color.TRANSPARENT);
-        		// 设置view监听
+        		// 设置view监听1
+        		imageGif.clearAnimation();
+        		imageGif.setVisibility(View.GONE);
         		scrollView.setOnTouchListener(new CanvasTouchListener(canvas, paint, imageViewFace));
             }catch(Exception e){
             	e.printStackTrace();

@@ -130,7 +130,9 @@ public class ProgressActivity extends MainBaseActivity {
                     	ProgressActivity.this.getTaskProgressList(itemsList);
                        
                     }else if("0002".equals(reponse.getCodeID())){
-                    	Toast.makeText(ProgressActivity.this, "用户名信息验证失败", Toast.LENGTH_SHORT).show();
+                    	Intent intent =new Intent(ProgressActivity.this, LoginActivity.class);
+                    	startActivity(intent);
+                    	//Toast.makeText(ProgressActivity.this, "用户名信息验证失败", Toast.LENGTH_SHORT).show();
                     }else if("0003".equals(reponse.getCodeID())){
                     	Toast.makeText(ProgressActivity.this, "服务器数据异常", Toast.LENGTH_SHORT).show();
                     }
