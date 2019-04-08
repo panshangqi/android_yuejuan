@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.view.Menu;
@@ -97,6 +99,7 @@ import com.app.modules.SelectQuestionItemListAdapter.ItemClickInterfaceListener;
 import com.app.modules.TotalScoreItemInfo;
 import com.app.modules.TotalScoreItemListAdapter;
 import com.app.utils.CanvasView;
+import com.app.utils.MyDialog;
 import com.app.utils.MyScrollView;
 import com.app.utils.WebServiceUtil;
 import com.app.webservice.*;
@@ -147,7 +150,7 @@ class MarkingScoreData{ //正评分数需要提交的数据
 	}
 }
 public class CorrectScoreEditActivity extends Activity {
-
+	MyDialog myDialog;
 	//画布参数
 	public boolean isMarkBiaozhu = false;
 	Bitmap mainBitmap;
@@ -205,7 +208,9 @@ public class CorrectScoreEditActivity extends Activity {
 			R.id.cul_btn_10,R.id.cul_btn_11,R.id.cul_btn_12,R.id.cul_btn_13,R.id.cul_btn_14
 	};
 	ImageView imageGif;
+	ImageView menuFlipButton;
 	Animation rotate;
+	LinearLayout menuBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	Log.d("YJ", "onCreate func");
@@ -238,19 +243,41 @@ public class CorrectScoreEditActivity extends Activity {
         markScoreJson = new MarkingScoreData();
         
         imageGif = (ImageView)this.findViewById(R.id.loading_image);
-
+        
+        
         rotate = AnimationUtils.loadAnimation(this, R.anim.rotate);  
         LinearInterpolator lin = new LinearInterpolator();  //setInterpolator表示设置旋转速率。LinearInterpolator为匀速效果，
         rotate.setInterpolator(lin);
         
-          
-
+        
         canvasOpBtns = new ArrayList();
         for(int i=0;i<canvasIds.length;i++){
         	canvasOpBtns.add((ImageView)this.findViewById(canvasIds[i]));
         }
         //设置保存图片按钮不可见 debug
     	((Button)this.findViewById(R.id.save_image_button)).setVisibility(View.GONE);
+    	
+    	//左侧菜单
+    	menuBar = (LinearLayout)this.findViewById(R.id.menu_bar);
+    	menuFlipButton = (ImageView)this.findViewById(R.id.menu_flip_button);
+    	menuFlipButton.setSelected(false);
+    	menuFlipButton.setOnClickListener(new ImageView.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				//AnimatorUtil.animHeightToView(this, menuBar, true, 200);
+				Log.v("YJ","menuFlipButton click");
+				if(menuBar.getVisibility() == 4){ //invisible
+					menuBar.setVisibility(View.VISIBLE);
+					menuFlipButton.setSelected(false);
+				}else if(menuBar.getVisibility() == 0){
+					menuBar.setVisibility(View.INVISIBLE);
+					menuFlipButton.setSelected(true);
+				}
+			}
+        });
+    	
         this.scrollView.setOnScrollListener(new MyScrollView.OnScrollListener() {
 			
 			@Override
@@ -258,7 +285,6 @@ public class CorrectScoreEditActivity extends Activity {
 				// TODO Auto-generated method stub
 				Log.v("YJ", "Y = " + String.valueOf(scrollY));
 				scrollTop = scrollY;
-				
 			}
 		});
         //get params queid
@@ -328,35 +354,34 @@ public class CorrectScoreEditActivity extends Activity {
         }
     	if(index == 1){//清空画布
 			Log.v("YJ","清空画布");
-			final AlertDialog.Builder normalDialog = new AlertDialog.Builder(CorrectScoreEditActivity.this);
-	        //normalDialog.setIcon(R.drawable.icon_dialog);
-	        normalDialog.setTitle("提示");
-	        normalDialog.setMessage("确定要清空所有标注吗?");
-	        normalDialog.setPositiveButton("确定", 
-	            new DialogInterface.OnClickListener() {
-		            @Override
-		            public void onClick(DialogInterface dialog, int which) {
-		                //...To-do
-		            	 Paint p = new Paint();
-	    		        //清屏
-	    		        p.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
-	    		        mainCanvas.drawPaint(p);
-	    		        //mainCanvas.drawARGB(0,250,20,20);
-		    			imageViewFace.invalidate();
-		    			isMarkBiaozhu = false;
-		            	dialog.cancel();
-		            }
-	        });
-	        normalDialog.setNegativeButton("关闭", 
-	            new DialogInterface.OnClickListener() {
-		            @Override
-		            public void onClick(DialogInterface dialog, int which) {
-		                //...To-do
-		            	dialog.cancel();
-		            }
-	        });
-	        // 显示
-	        normalDialog.show();
+			//
+			//通知
+    		myDialog=new MyDialog(CorrectScoreEditActivity.this,R.style.MyDialog, "YES_NO");
+            myDialog.setTitle("警告！");
+            myDialog.setMessage("确定要清空所有标注吗?");
+            myDialog.setYesOnclickListener("确定", new MyDialog.onYesOnclickListener() {
+                @Override
+                public void onYesOnclick() {
+                	//...To-do
+	            	 Paint p = new Paint();
+	   		        //清屏
+	   		        p.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
+	   		        mainCanvas.drawPaint(p);
+	   		        //mainCanvas.drawARGB(0,250,20,20);
+	    			imageViewFace.invalidate();
+	    			isMarkBiaozhu = false;
+                    myDialog.dismiss();
+                }
+            });
+            myDialog.setNoOnclickListener("取消", new MyDialog.onNoOnclickListener() {
+                @Override
+                public void onNoClick() {
+                    
+                    myDialog.dismiss();
+                }
+            });
+            myDialog.show();
+            
 	        canvasOpBtns.get(index).setSelected(false);
 			
 		}
@@ -599,16 +624,17 @@ public class CorrectScoreEditActivity extends Activity {
     }
     public void renderGivePointsList(List<GetUserTaskQueInfoResponse.Datas> itemsList){
     	
-    	Log.v("YJ","开始渲染打分表");
+    	Log.v("YJ","先取到所有列表，然后获取当前题目给分信息，开始渲染打分表");
     	
     	List<ScorePointsItemInfo> listInfo = new ArrayList();
     	for(int i=0;i<itemsList.size();i++){
     		GetUserTaskQueInfoResponse.Datas data = itemsList.get(i);
     		Log.v("YJ queid",data.queid);
     		if(this.selectedQueID.equals(data.queid)){
-    			this.full_marks = data.fullmark;
+    			
     			if(data.smallqueinfoList.size() == 0) //没有小题的情况
     			{
+    				this.full_marks = data.fullmark; //满分
     				Log.v("YJ","没有小题的情况");
     				this.markScoreJson.hasSubQuestion = false;
     				
@@ -849,29 +875,28 @@ public class CorrectScoreEditActivity extends Activity {
                 		//加载对应的图片
                     	//CorrectScoreEditActivity.this.getExamTaskListFromService();
                     	//Toast.makeText(CorrectScoreEditActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
-                    	AlertDialog.Builder builder = new AlertDialog.Builder(CorrectScoreEditActivity.this);
-                        builder.setTitle("温馨提示");
-                        builder.setMessage("分数修改成功，请回评下一题或者继续批阅！");
-                        //builder.setIcon(R.drawable.ic_launcher);
-                        builder.setCancelable(false);
-                        builder.setPositiveButton("确定", new OnClickListener() {
-                 
-
-                			@Override
-                			public void onClick(DialogInterface dialog, int which) {
-                				// TODO Auto-generated method stub
-                				dialog.cancel();
-                				Intent intent =new Intent(CorrectScoreEditActivity.this, AlreadyMarkActivity.class);
+                    	//通知
+                		myDialog=new MyDialog(CorrectScoreEditActivity.this,R.style.MyDialog, "YES");
+                        myDialog.setTitle("温馨提示！");
+                        myDialog.setMessage("分数修改成功，请回评下一题或者继续批阅！");
+                        myDialog.setYesOnclickListener("确定", new MyDialog.onYesOnclickListener() {
+                            @Override
+                            public void onYesOnclick() {
+                            	
+                                myDialog.dismiss();
+                                Intent intent =new Intent(CorrectScoreEditActivity.this, AlreadyMarkActivity.class);
                 				startActivity(intent);
-                			}
+                            }
                         });
-                        builder.create().show();
+                        
+                        myDialog.show();
+                        
                     }else if("0002".equals(reponse.getCodeID())){
                     	//Toast.makeText(AlreadyMarkActivity.this, reponse.getMessage(), Toast.LENGTH_SHORT).show();
                     	Intent intent =new Intent(CorrectScoreEditActivity.this, LoginActivity.class);
                     	startActivity(intent);
                     }else{
-                    	Toast.makeText(CorrectScoreEditActivity.this, "0x22"+reponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    	Toast.makeText(CorrectScoreEditActivity.this, reponse.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -1138,6 +1163,37 @@ public class CorrectScoreEditActivity extends Activity {
                     		imgLoadTask.execute(url);//execute里面是图片的地址
                     		//总分设为0
                     		((TextView)CorrectScoreEditActivity.this.findViewById(R.id.total_score_text_view)).setText("0");
+                    	}else{
+                    		//通知
+                    		myDialog=new MyDialog(CorrectScoreEditActivity.this,R.style.MyDialog, "YES");
+                            myDialog.setTitle("警告！");
+                            myDialog.setMessage("没有试卷信息，请确定返回！");
+                            myDialog.setYesOnclickListener("确定", new MyDialog.onYesOnclickListener() {
+                                @Override
+                                public void onYesOnclick() {
+                                	Intent intent;
+                                	if(Public.isMarkingActivity == 1){
+                                		intent =new Intent(CorrectScoreEditActivity.this, MarkingActivity.class);
+                                    	startActivity(intent);
+                                    	//overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+                                	}else{
+                                		intent =new Intent(CorrectScoreEditActivity.this, AlreadyMarkActivity.class);
+                        				startActivity(intent);
+                        				//overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+                                	}
+                                    myDialog.dismiss();
+                                }
+                            });
+                            myDialog.setNoOnclickListener("取消", new MyDialog.onNoOnclickListener() {
+                                @Override
+                                public void onNoClick() {
+                                    
+                                    myDialog.dismiss();
+                                }
+                            });
+                            myDialog.show();
+                              
+
                     	}
                     	
                     }else if("0002".equals(reponse.getCodeID())){
@@ -1228,7 +1284,17 @@ public class CorrectScoreEditActivity extends Activity {
 							this.scoreShowText = this.scoreShowText.substring(0, this.scoreShowText.length()-1);	
 						}
 					}else if(i==12){ //满分
-						this.scoreShowText = this.full_marks;
+						if(this.markScoreJson.hasSubQuestion){
+							if(this.tsAdapter != null){
+								this.scoreShowText = tsAdapter.getFullMark();
+							}else{
+								this.scoreShowText = "0";
+							}
+							
+						}else{
+							this.scoreShowText = this.full_marks;	
+						}
+						
 					}else if(i==13){ //零分
 						this.scoreShowText = "0";
 					}else if(i==14){ //提交分数
@@ -1684,7 +1750,8 @@ public class CorrectScoreEditActivity extends Activity {
         			break;
         		}
     		}
-    		
+    		setVisibleRecord(false);
+    		setVisibleSelect(false);
     		// true：告诉系统，这个触摸事件由我来处理
     		// false：告诉系统，这个触摸事件我不处理，这时系统会把触摸事件传递给imageview的父节点
     		return isPenOP ? true : false; //false 禁止滚动， true滚动
