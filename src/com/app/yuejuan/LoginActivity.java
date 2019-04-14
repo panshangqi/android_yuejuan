@@ -48,6 +48,11 @@ public class LoginActivity extends Activity {
 	TextView ipET;
 	EditText passwordET;
 	EditText usernameET;
+	Button loginButton;
+	boolean isLogining = false;
+	boolean isLoginSuccess = false;
+	// 声明一个Handler对象
+    private static Handler handler=new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	Log.d("YJ", "onCreate func");
@@ -58,7 +63,7 @@ public class LoginActivity extends Activity {
         usernameET =(EditText)findViewById(R.id.login_username);
         passwordET =(EditText)findViewById(R.id.login_password);
         Public pub = (Public)this.getApplication();
-        
+        loginButton = (Button)this.findViewById(R.id.login_button);
         usernameET.setText(pub.getUserID());
         
     }
@@ -71,8 +76,61 @@ public class LoginActivity extends Activity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+    public class myThread implements Runnable{
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			int k = 8;
+            while(k>=0){
+            	k--;
+            	if(k<=0){
+            		
+                    
+                    isLogining = false;
+                    
+                    loginButton.post(new Runnable() {  
+                        
+                        @Override  
+                        public void run() {  
+                        	
+                        	loginButton.setText("登 录");
+                            loginButton.setBackgroundResource(R.drawable.buttonsharp);
+                            if(!isLoginSuccess){
+                            	Toast.makeText(LoginActivity.this, "访问错误", Toast.LENGTH_SHORT).show();	
+                            }
+                            
+                        }  
+                    });  
+            		break;
+            	}
+            	Log.v("YJ Wait", String.valueOf(k));
+            	try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            	
+            }
+		}
+    	
+    }
     //登陆
 	public void toLoginClick(){
+		
+		
+		if(isLogining){
+			Log.v("YJ ", "正在登登录，稍后点击");	
+			return;
+		}
+		isLoginSuccess = false;
+		isLogining = true;
+		loginButton.setText("正在登录...");
+        loginButton.setBackgroundResource(R.drawable.buttonsharp_gray);
+		Log.v("YJ ", "点击登录");
+		Thread thread = new Thread(new myThread());
+		thread.start();
 		
         String username = usernameET.getText().toString();
         String password = passwordET.getText().toString();
@@ -84,12 +142,16 @@ public class LoginActivity extends Activity {
         Public pub = (Public)this.getApplication();
         pub.setUserID(username);
         Public.imageHost = ip;
-        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "UserLogin", properties, new WebServiceUtil.WebServiceCallBack() {
+        
+        WebServiceUtil.callWebService(WebServiceUtil.getURL(), "UserLogin", properties, new WebServiceUtil.WebServiceCallBack() {
             @Override
             public void callBack(String result) {
+            	loginButton.setText("登 录");
+                loginButton.setBackgroundResource(R.drawable.buttonsharp);
+                isLogining = false;
                 if (result != null) {
                     Log.v("YJ",result);
-                    
+                    isLoginSuccess = true;
                     UserLoginResponse reponse = new UserLoginResponse(result);
                     if("0001".equals(reponse.getCodeID())){
                     	//AppCookies.setToken(reponse.getAuthtoken());
@@ -117,7 +179,7 @@ public class LoginActivity extends Activity {
         properties.put("arg0", userid);
         properties.put("arg1", token);
         
-        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetUserinfo", properties, new WebServiceUtil.WebServiceCallBack() {
+        WebServiceUtil.callWebService(WebServiceUtil.getURL(), "GetUserinfo", properties, new WebServiceUtil.WebServiceCallBack() {
             @Override
             public void callBack(String result) {
                 if (result != null) {

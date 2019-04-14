@@ -75,7 +75,7 @@ public class PersonalActivity extends MainBaseActivity {
         	startActivity(intent);
         	overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
         	Log.v("YJ","Login out");
-            WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "UserLogout", properties, new WebServiceUtil.WebServiceCallBack() {
+            WebServiceUtil.callWebService(WebServiceUtil.getURL(), "UserLogout", properties, new WebServiceUtil.WebServiceCallBack() {
                 @Override
                 public void callBack(String result) {
                     if (result != null) {

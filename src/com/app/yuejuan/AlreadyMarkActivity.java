@@ -82,7 +82,7 @@ public class AlreadyMarkActivity extends MainBaseActivity {
         HashMap<String, String> properties = new HashMap<String, String>();
         properties.put("arg0", pub.usersubjectid);
 
-        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetSubjectstatus", properties, new WebServiceUtil.WebServiceCallBack() {
+        WebServiceUtil.callWebService(WebServiceUtil.getURL(), "GetSubjectstatus", properties, new WebServiceUtil.WebServiceCallBack() {
             @Override
             public void callBack(String result) {
                 if (result != null) {
@@ -145,7 +145,7 @@ public class AlreadyMarkActivity extends MainBaseActivity {
         //properties.put("arg3", "0");
         //properties.put("arg4", "");
         
-        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetAlreadymarklist", properties, new WebServiceUtil.WebServiceCallBack() {
+        WebServiceUtil.callWebService(WebServiceUtil.getURL(), "GetAlreadymarklist", properties, new WebServiceUtil.WebServiceCallBack() {
             @Override
             public void callBack(String result) {
                 if (result != null) {

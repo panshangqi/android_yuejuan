@@ -788,7 +788,7 @@ public class CorrectScoreEditActivity extends Activity {
         properties.put("arg1", pub.token);
         properties.put("arg2", pub.usersubjectid);
         
-        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetUsertaskqueinfo", properties, new WebServiceUtil.WebServiceCallBack() {
+        WebServiceUtil.callWebService(WebServiceUtil.getURL(), "GetUsertaskqueinfo", properties, new WebServiceUtil.WebServiceCallBack() {
             @Override
             public void callBack(String result) {
                 if (result != null) {
@@ -821,7 +821,7 @@ public class CorrectScoreEditActivity extends Activity {
         properties.put("arg2", pub.usersubjectid);
         
         Log.v("YJ", pub.token); //
-        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetWorkprogress", properties, new WebServiceUtil.WebServiceCallBack() {
+        WebServiceUtil.callWebService(WebServiceUtil.getURL(), "GetWorkprogress", properties, new WebServiceUtil.WebServiceCallBack() {
             @Override
             public void callBack(String result) {
                 if (result != null) {
@@ -871,7 +871,7 @@ public class CorrectScoreEditActivity extends Activity {
         properties.put("arg2", scoreJson);
         
         Log.v("YJ", pub.token); //
-        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "SaveAlreadmarknewscore", properties, new WebServiceUtil.WebServiceCallBack() {
+        WebServiceUtil.callWebService(WebServiceUtil.getURL(), "SaveAlreadmarknewscore", properties, new WebServiceUtil.WebServiceCallBack() {
             @Override
             public void callBack(String result) {
                 if (result != null) {
@@ -978,7 +978,7 @@ public class CorrectScoreEditActivity extends Activity {
         properties.put("arg2", scoreJson);
         
         Log.v("YJ", pub.token); //
-        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "SaveNormalScore", properties, new WebServiceUtil.WebServiceCallBack() {
+        WebServiceUtil.callWebService(WebServiceUtil.getURL(), "SaveNormalScore", properties, new WebServiceUtil.WebServiceCallBack() {
             @Override
             public void callBack(String result) {
                 if (result != null) {
@@ -1018,7 +1018,7 @@ public class CorrectScoreEditActivity extends Activity {
     public void getTetstPaperSignFromService(){
 
         HashMap<String, String> properties = new HashMap<String, String>();
-        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetTestpaperSign", properties, new WebServiceUtil.WebServiceCallBack() {
+        WebServiceUtil.callWebService(WebServiceUtil.getURL(), "GetTestpaperSign", properties, new WebServiceUtil.WebServiceCallBack() {
             @Override
             public void callBack(String result) {
                 if (result != null) {
@@ -1052,7 +1052,7 @@ public class CorrectScoreEditActivity extends Activity {
         //properties.put("arg3", "0");
         //properties.put("arg4", "");
         
-        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetAlreadymarklist", properties, new WebServiceUtil.WebServiceCallBack() {
+        WebServiceUtil.callWebService(WebServiceUtil.getURL(), "GetAlreadymarklist", properties, new WebServiceUtil.WebServiceCallBack() {
             @Override
             public void callBack(String result) {
                 if (result != null) {
@@ -1087,7 +1087,7 @@ public class CorrectScoreEditActivity extends Activity {
         //properties.put("arg4", "");
         imageGif.startAnimation(rotate);
         imageGif.setVisibility(View.VISIBLE);
-        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetAlreadmarkinfo", properties, new WebServiceUtil.WebServiceCallBack() {
+        WebServiceUtil.callWebService(WebServiceUtil.getURL(), "GetAlreadmarkinfo", properties, new WebServiceUtil.WebServiceCallBack() {
             @Override
             public void callBack(String result) {
                 if (result != null) {
@@ -1148,7 +1148,7 @@ public class CorrectScoreEditActivity extends Activity {
         //properties.put("arg4", "");
         imageGif.startAnimation(rotate);
         imageGif.setVisibility(View.VISIBLE);
-        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetExamtaskinfo", properties, new WebServiceUtil.WebServiceCallBack() {
+        WebServiceUtil.callWebService(WebServiceUtil.getURL(), "GetExamtaskinfo", properties, new WebServiceUtil.WebServiceCallBack() {
             @Override
             public void callBack(String result) {
                 if (result != null) {
@@ -1230,7 +1230,7 @@ public class CorrectScoreEditActivity extends Activity {
         properties.put("arg0", userid);
         properties.put("arg1", token);
         properties.put("arg2", score);
-        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "Savearbitrate", properties, new WebServiceUtil.WebServiceCallBack() {
+        WebServiceUtil.callWebService(WebServiceUtil.getURL(), "Savearbitrate", properties, new WebServiceUtil.WebServiceCallBack() {
             @Override
             public void callBack(String result) {
                 if (result != null) {

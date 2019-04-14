@@ -58,7 +58,7 @@ public class ModifyPasswordActivity extends Activity {
         properties.put("arg2", password);
         
         Log.v("YJ", pub.token); //
-        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "ChangePassword", properties, new WebServiceUtil.WebServiceCallBack() {
+        WebServiceUtil.callWebService(WebServiceUtil.getURL(), "ChangePassword", properties, new WebServiceUtil.WebServiceCallBack() {
             @Override
             public void callBack(String result) {
                 if (result != null) {

@@ -125,7 +125,7 @@ public class MarkingActivity extends MainBaseActivity {
         HashMap<String, String> properties = new HashMap<String, String>();
         properties.put("arg0", pub.usersubjectid);
 
-        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetSubjectstatus", properties, new WebServiceUtil.WebServiceCallBack() {
+        WebServiceUtil.callWebService(WebServiceUtil.getURL(), "GetSubjectstatus", properties, new WebServiceUtil.WebServiceCallBack() {
             @Override
             public void callBack(String result) {
                 if (result != null) {
@@ -193,7 +193,7 @@ public class MarkingActivity extends MainBaseActivity {
         properties.put("arg2", pub.usersubjectid);
         
         Log.v("YJ", pub.token); //
-        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetWorkprogress", properties, new WebServiceUtil.WebServiceCallBack() {
+        WebServiceUtil.callWebService(WebServiceUtil.getURL(), "GetWorkprogress", properties, new WebServiceUtil.WebServiceCallBack() {
             @Override
             public void callBack(String result) {
                 if (result != null) {

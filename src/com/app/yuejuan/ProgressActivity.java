@@ -118,7 +118,7 @@ public class ProgressActivity extends MainBaseActivity {
         properties.put("arg2", pub.usersubjectid);
         
 
-        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "GetWorkprogress", properties, new WebServiceUtil.WebServiceCallBack() {
+        WebServiceUtil.callWebService(WebServiceUtil.getURL(), "GetWorkprogress", properties, new WebServiceUtil.WebServiceCallBack() {
             @Override
             public void callBack(String result) {
                 if (result != null) {

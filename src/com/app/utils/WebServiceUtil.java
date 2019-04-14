@@ -1,6 +1,7 @@
 package com.app.utils;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -8,6 +9,7 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.app.yuejuan.Public;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
@@ -19,14 +21,19 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 public class WebServiceUtil {
 	//public static final String WEB_SERVER_URL = "http://121.18.49.118:88/exam/AppdatacenterImpPort?wsdl";//"http://49.4.48.115/exam/AppdatacenterImpPort?wsdl";
-	public static final String WEB_SERVER_URL = "http://49.4.48.115/exam/AppdatacenterImpPort?wsdl";
+	//public static final String WEB_SERVER_URL = "http://49.4.48.115/exam/AppdatacenterImpPort?wsdl";
+	//public static final String WEB_SERVER_URL = "http://"+Public.imageHost+"/exam/AppdatacenterImpPort?wsdl";
+	
     // 含有3个线程的线程池
     private static final ExecutorService executorService = Executors.newFixedThreadPool(8);//限制线程池大小为8的线程池
     // 命名空间
     private static final String NAMESPACE = "http://webservice.app.com/";//"http://121.18.49.118:88/";
-    
+    public static String getURL(){
+    	return "http://"+Public.imageHost+"/exam/AppdatacenterImpPort?wsdl";
+    }
     public static void callWebService(String url, final String methodName, HashMap<String,String> properties, final WebServiceCallBack webServiceCallBack){
         //创建HttpTransportSE对象，传递WebService服务器地址
+    	Log.v("YJip", url);
         final HttpTransportSE httpTransportSE = new HttpTransportSE(url);
         //创建SoapObject对象
         final SoapObject soapObject = new SoapObject(NAMESPACE,methodName);
