@@ -148,6 +148,15 @@ class MarkingScoreData{ //正评分数需要提交的数据
 		json += "}";
 		return json;
 	}
+	public String toArbitrateString(){
+		String json = "{";
+		json += this.KeyValue("subjectid", this.subjectid, true);
+		json += this.KeyValue("secretid", this.secretid, true);
+		json += this.KeyValue("examid", this.examid, true);
+		json += this.KeyValue("queid", this.queid, false);
+		json += "}";
+		return json;
+	}
 }
 public class CorrectScoreEditActivity extends Activity {
 	MyDialog myDialog;
@@ -188,7 +197,7 @@ public class CorrectScoreEditActivity extends Activity {
 	public String selectedQueName = "";
 	public String selectedScretid;
 	public String TYPE = "0";  //正平=0还是回评=1；
-	public RadioButton recordButton, scoreButton, selectButton;
+	public RadioButton recordButton, scoreButton, selectButton, zhongcaiButton;
 	public TextView scoreShowTextView;
 	public LinearLayout fixedScorePabel ,recordPanel, scorePanel, selectPanel;
 	public ImgLoadTask imgLoadTask;
@@ -227,6 +236,7 @@ public class CorrectScoreEditActivity extends Activity {
         this.recordButton = (RadioButton) this.findViewById(R.id.ct_record_button);
         this.scoreButton = (RadioButton) this.findViewById(R.id.ct_score_button);
         this.selectButton = (RadioButton) this.findViewById(R.id.ct_select_button);
+        this.zhongcaiButton = (RadioButton) this.findViewById(R.id.submit_except_button);
         
         this.recordPanel = (LinearLayout) this.findViewById(R.id.ct_record_panel);
         this.scorePanel = (LinearLayout) this.findViewById(R.id.ct_score_panel);
@@ -307,6 +317,7 @@ public class CorrectScoreEditActivity extends Activity {
         		selectedScretid =  intent.getStringExtra("secretid");
         		selectedQueName = intent.getStringExtra("quename");
         		quenameView.setText(this.selectedQueName);
+        		this.zhongcaiButton.setVisibility(View.INVISIBLE);
         		Log.v("YJ secretid ", selectedScretid);
         		this.selectButton.setVisibility(View.GONE);
         		//回评信息
@@ -465,7 +476,8 @@ public class CorrectScoreEditActivity extends Activity {
 	}
     public void savePngImage(Bitmap mBitmap) {  
     	  try {  
-			File file = new File(Public.cachePath +"hah.png");
+		    Public pub = (Public)this.getApplication();
+			File file = new File(pub.cachePath +"hah.png");
 			OutputStream stream = new FileOutputStream(file);
 			
 			mBitmap.compress(CompressFormat.PNG, 100, stream);
@@ -1207,6 +1219,38 @@ public class CorrectScoreEditActivity extends Activity {
             }
         });
     }
+    public void SubmitArbitrate(){
+    	Public pub = (Public)this.getApplication();
+    	String userid = pub.getUserID();
+    	String token = pub.getToken();
+    	String score = markScoreJson.toArbitrateString();
+    	Log.v("YJ socre", score);
+    	
+        HashMap<String, String> properties = new HashMap<String, String>();
+        properties.put("arg0", userid);
+        properties.put("arg1", token);
+        properties.put("arg2", score);
+        WebServiceUtil.callWebService(WebServiceUtil.WEB_SERVER_URL, "Savearbitrate", properties, new WebServiceUtil.WebServiceCallBack() {
+            @Override
+            public void callBack(String result) {
+                if (result != null) {
+                	Log.v("YJ","提交仲裁");
+                    Log.v("YJ",result);
+                    GetAlreadyMarkInfoResponse reponse = new GetAlreadyMarkInfoResponse(result);
+                    if("0001".equals(reponse.getCodeID())){
+                    	Toast.makeText(CorrectScoreEditActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
+                    	
+                    }else if("0002".equals(reponse.getCodeID())){
+                    	//Toast.makeText(AlreadyMarkActivity.this, reponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    	Intent intent =new Intent(CorrectScoreEditActivity.this, LoginActivity.class);
+                    	startActivity(intent);
+                    }else{
+                    	Toast.makeText(CorrectScoreEditActivity.this, reponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+    }
     public List<String> getScorePoints(String str){
     	
     	List<String> lists = new ArrayList();
@@ -1443,6 +1487,29 @@ public class CorrectScoreEditActivity extends Activity {
 				//overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
         	}
             break;
+        case R.id.submit_except_button: //提交仲裁
+        	
+        	myDialog=new MyDialog(CorrectScoreEditActivity.this,R.style.MyDialog, "YES_NO");
+            myDialog.setTitle("警告！");
+            myDialog.setMessage("确定要提交仲裁吗?");
+            myDialog.setYesOnclickListener("确定", new MyDialog.onYesOnclickListener() {
+                @Override
+                public void onYesOnclick() {
+                	SubmitArbitrate();
+                	//加载对应的图片
+                	getExamTaskListFromService();
+                	myDialog.dismiss();
+                }
+            });
+            myDialog.setNoOnclickListener("取消", new MyDialog.onNoOnclickListener() {
+                @Override
+                public void onNoClick() {
+                    
+                    myDialog.dismiss();
+                }
+            });
+            myDialog.show();
+        	break;
         case R.id.ct_record_button:
         	if(this.recordPanel.getVisibility() == 4){ //invisible
         		this.setVisibleRecord(true);

@@ -57,7 +57,10 @@ public class LoginActivity extends Activity {
         ipET.setText(Public.imageHost);
         usernameET =(EditText)findViewById(R.id.login_username);
         passwordET =(EditText)findViewById(R.id.login_password);
-        passwordET.setText("888888");
+        Public pub = (Public)this.getApplication();
+        
+        usernameET.setText(pub.getUserID());
+        
     }
 
 
@@ -92,7 +95,8 @@ public class LoginActivity extends Activity {
                     	//AppCookies.setToken(reponse.getAuthtoken());
                         Public pub = (Public)LoginActivity.this.getApplication();
                         pub.setToken(reponse.getAuthtoken());
-                        
+                        //pub.setUserName(pub.getUserID());
+                        //pub.setHostIP(pub.imageHost);
                         LoginActivity.this.getUserInfo();
                        
                     }else{
